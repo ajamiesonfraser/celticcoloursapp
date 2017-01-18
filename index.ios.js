@@ -6,6 +6,7 @@ import SideMenu from 'react-native-side-menu'
 import Menu from './app/components/Menu'
 import BottomBar from "./app/components/BottomBar"
 
+// this is a test
 
 class celticcoloursapp extends Component {
 
