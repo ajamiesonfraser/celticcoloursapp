@@ -10,11 +10,11 @@ class BottomBar extends Component {
     this.state = {
       selectedTab: "tab1"
       }
-    } 
+    }
 
   render(){
     return(
-      
+
       <TabBarIOS
         selectedTab={this.state.selectedTab}>
 
@@ -23,8 +23,10 @@ class BottomBar extends Component {
           title={`TAB 1`}
           iconName="snowflake-o"
           onPress={() => this.setState({selectedTab: "tab1"})}>
-            <AppNavigator
-              initialRoute={{ident: "PeopleIndex"}} />
+
+          <AppNavigator
+            initialRoute={{ident: "MyScheduleIndex"}} />
+
         </Icon.TabBarItemIOS>
 
         <Icon.TabBarItemIOS
@@ -32,9 +34,19 @@ class BottomBar extends Component {
           iconName="snowflake-o"
           onPress={() => this.setState({selectedTab: "tab2"})}>
             <AppNavigator
-              initialRoute={{ident: "PersonShow",
-                            person: {firstName: "aj", lastName: "fraser", id: 1}}} />
+              initialRoute={{ident: "ListingShow",
+                            listing: {listingName: "Ceilidh Experience", id: 1}}} />
         </Icon.TabBarItemIOS>
+
+        <Icon.TabBarItemIOS
+          selected={this.state.selectedTab === "tab3"}
+          title={'TAB 3'}
+          iconName="snowflake-o"
+          onPress={() => this.setState({selectedTab: "tab3"})}>
+            <AppNavigator
+              initialRoute={{ident: "MapScreen"}} />
+        </Icon.TabBarItemIOS>
+
 
       </TabBarIOS>
     )

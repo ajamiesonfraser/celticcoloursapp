@@ -6,13 +6,6 @@ import { Dimensions, StyleSheet, ScrollView, View, Image, Text } from 'react-nat
 var window = Dimensions.get('window');
 var uri = 'https://pbs.twimg.com/profile_images/537787723164024832/lpI-9shb_400x400.jpeg';
 
-const people = [
-  {firstName: "aj", lastName: "fraser", id: 1},
-  {firstName: "darcy", lastName: "campbell", id: 2},
-  {firstName: "adam", lastName: "walsh", id: 3},
-  {firstName: "matt", lastName: "lewis", id: 4},
-  {firstName: "scott", lastName: "moore", id: 5}
-]
 
 class Menu extends Component {
   
@@ -51,6 +44,8 @@ class Menu extends Component {
   }
 }
 
+
+
 const styles = StyleSheet.create({
   menu: {
     flex: 1,
@@ -75,7 +70,7 @@ const styles = StyleSheet.create({
     top: 20,
   },
   item: {
-    fontSize: 14,
+    fontSize: 30,
     fontWeight: '300',
     paddingTop: 5,
   },

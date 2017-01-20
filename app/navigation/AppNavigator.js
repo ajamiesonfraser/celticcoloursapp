@@ -1,8 +1,9 @@
 'use strict'
 import React, { Component } from 'react'
 import {Navigator, Text, StyleSheet} from 'react-native'
-import PeopleIndexScreen from '../screens/PeopleIndexScreen'
-import PersonShowScreen from '../screens/PersonShowScreen'
+import MyScheduleScreen from '../screens/MyScheduleScreen'
+import ListingShowScreen from '../screens/ListingShowScreen'
+import MapScreen from '../screens/MapScreen'
 
 class AppNavigator extends Component {
 
@@ -10,18 +11,25 @@ class AppNavigator extends Component {
     var globalNavigatorProps = { navigator }
 
     switch(route.ident) {
-      case "PeopleIndex":
+      case "MyScheduleIndex":
         return (
-          <PeopleIndexScreen
+          <MyScheduleScreen
             {...globalNavigatorProps} />
         )
 
-      case "PersonShow":
+      case "ListingShow":
         return (
-          <PersonShowScreen
+          <ListingShowScreen
             {...globalNavigatorProps}
-            person={route.person} />
+            listing={route.listing} />
         )
+
+      case "MapScreen":
+        return (
+          <MapScreen
+            {...globalNavigatorProps} />
+        )
+
 
       default:
         return (
