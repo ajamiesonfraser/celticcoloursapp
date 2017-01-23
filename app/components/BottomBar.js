@@ -16,12 +16,24 @@ class BottomBar extends Component {
     return(
 
       <TabBarIOS
-        selectedTab={this.state.selectedTab}>
+        selectedTab={this.state.selectedTab}
+        tintColor={'red'}
+        translucent={true}>
+
+
+        <Icon.TabBarItemIOS
+          selected={this.state.selectedTab === "tab3"}
+          iconName="compass"
+          title={``}
+          onPress={() => this.setState({selectedTab: "tab3"})}>
+            <AppNavigator
+              initialRoute={{ident: "MapScreen"}} />
+        </Icon.TabBarItemIOS>
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab1"}
-          title={`TAB 1`}
-          iconName="snowflake-o"
+          iconName="home"
+          title={``}
           onPress={() => this.setState({selectedTab: "tab1"})}>
 
           <AppNavigator
@@ -31,26 +43,24 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab2"}
-          iconName="snowflake-o"
+          iconName="music"
+          title={``}
           onPress={() => this.setState({selectedTab: "tab2"})}>
             <AppNavigator
               initialRoute={{ident: "ListingShow",
                             listing: {listingName: "Ceilidh Experience", id: 1}}} />
         </Icon.TabBarItemIOS>
 
-        <Icon.TabBarItemIOS
-          selected={this.state.selectedTab === "tab3"}
-          title={'TAB 3'}
-          iconName="snowflake-o"
-          onPress={() => this.setState({selectedTab: "tab3"})}>
-            <AppNavigator
-              initialRoute={{ident: "MapScreen"}} />
-        </Icon.TabBarItemIOS>
-
-
       </TabBarIOS>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  icon:{
+    height: 5,
+    width: 5,
+  }
+})
 
 module.exports = BottomBar

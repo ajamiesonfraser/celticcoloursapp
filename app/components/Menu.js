@@ -1,43 +1,49 @@
 'use strict'
 
 import React, {Component} from 'react'
-import { Dimensions, StyleSheet, ScrollView, View, Image, Text } from 'react-native'
+import { Dimensions, StyleSheet, ScrollView, View, Image, Text, Navigator, TabBarItemIOS } from 'react-native'
+import AppNavigator from '../navigation/AppNavigator'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 var window = Dimensions.get('window');
 var uri = 'https://pbs.twimg.com/profile_images/537787723164024832/lpI-9shb_400x400.jpeg';
 
 
 class Menu extends Component {
+
   
-  static propTypes = {
-    onItemSelected: React.PropTypes.func.isRequired,
-  }
 
   render() {
     return (
       
       <ScrollView scrollsToTop={false} style={styles.menu}>
         
-        <View style={styles.avatarContainer}>
-          
-          <Image
-            style={styles.avatar}
-            source={{ uri, }}/>
-          <Text style={styles.name}>A.J.</Text>
         
-        </View>
-
         <Text
-          onPress={() => this.props.onItemSelected('About')}
+          onPress={() => this.props.onItemSelected('MapScreen')}
           style={styles.item}>
-          About
+          Discover
         </Text>
 
         <Text
-          onPress={() => this.props.onItemSelected('Contacts')}
+          onPress={() => this.props.onItemSelected('')}
           style={styles.item}>
-          Contacts
+          Schedule
         </Text>
+
+        <Text
+          onPress={() => this.props.onItemSelected('')}
+          style={styles.item}>
+          Artists
+        </Text>
+
+        <Text
+          onPress={() => this.props.onItemSelected('')}
+          style={styles.item}>
+          Contact
+        </Text>
+
+
       
       </ScrollView>
     )
