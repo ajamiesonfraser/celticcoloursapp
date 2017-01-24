@@ -18,9 +18,6 @@ class celticcoloursapp extends Component {
 
 }
 
-
-
-
 const styles = StyleSheet.create({
 
 })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, TabBarIOS, TabBarItemIOS } from 'react-native'
+import { StyleSheet, TabBarIOS, TabBarItemIOS, Image } from 'react-native'
 import AppNavigator from '../navigation/AppNavigator'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
@@ -23,7 +23,7 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab3"}
-          iconName="compass"
+          icon={require('../assets/compass.png')}
           title={``}
           onPress={() => this.setState({selectedTab: "tab3"})}>
             <AppNavigator
@@ -32,10 +32,9 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab1"}
-          iconName="home"
+          icon={require('../assets/home.png')}
           title={``}
           onPress={() => this.setState({selectedTab: "tab1"})}>
-
           <AppNavigator
             initialRoute={{ident: "MyScheduleIndex"}} />
 
@@ -43,7 +42,7 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab2"}
-          iconName="music"
+          icon={require('../assets/fiddle.png')}
           title={``}
           onPress={() => this.setState({selectedTab: "tab2"})}>
             <AppNavigator
