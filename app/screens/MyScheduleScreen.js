@@ -7,6 +7,21 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 
+
+fetch('https://novastream.ca/xml2json.php?org=23324&type=artists')
+
+function getMoviesFromApiAsync() {
+    return fetch('https://novastream.ca/xml2json.php?org=23324&type=artists')
+    console.log('worked')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson.bio_limited;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
 const listings = [
   {listingName: "Ceilidh Experience", id: 1},
   {listingName: "Step Into the Past", id: 2},
@@ -27,7 +42,8 @@ class MyScheduleScreen extends Component {
   render() {
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar />
+        <Navbar 
+        navTitle = "My Schedule"/>
         <ListView
           initialListSize={10}
           dataSource={this.state.listingsDataSource}

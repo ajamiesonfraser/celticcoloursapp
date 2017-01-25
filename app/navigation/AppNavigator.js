@@ -4,6 +4,7 @@ import {Navigator, Text, StyleSheet} from 'react-native'
 import MyScheduleScreen from '../screens/MyScheduleScreen'
 import ListingShowScreen from '../screens/ListingShowScreen'
 import MapScreen from '../screens/MapScreen'
+import ArtistListingScreen from '../screens/ArtistListingScreen'
 
 class AppNavigator extends Component {
 
@@ -27,6 +28,12 @@ class AppNavigator extends Component {
       case "MapScreen":
         return (
           <MapScreen
+            {...globalNavigatorProps} />
+        )
+
+      case "ArtistListing":
+        return (
+          <ArtistListingScreen
             {...globalNavigatorProps} />
         )
 

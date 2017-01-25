@@ -49,7 +49,8 @@ class ListingShowScreen extends Component {
     return (
       <ViewContainer style={{backgroundColor: listingBackgroundColor}}>
         
-        <Navbar />
+        <Navbar 
+        navTitle = "Listing"/>
 
         <StatusBarBackground style={{backgroundColor: listingBackgroundColor}} />
 

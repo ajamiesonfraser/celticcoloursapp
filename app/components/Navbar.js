@@ -5,35 +5,23 @@ import NavigationBar from 'react-native-navbar'
 import AppNavigator from '../navigation/AppNavigator'
 import ModalDropdown from 'react-native-modal-dropdown'
 
-// class NavTitle extends Component {
-//   render() {
-//     return (
-//       <Text>Hello {this.props.name}!</Text>
-//     );
-//   }
-// }
-
 class Navbar extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      title: 'My Schedule'
-    }
-  }
 
 	render (){
 
-		var rightButtonConfig = {
-      title: 'Next',
-      handler: function onNext() {
-      }
-    }
+    // var titleConfig = {
+    //   {this.props.navTitle}
+    // }
 
 
 		return (
       <View>
 			<NavigationBar
-    		title={this.state.title}
+        title = {
+          <Text>
+            {this.props.navTitle}
+          </Text>
+        }
         rightButton={
           <ModalDropdown 
             options={['My Events', 'By Day', 'By Artist', 'By Region', 'By Type']}>
