@@ -50,13 +50,16 @@ class ListingShowScreen extends Component {
       <ViewContainer style={{backgroundColor: listingBackgroundColor}}>
         
         <Navbar 
-        navTitle = "Listing"/>
+        navTitle = "Listing"
+        backButton = {
+          <TouchableOpacity onPress={() => this.props.navigator.pop() }>
+          <Icon name="chevron-left" size={15} />
+          </TouchableOpacity>
+        }/>
 
         <StatusBarBackground style={{backgroundColor: listingBackgroundColor}} />
 
-        <TouchableOpacity onPress={() => this.props.navigator.pop() }>
-          <Icon name="times" size={30} />
-        </TouchableOpacity>
+        
         
         <ListView
           dataSource={this.state.listingsDataSource}

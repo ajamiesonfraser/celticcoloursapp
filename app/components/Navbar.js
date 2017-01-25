@@ -1,18 +1,14 @@
 'use strict'
 import React, { Component } from 'react'
-import {Navigator, Text, StyleSheet, View, Image} from 'react-native'
+import {Navigator, Text, StyleSheet, View, Image, TouchableOpacity } from 'react-native'
 import NavigationBar from 'react-native-navbar'
 import AppNavigator from '../navigation/AppNavigator'
 import ModalDropdown from 'react-native-modal-dropdown'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 class Navbar extends Component {
 
 	render (){
-
-    // var titleConfig = {
-    //   {this.props.navTitle}
-    // }
-
 
 		return (
       <View>
@@ -22,6 +18,7 @@ class Navbar extends Component {
             {this.props.navTitle}
           </Text>
         }
+        leftButton= {this.props.backButton}
         rightButton={
           <ModalDropdown 
             options={['My Events', 'By Day', 'By Artist', 'By Region', 'By Type']}>
