@@ -15,7 +15,6 @@ class celticcoloursapp extends Component {
       <BottomBar />
     )
   }
-
 }
 
 const styles = StyleSheet.create({

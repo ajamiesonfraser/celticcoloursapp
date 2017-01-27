@@ -6,21 +6,10 @@ import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
+import TestData from '../components/TestData'
+import axios from 'axios'
 
 
-fetch('https://novastream.ca/xml2json.php?org=23324&type=artists')
-
-function getMoviesFromApiAsync() {
-    return fetch('https://novastream.ca/xml2json.php?org=23324&type=artists')
-    console.log('worked')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        return responseJson.bio_limited;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
 
 const listings = [
   {listingName: "Ceilidh Experience", id: 1},
@@ -35,9 +24,25 @@ class MyScheduleScreen extends Component {
     super(props)
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     this.state = {
-      listingsDataSource: ds.cloneWithRows(listings)
+      artistName:[],
+      listingsDataSource: ds.cloneWithRows(listings).bind(this)
     }
   }
+  componentDidMount(){
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists')
+    .then((response) => {
+      console.log(response.data)
+      var aList = response.data
+      aList.map((artist) => { 
+        this.setState({
+          artistName : this.state.artistName.concat([artist])
+        })
+      })
+      console.log(this.state.artistName)
+      console.log(response.status)
+    })
+  }
+  
 
   render() {
     return (
@@ -47,21 +52,26 @@ class MyScheduleScreen extends Component {
         <ListView
           initialListSize={10}
           dataSource={this.state.listingsDataSource}
-          renderRow={(listing) => { return this._renderListingRow(listing) }} />
+          renderRow={(listing) => {
+            return this._renderListingRow(listing)
+          }} 
+        />
       </ViewContainer>
     )
   }
+
 
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
         <Text style={styles.listingName}>{`${_.capitalize(listing.listingName)}`}</Text>
+        <Text>{this.state.artistName.length}</Text>
+        {this.state.artistName.map((artist) => {<Text>{artist.name}</Text>})}
         <View style={{flex: 1}} />
         <Icon name="chevron-right" style={styles.listingMoreIcon} />
       </TouchableOpacity>
     )
   }
-
 
   _navigateToListingShow(listing) {
     this.props.navigator.push({
