@@ -22,36 +22,34 @@ const listings = [
 class MyScheduleScreen extends Component {
   constructor(props) {
     super(props)
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+
     this.state = {
-      artistName:[],
-      listingsDataSource: ds.cloneWithRows(listings).bind(this)
+      artistName: []
     }
   }
   componentDidMount(){
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists')
     .then((response) => {
-      console.log(response.data)
       var aList = response.data
       aList.map((artist) => { 
         this.setState({
-          artistName : this.state.artistName.concat([artist])
+          artistName : this.state.artistName.concat([{listingName: artist.name, id: artist.id}])
         })
       })
-      console.log(this.state.artistName)
-      console.log(response.status)
     })
   }
   
 
   render() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
         <Navbar 
         navTitle = "My Schedule"/>
         <ListView
           initialListSize={10}
-          dataSource={this.state.listingsDataSource}
+          dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
           }} 
@@ -65,8 +63,6 @@ class MyScheduleScreen extends Component {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
         <Text style={styles.listingName}>{`${_.capitalize(listing.listingName)}`}</Text>
-        <Text>{this.state.artistName.length}</Text>
-        {this.state.artistName.map((artist) => {<Text>{artist.name}</Text>})}
         <View style={{flex: 1}} />
         <Icon name="chevron-right" style={styles.listingMoreIcon} />
       </TouchableOpacity>
