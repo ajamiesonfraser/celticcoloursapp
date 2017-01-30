@@ -6,29 +6,17 @@ import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
-import TestData from '../components/TestData'
 import axios from 'axios'
-
-
-
-const listings = [
-  {listingName: "Ceilidh Experience", id: 1},
-  {listingName: "Step Into the Past", id: 2},
-  {listingName: "Celtic Cabaret", id: 3},
-  {listingName: "Dynamic Duos", id: 4},
-  {listingName: "Whycocomagh Gathering", id: 5}
-]
 
 class MyScheduleScreen extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       artistName: []
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows')
     .then((response) => {
       var aList = response.data
       aList.map((artist) => { 
@@ -37,17 +25,27 @@ class MyScheduleScreen extends Component {
         })
       })
     })
+    .done()
   }
   
+  _renderListingRow(listing) {
+    return (
+      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
+        <Text style={styles.listingName}>{`${(listing.listingName)}`}</Text>
+        <View style={{flex: 1}} />
+        <Icon name="chevron-right" style={styles.listingMoreIcon} />
+      </TouchableOpacity>
+    )
+  }
 
   render() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
         <Navbar 
         navTitle = "My Schedule"/>
         <ListView
+          enableEmptySections={true}
           initialListSize={10}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
@@ -59,15 +57,7 @@ class MyScheduleScreen extends Component {
   }
 
 
-  _renderListingRow(listing) {
-    return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
-        <Text style={styles.listingName}>{`${_.capitalize(listing.listingName)}`}</Text>
-        <View style={{flex: 1}} />
-        <Icon name="chevron-right" style={styles.listingMoreIcon} />
-      </TouchableOpacity>
-    )
-  }
+  
 
   _navigateToListingShow(listing) {
     this.props.navigator.push({
