@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component} from 'react'
-import {Text, View, ListView, TouchableOpacity, StyleSheet } from 'react-native'
+import {Text, View, ListView, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import ViewContainer from '../components/ViewContainer'
 import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'
@@ -21,7 +21,7 @@ class MyScheduleScreen extends Component {
       var aList = response.data
       aList.map((artist) => { 
         this.setState({
-          artistName : this.state.artistName.concat([{listingName: artist.name, id: artist.id}])
+          artistName : this.state.artistName.concat([{listingName: artist.name, id: artist.id, startTime: artist.formatted_start_time, listingPicture: artist.poster_url}])
         })
       })
     })
@@ -31,7 +31,11 @@ class MyScheduleScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
+        <Image style={styles.listingPicture} source={{uri: listing.listingPicture}}/>
         <Text style={styles.listingName}>{`${(listing.listingName)}`}</Text>
+        <View style={styles.startTime}>
+          <Text>{`${(listing.startTime)}`}</Text>
+        </View>
         <View style={{flex: 1}} />
         <Icon name="chevron-right" style={styles.listingMoreIcon} />
       </TouchableOpacity>
@@ -75,16 +79,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-
+  startTime: {
+    marginLeft: 25,
+    justifyContent:"flex-start",
+    flexDirection:"row"
+  },
   listingRow: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    alignItems: "center",
-    height: 50
+    height: 100
   },
-
-  listingName: {
+  listingPicture:{
+    backgroundColor: 'blue',
+    height: 60,
+    width:90,
     marginLeft: 25
+  },
+  listingName: {
+    marginLeft: 25,
+    flexDirection: 'column'
   },
 
   listingMoreIcon: {
