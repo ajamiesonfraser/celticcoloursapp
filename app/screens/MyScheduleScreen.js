@@ -6,6 +6,7 @@ import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
+import GetDirectionsButton from '../components/GetDirectionsButton'
 import axios from 'axios'
 
 class MyScheduleScreen extends Component {
@@ -39,17 +40,14 @@ class MyScheduleScreen extends Component {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
         <Image style={styles.listingPicture} source={{uri: listing.listingPicture}}/>
-        <View>
+        <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingName)}`}</Text>
           <Text style={styles.listingDate}>{`${(listing.listingDate)}`}</Text>
-          <Text>{`${(listing.startTime)}`}</Text>
           <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingVenue)}`}</Text>
         </View>
-        <Button 
-          onPress={(event) => this._navigateToListingShow(listing)}
-          style={styles.directionsButton}
-          title="Get Directions"
-          color='#0076FF'/>
+        <Text style={styles.startTime}>{`${(listing.startTime)}`}</Text>
+        <GetDirectionsButton/>
+        
       </TouchableOpacity>
     )
   }
@@ -93,25 +91,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
     color: 'red'
   },
-  directionsButton: {
-    height: 50,
-    width: 200,
-    backgroundColor: "blue",
-    flex: 1,
-
+  listingInfo:{
+    flexDirection: "column",
+    width:200,
+    marginTop: 15
   },
   startTime: {
     marginRight: 5,
+    flexDirection: "column",
+    color: "#F6655E",
+    fontSize: 17
   },
    listingDate: {
-    marginLeft: 25,
-    paddingBottom: 5
+    marginLeft: 15,
+    paddingBottom: 5,
+    fontSize: 13,
+    fontFamily: "Helvetica"
   },
   listingVenue: {
-    marginLeft: 25,
+    marginLeft: 15,
     width: 170,
     color: '#0076FF',
-    paddingBottom: 5
+    paddingBottom: 5,
+    fontSize: 11
   },
   listingRow: {
     flexDirection: "row",
@@ -122,17 +124,20 @@ const styles = StyleSheet.create({
   },
   listingPicture:{
     backgroundColor: 'blue',
-    height: 60,
-    width:90,
-    marginLeft: 15
+    height: 50,
+    width:75,
+    marginLeft: 15,
+    alignSelf: 'flex-start',
+    marginTop: 10
   },
   listingName: {
-    marginLeft: 25,
+    marginLeft: 15,
     flexDirection: 'column',
-    width: 200,
+    width: 175,
     fontSize: 17,
     paddingBottom: 5,
-    fontWeight: '100'
+    fontWeight: '100',
+    fontFamily: 'Helvetica'
   },
 
   listingMoreIcon: {

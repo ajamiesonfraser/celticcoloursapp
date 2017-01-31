@@ -7,6 +7,7 @@ import BottomBar from "./app/components/BottomBar"
 import Navbar from './app/components/Navbar'
 import Button from './app/components/Button'
 
+console.disableYellowBox = true;
 
 class celticcoloursapp extends Component {
 
