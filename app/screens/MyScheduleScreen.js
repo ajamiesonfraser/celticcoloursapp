@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component} from 'react'
-import {Text, View, ListView, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import {Text, View, ListView, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
 import ViewContainer from '../components/ViewContainer'
 import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'
@@ -21,7 +21,14 @@ class MyScheduleScreen extends Component {
       var aList = response.data
       aList.map((artist) => { 
         this.setState({
-          artistName : this.state.artistName.concat([{listingName: artist.name, id: artist.id, startTime: artist.formatted_start_time, listingPicture: artist.poster_url}])
+          artistName : this.state.artistName.concat([{
+              listingName: artist.name, 
+              id: artist.id, 
+              startTime: artist.formatted_start_time, 
+              listingPicture: artist.poster_url,
+              listingDate: artist.formatted_date,
+              listingVenue: artist.venue_name
+          }])
         })
       })
     })
@@ -32,12 +39,17 @@ class MyScheduleScreen extends Component {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
         <Image style={styles.listingPicture} source={{uri: listing.listingPicture}}/>
-        <Text style={styles.listingName}>{`${(listing.listingName)}`}</Text>
-        <View style={styles.startTime}>
+        <View>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingName)}`}</Text>
+          <Text style={styles.listingDate}>{`${(listing.listingDate)}`}</Text>
           <Text>{`${(listing.startTime)}`}</Text>
+          <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingVenue)}`}</Text>
         </View>
-        <View style={{flex: 1}} />
-        <Icon name="chevron-right" style={styles.listingMoreIcon} />
+        <Button 
+          onPress={(event) => this._navigateToListingShow(listing)}
+          style={styles.directionsButton}
+          title="Get Directions"
+          color='#0076FF'/>
       </TouchableOpacity>
     )
   }
@@ -50,11 +62,12 @@ class MyScheduleScreen extends Component {
         navTitle = "My Schedule"/>
         <ListView
           enableEmptySections={true}
-          initialListSize={10}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
           }} 
+          pageSize={5}
+          initialListSize={5}
         />
       </ViewContainer>
     )
@@ -78,26 +91,48 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    color: 'red'
+  },
+  directionsButton: {
+    height: 50,
+    width: 200,
+    backgroundColor: "blue",
+    flex: 1,
+
   },
   startTime: {
+    marginRight: 5,
+  },
+   listingDate: {
     marginLeft: 25,
-    justifyContent:"flex-start",
-    flexDirection:"row"
+    paddingBottom: 5
+  },
+  listingVenue: {
+    marginLeft: 25,
+    width: 170,
+    color: '#0076FF',
+    paddingBottom: 5
   },
   listingRow: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    height: 100
+    height: 170,
+    flexWrap: "wrap",
+    alignItems: 'center'
   },
   listingPicture:{
     backgroundColor: 'blue',
     height: 60,
     width:90,
-    marginLeft: 25
+    marginLeft: 15
   },
   listingName: {
     marginLeft: 25,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    width: 200,
+    fontSize: 17,
+    paddingBottom: 5,
+    fontWeight: '100'
   },
 
   listingMoreIcon: {
