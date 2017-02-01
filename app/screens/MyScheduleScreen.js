@@ -28,7 +28,9 @@ class MyScheduleScreen extends Component {
               startTime: artist.formatted_start_time, 
               listingPicture: artist.poster_url,
               listingDate: artist.formatted_date,
-              listingVenue: artist.venue_name
+              listingVenue: artist.venue_name,
+              latitude: artist.venue[0].latitude,
+              longitude: artist.venue[0].longitude
           }])
         })
       })
@@ -46,9 +48,10 @@ class MyScheduleScreen extends Component {
           <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingVenue)}`}</Text>
         </View>
         <Text style={styles.startTime}>{`${(listing.startTime)}`}</Text>
-        <GetDirectionsButton/>
-        
+        <GetDirectionsButton
+          mapUrl={`http://maps.apple.com/?daddr=${listing.latitude},${listing.longitude}`}/>
       </TouchableOpacity>
+
     )
   }
 
@@ -106,7 +109,8 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     paddingBottom: 5,
     fontSize: 13,
-    fontFamily: "Helvetica"
+    fontFamily: "Helvetica",
+    fontWeight: '100'
   },
   listingVenue: {
     marginLeft: 15,
@@ -117,8 +121,8 @@ const styles = StyleSheet.create({
   },
   listingRow: {
     flexDirection: "row",
-    justifyContent: "flex-start",
-    height: 170,
+    justifyContent: "center",
+    height: 150,
     flexWrap: "wrap",
     alignItems: 'center'
   },
