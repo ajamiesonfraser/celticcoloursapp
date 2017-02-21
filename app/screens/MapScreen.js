@@ -12,6 +12,7 @@ import MapView from 'react-native-maps'
 
 
 class MapScreen extends Component {
+
   
   render () {
     console.log('whatever')
@@ -22,12 +23,6 @@ class MapScreen extends Component {
       <MapView
         style={styles.map}
         showsUserLocation={true}
-        initialRegion={{
-	     latitude: 37.78825,
-	     longitude: -122.4324,
-	     latitudeDelta: 0.0922,
-	     
-	     longitudeDelta: 0.0421,}}
       />
       </ViewContainer>
       )

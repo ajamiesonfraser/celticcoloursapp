@@ -41,7 +41,8 @@ class AppNavigator extends Component {
       case "EventDetail":
         return (
           <EventDetailScreen
-            {...globalNavigatorProps} />
+            {...globalNavigatorProps}
+            {...route.passProps} />
         )
 
       default:

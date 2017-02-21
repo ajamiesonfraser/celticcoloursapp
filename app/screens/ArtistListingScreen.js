@@ -18,12 +18,16 @@ class ArtistListingScreen extends Component {
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name')
     .then((response) => {
       var aList = response.data
-      aList.map((artist) => { 
+      Object.keys(aList).map((artist) => {
         this.setState({
-          artistName : this.state.artistName.concat([{listingName: artist.name, id: artist.id, profilePicture: artist.web_photo_url}])
+          artistName : this.state.artistName.concat([{
+            listingName: aList[artist].name 
+            // id: artist.id, 
+            // profilePicture: artist.web_photo_url
+          }])
         })
       })
     })
@@ -33,7 +37,7 @@ class ArtistListingScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
-        <Image style={styles.listingPicture} source={{uri: listing.profilePicture}}/>
+      
         <Text style={styles.listingName}>{`${(listing.listingName)}`}</Text>
         <View style={{flex: 1}} />
         <Icon name="chevron-right" style={styles.listingMoreIcon} />
@@ -48,8 +52,10 @@ class ArtistListingScreen extends Component {
         <Navbar 
         navTitle = "Artists"/>
         <ListView
+          pageSize={1}
+          initialListSize={20}
+          scrollRenderAheadDistance={500}
           enableEmptySections={true}
-          initialListSize={1}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)

@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -30,6 +31,8 @@
 		832F863B36034C21A398D3B5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 774BA962525F41FBB6DB1F1D /* Zocial.ttf */; };
 		8B2D3FE348B64B91B81CD65D /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29866C1A4F434D70BABA8D09 /* libRNVectorIcons.a */; };
 		9D2CAB834FAD4340BB6853F4 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E051591371B347D3B8D6E7E0 /* SimpleLineIcons.ttf */; };
+		A809B3F91E57339500E5050C /* holangels.gpx in Resources */ = {isa = PBXBuildFile; fileRef = A809B3F81E57339500E5050C /* holangels.gpx */; };
+		A809B3FA1E57339500E5050C /* holangels.gpx in Resources */ = {isa = PBXBuildFile; fileRef = A809B3F81E57339500E5050C /* holangels.gpx */; };
 		A8C69F361E2FA78F00CE864B /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C69F1B1E2FA74E00CE864B /* libAirMaps.a */; };
 		B6510607A3F54DCFAFB50AEC /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34FEC6B9DFBA43B2B392100D /* Ionicons.ttf */; };
 		B7C7E8BD5F244D02B7831FF6 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C182E507FD024AA2B6BE6337 /* Octicons.ttf */; };
@@ -267,6 +270,7 @@
 		774BA962525F41FBB6DB1F1D /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		A809B3F81E57339500E5050C /* holangels.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = holangels.gpx; path = ../holangels.gpx; sourceTree = "<group>"; };
 		A8C69F161E2FA74E00CE864B /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		AC9D05C3E9454E42ACD43AF8 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		C182E507FD024AA2B6BE6337 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
@@ -479,6 +483,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A809B3F81E57339500E5050C /* holangels.gpx */,
 				13B07FAE1A68108700A75B9A /* celticcoloursapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* celticcoloursappTests */,
@@ -565,6 +570,9 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = NM82P768VX;
 					};
 				};
 			};
@@ -838,6 +846,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A809B3FA1E57339500E5050C /* holangels.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -850,6 +859,7 @@
 				04689F8BCAD14C8FA2D6CE07 /* Entypo.ttf in Resources */,
 				6A5D7471CEA24DA986D186A2 /* EvilIcons.ttf in Resources */,
 				C1C0DA0A93E5430982B524B0 /* FontAwesome.ttf in Resources */,
+				A809B3F91E57339500E5050C /* holangels.gpx in Resources */,
 				7CB2A4A2C404426FA0975391 /* Foundation.ttf in Resources */,
 				B6510607A3F54DCFAFB50AEC /* Ionicons.ttf in Resources */,
 				0F335ACC80534C5CB9BBCB6A /* MaterialCommunityIcons.ttf in Resources */,
@@ -965,10 +975,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = NM82P768VX;
 				INFOPLIST_FILE = celticcoloursapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
+				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lc++",
 				);
@@ -983,10 +993,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NM82P768VX;
 				INFOPLIST_FILE = celticcoloursapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
+				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lc++",
 				);

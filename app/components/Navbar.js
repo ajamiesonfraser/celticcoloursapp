@@ -14,7 +14,7 @@ class Navbar extends Component {
       <View>
 			<NavigationBar
         title = {
-          <Text>
+          <Text style={styles.navTitle}>
             {this.props.navTitle}
           </Text>
         }
@@ -22,9 +22,9 @@ class Navbar extends Component {
         rightButton={
           <ModalDropdown 
             options={['My Events', 'By Day', 'By Artist', 'By Region', 'By Type']}>
-            <Image 
+            <Icon
               style={styles.buttonIcon}
-              source={require('../assets/downArrow.png')} />
+              name="angle-down" size={25} />
           </ModalDropdown>
         }
       />
@@ -35,16 +35,18 @@ class Navbar extends Component {
 }
 
 const styles = StyleSheet.create({
+   navTitle:{
+    justifyContent:'center',
+    alignItems:'center'
+  },
   dropdown:{
     marginRight:20,
     width: 50,
     backgroundColor:"blue",
   },
   buttonIcon:{
-    marginTop: 5,
-    marginRight: 20,
-    height: 30,
-    width: 30
+    marginTop: 15,
+    marginRight: 20
   }
 })
 

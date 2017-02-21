@@ -17,20 +17,26 @@ class MyScheduleScreen extends Component {
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
-      aList.map((artist) => { 
+      // console.log(aList)
+      Object.keys(aList).map((artist) => { 
         this.setState({
           artistName : this.state.artistName.concat([{
-              listingName: artist.name, 
-              id: artist.id, 
-              startTime: artist.formatted_start_time, 
-              listingPicture: artist.poster_url,
-              listingDate: artist.formatted_date,
-              listingVenue: artist.venue_name,
-              latitude: artist.venue[0].latitude,
-              longitude: artist.venue[0].longitude
+              listingName: aList[artist].name, 
+              id: aList[artist].id, 
+              startTime: aList[artist].formatted_start_time, 
+              listingPicture: aList[artist].poster_url,
+              listingDate: aList[artist].formatted_date,
+              listingVenue: aList[artist].venue_name,
+              listingCommunity:aList[artist].venue[0].community,
+              latitude: aList[artist].venue[0].latitude,
+              longitude: aList[artist].venue[0].longitude,
+              googleAddress: aList[artist].venue[0].google_maps_link,
+              listingPrice: aList[artist].price,
+              listingSeating: aList[artist].seating,
+              description: aList[artist].description_public,
           }])
         })
       })
@@ -40,7 +46,7 @@ class MyScheduleScreen extends Component {
   
   _renderListingRow(listing) {
     return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
+      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
         <Image style={styles.listingPicture} source={{uri: listing.listingPicture}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingName)}`}</Text>
@@ -49,7 +55,7 @@ class MyScheduleScreen extends Component {
         </View>
         <Text style={styles.startTime}>{`${(listing.startTime)}`}</Text>
         <GetDirectionsButton
-          mapUrl={`http://maps.apple.com/?daddr=${listing.latitude},${listing.longitude}`}/>
+          mapUrl={`${listing.googleAddress}`}/>
       </TouchableOpacity>
 
     )
@@ -62,13 +68,14 @@ class MyScheduleScreen extends Component {
         <Navbar 
         navTitle = "My Schedule"/>
         <ListView
+          pageSize={1}
+          initialListSize={20}
+          scrollRenderAheadDistance={500}
           enableEmptySections={true}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
-          }} 
-          pageSize={5}
-          initialListSize={5}
+          }}  
         />
       </ViewContainer>
     )
@@ -77,9 +84,23 @@ class MyScheduleScreen extends Component {
 
   
 
-  _navigateToListingShow(listing) {
+  _navigateToEventDetail(listing) {
     this.props.navigator.push({
-      ident: "ListingShow",
+      ident: "EventDetail",
+      passProps: {
+        listingName:`${listing.listingName}`,
+        listingDate:`${listing.listingDate}`,
+        listingVenue:`${listing.listingVenue}`,
+        listingPicture:`${listing.listingPicture}`,
+        listingCommunity:`${listing.listingCommunity}`,
+        startTime:`${listing.startTime}`,
+        listingPrice:`${listing.listingPrice}`,
+        listingSeating:`${listing.listingSeating}`,
+        longitude: `${listing.longitude}`,
+        latitude: `${listing.latitude}`,
+        description: `${listing.description}`,
+        performer: `${listing.performer}`
+      },
       listing
     })
   }
