@@ -18,15 +18,15 @@ class ArtistListingScreen extends Component {
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id')
     .then((response) => {
       var aList = response.data
       Object.keys(aList).map((artist) => {
         this.setState({
           artistName : this.state.artistName.concat([{
-            listingName: aList[artist].name 
-            // id: artist.id, 
-            // profilePicture: artist.web_photo_url
+            listingName: aList[artist].name, 
+            id: artist.id, 
+            profilePicture: aList[artist].web_photo_url
           }])
         })
       })
@@ -37,7 +37,7 @@ class ArtistListingScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
-      
+        <Image style={styles.listingPicture} source={{uri: listing.profilePicture}}/>
         <Text style={styles.listingName}>{`${(listing.listingName)}`}</Text>
         <View style={{flex: 1}} />
         <Icon name="chevron-right" style={styles.listingMoreIcon} />
@@ -53,9 +53,9 @@ class ArtistListingScreen extends Component {
         navTitle = "Artists"/>
         <ListView
           pageSize={1}
-          initialListSize={20}
-          scrollRenderAheadDistance={500}
-          enableEmptySections={true}
+          initialListSize={5}
+          scrollRenderAheadDistance={1}
+          onEndReachedThreshold={1}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
@@ -95,9 +95,13 @@ const styles = StyleSheet.create({
     marginLeft: 25
   },
   listingName: {
-    marginLeft: 25,
-    fontFamily: "Helvetica",
-    fontSize: 20
+    marginLeft: 15,
+    flexDirection: 'column',
+    width: 175,
+    fontSize: 20,
+    paddingBottom: 5,
+    fontWeight: '100',
+    fontFamily: 'Helvetica'
   },
 
   listingMoreIcon: {

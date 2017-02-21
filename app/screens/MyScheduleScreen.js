@@ -69,8 +69,8 @@ class MyScheduleScreen extends Component {
         navTitle = "My Schedule"/>
         <ListView
           pageSize={1}
-          initialListSize={20}
-          scrollRenderAheadDistance={500}
+          initialListSize={5}
+          scrollRenderAheadDistance={1}
           enableEmptySections={true}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
