@@ -19,6 +19,7 @@ class MyScheduleScreen extends Component {
   componentDidMount(){
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
+      console.log(response)
       var aList = response.data
       // console.log(aList)
       Object.keys(aList).map((artist) => { 
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   listingPicture:{
-    backgroundColor: 'blue',
+    backgroundColor: '#9B9B9B',
     height: 50,
     width:75,
     marginLeft: 15,

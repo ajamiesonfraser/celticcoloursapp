@@ -9,7 +9,6 @@ import Navbar from '../components/Navbar'
 import axios from 'axios'
 
 
-
 class ArtistListingScreen extends Component {
   constructor(props) {
     super(props)
@@ -18,29 +17,36 @@ class ArtistListingScreen extends Component {
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
     .then((response) => {
+      console.log(response)
       var aList = response.data
       Object.keys(aList).map((artist) => {
         this.setState({
           artistName : this.state.artistName.concat([{
             listingName: aList[artist].name, 
-            id: artist.id, 
-            profilePicture: aList[artist].web_photo_url
+            id: aList[artist].id, 
+            profilePicture: aList[artist].web_photo_url,
+            bio: aList[artist].bio_public,
+            homebase: aList[artist].homebase,
+            shows: aList[artist].shows[0].show[0].name
           }])
         })
       })
     })
     .done()
   }
-  
+    
   _renderListingRow(listing) {
     return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToListingShow(listing) }>
+      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing) }>
         <Image style={styles.listingPicture} source={{uri: listing.profilePicture}}/>
-        <Text style={styles.listingName}>{`${(listing.listingName)}`}</Text>
+        <View style={styles.listingInfo}>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{`${(listing.listingName)}`}</Text>
+          <Text style={styles.homebase}>{`${listing.homebase}`}</Text>
+          <Text style={styles.homebase}>{`${listing.shows}`}</Text>
+        </View>
         <View style={{flex: 1}} />
-        <Icon name="chevron-right" style={styles.listingMoreIcon} />
       </TouchableOpacity>
     )
   }
@@ -55,7 +61,7 @@ class ArtistListingScreen extends Component {
           pageSize={1}
           initialListSize={5}
           scrollRenderAheadDistance={1}
-          onEndReachedThreshold={1}
+          enableEmptySections={true}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
@@ -65,9 +71,18 @@ class ArtistListingScreen extends Component {
     )
   }
 
-  _navigateToListingShow(listing) {
+  _navigateToArtistDetail(listing) {
     this.props.navigator.push({
-      ident: "ListingShow",
+      ident: "ArtistDetail",
+      passProps: {
+        artistName:`${listing.artistName}`,
+        listingName:`${listing.listingName}`,
+        id: `${listing.id}`,
+        profilePicture: `${listing.profilePicture}`,
+        bio: `${listing.bio}`,
+        homebase:`${listing.homebase}`,
+        shows:`${listing.shows}`
+      },
       listing
     })
   }
@@ -81,7 +96,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-
+  listingInfo:{
+    flexDirection: "column",
+    width:200,
+    marginTop: 15
+  },
+  homebase: {
+    marginLeft: 15,
+    paddingBottom: 5,
+    fontSize: 13,
+    fontFamily: "Helvetica",
+    fontWeight: '100'
+  },
   listingRow: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -89,17 +115,16 @@ const styles = StyleSheet.create({
     height: 100
   },
   listingPicture:{
-    backgroundColor: 'blue',
+    backgroundColor: '#9B9B9B',
     height: 60,
     width:90,
     marginLeft: 25
   },
   listingName: {
     marginLeft: 15,
-    flexDirection: 'column',
+    flexDirection: 'row',
     width: 175,
-    fontSize: 20,
-    paddingBottom: 5,
+    fontSize: 17,
     fontWeight: '100',
     fontFamily: 'Helvetica'
   },
