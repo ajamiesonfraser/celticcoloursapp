@@ -1,55 +1,56 @@
 'use strict'
 
 import React, {Component} from 'react'
-import { Dimensions, StyleSheet, ScrollView, View, Image, Text } from 'react-native'
+import { Dimensions, StyleSheet, ScrollView, View, Image, Text, Navigator, TabBarItemIOS } from 'react-native'
+import AppNavigator from '../navigation/AppNavigator'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 var window = Dimensions.get('window');
 var uri = 'https://pbs.twimg.com/profile_images/537787723164024832/lpI-9shb_400x400.jpeg';
 
-const people = [
-  {firstName: "aj", lastName: "fraser", id: 1},
-  {firstName: "darcy", lastName: "campbell", id: 2},
-  {firstName: "adam", lastName: "walsh", id: 3},
-  {firstName: "matt", lastName: "lewis", id: 4},
-  {firstName: "scott", lastName: "moore", id: 5}
-]
 
 class Menu extends Component {
+
   
-  static propTypes = {
-    onItemSelected: React.PropTypes.func.isRequired,
-  }
 
   render() {
     return (
       
       <ScrollView scrollsToTop={false} style={styles.menu}>
         
-        <View style={styles.avatarContainer}>
-          
-          <Image
-            style={styles.avatar}
-            source={{ uri, }}/>
-          <Text style={styles.name}>A.J.</Text>
         
-        </View>
-
         <Text
-          onPress={() => this.props.onItemSelected('About')}
+          onPress={() => this.props.onItemSelected('MapScreen')}
           style={styles.item}>
-          About
+          Discover
         </Text>
 
         <Text
-          onPress={() => this.props.onItemSelected('Contacts')}
+          onPress={() => this.props.onItemSelected('')}
           style={styles.item}>
-          Contacts
+          Schedule
         </Text>
+
+        <Text
+          onPress={() => this.props.onItemSelected('')}
+          style={styles.item}>
+          Artists
+        </Text>
+
+        <Text
+          onPress={() => this.props.onItemSelected('')}
+          style={styles.item}>
+          Contact
+        </Text>
+
+
       
       </ScrollView>
     )
   }
 }
+
+
 
 const styles = StyleSheet.create({
   menu: {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     top: 20,
   },
   item: {
-    fontSize: 14,
+    fontSize: 30,
     fontWeight: '300',
     paddingTop: 5,
   },

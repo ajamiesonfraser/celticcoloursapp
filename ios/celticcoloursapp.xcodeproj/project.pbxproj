@@ -31,6 +31,9 @@
 		832F863B36034C21A398D3B5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 774BA962525F41FBB6DB1F1D /* Zocial.ttf */; };
 		8B2D3FE348B64B91B81CD65D /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29866C1A4F434D70BABA8D09 /* libRNVectorIcons.a */; };
 		9D2CAB834FAD4340BB6853F4 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E051591371B347D3B8D6E7E0 /* SimpleLineIcons.ttf */; };
+		A809B3F91E57339500E5050C /* holangels.gpx in Resources */ = {isa = PBXBuildFile; fileRef = A809B3F81E57339500E5050C /* holangels.gpx */; };
+		A809B3FA1E57339500E5050C /* holangels.gpx in Resources */ = {isa = PBXBuildFile; fileRef = A809B3F81E57339500E5050C /* holangels.gpx */; };
+		A8C69F361E2FA78F00CE864B /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8C69F1B1E2FA74E00CE864B /* libAirMaps.a */; };
 		B6510607A3F54DCFAFB50AEC /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34FEC6B9DFBA43B2B392100D /* Ionicons.ttf */; };
 		B7C7E8BD5F244D02B7831FF6 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C182E507FD024AA2B6BE6337 /* Octicons.ttf */; };
 		C1C0DA0A93E5430982B524B0 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5842952FAB6B4669802D6A17 /* FontAwesome.ttf */; };
@@ -227,6 +230,13 @@
 			remoteGlobalIDString = 5DBEB1501B18CEA900B34395;
 			remoteInfo = RNVectorIcons;
 		};
+		A8C69F1A1E2FA74E00CE864B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A8C69F161E2FA74E00CE864B /* AirMaps.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
+			remoteInfo = AirMaps;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -260,6 +270,8 @@
 		774BA962525F41FBB6DB1F1D /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		A809B3F81E57339500E5050C /* holangels.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = holangels.gpx; path = ../holangels.gpx; sourceTree = "<group>"; };
+		A8C69F161E2FA74E00CE864B /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		AC9D05C3E9454E42ACD43AF8 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		C182E507FD024AA2B6BE6337 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		E051591371B347D3B8D6E7E0 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -279,6 +291,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8C69F361E2FA78F00CE864B /* libAirMaps.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -441,6 +454,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				A8C69F161E2FA74E00CE864B /* AirMaps.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -469,6 +483,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A809B3F81E57339500E5050C /* holangels.gpx */,
 				13B07FAE1A68108700A75B9A /* celticcoloursapp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* celticcoloursappTests */,
@@ -492,6 +507,14 @@
 			isa = PBXGroup;
 			children = (
 				A8A97C271E295A1100E4A6EC /* libRNVectorIcons.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A8C69F171E2FA74E00CE864B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A8C69F1B1E2FA74E00CE864B /* libAirMaps.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -541,12 +564,15 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 610;
+				LastUpgradeCheck = 820;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = NM82P768VX;
 					};
 				};
 			};
@@ -562,6 +588,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = A8C69F171E2FA74E00CE864B /* Products */;
+					ProjectRef = A8C69F161E2FA74E00CE864B /* AirMaps.xcodeproj */;
+				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
 					ProjectRef = 00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */;
@@ -802,6 +832,13 @@
 			remoteRef = A8A97C261E295A1100E4A6EC /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		A8C69F1B1E2FA74E00CE864B /* libAirMaps.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libAirMaps.a;
+			remoteRef = A8C69F1A1E2FA74E00CE864B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -809,6 +846,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A809B3FA1E57339500E5050C /* holangels.gpx in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,6 +859,7 @@
 				04689F8BCAD14C8FA2D6CE07 /* Entypo.ttf in Resources */,
 				6A5D7471CEA24DA986D186A2 /* EvilIcons.ttf in Resources */,
 				C1C0DA0A93E5430982B524B0 /* FontAwesome.ttf in Resources */,
+				A809B3F91E57339500E5050C /* holangels.gpx in Resources */,
 				7CB2A4A2C404426FA0975391 /* Foundation.ttf in Resources */,
 				B6510607A3F54DCFAFB50AEC /* Ionicons.ttf in Resources */,
 				0F335ACC80534C5CB9BBCB6A /* MaterialCommunityIcons.ttf in Resources */,
@@ -906,6 +945,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/celticcoloursapp.app/celticcoloursapp";
 			};
@@ -923,6 +963,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/celticcoloursapp.app/celticcoloursapp";
 			};
@@ -934,13 +975,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = NM82P768VX;
 				INFOPLIST_FILE = celticcoloursapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
+				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = celticcoloursapp;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -951,13 +993,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NM82P768VX;
 				INFOPLIST_FILE = celticcoloursapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				OTHER_LDFLAGS = (
-					"$(inherited)",
+				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = celticcoloursapp;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -976,15 +1019,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1017,8 +1064,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1026,6 +1075,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
