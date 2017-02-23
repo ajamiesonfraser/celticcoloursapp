@@ -4,11 +4,12 @@ import MapView from 'react-native-maps';
 import PanController from '../components/PanController';
 import PriceMarker from '../components/AnimatedPriceMarker';
 
+
 const screen = Dimensions.get('window');
 
 const ASPECT_RATIO = screen.width / screen.height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
+var LATITUDE = 37.78825;
+var LONGITUDE = -122.4324;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -115,6 +116,7 @@ function getMarkerState(panX, panY, scrollY, i) {
   };
 }
 
+
 class DiscoverMap extends React.Component {
   constructor(props) {
     super(props);
@@ -158,7 +160,7 @@ class DiscoverMap extends React.Component {
         amount: 199,
         coordinate: {
           latitude: LATITUDE + 0.004,
-          longitude: LONGITUDE - 0.004,
+          longitude: LONGITUDE - 0.010,
         },
       },
       {
@@ -196,6 +198,21 @@ class DiscoverMap extends React.Component {
 
   componentDidMount() {
     const { region, panX, panY, scrollX, markers } = this.state;
+    
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          currentLatitude: position.coords.latitude,
+          currentLongitude: position.coords.longitude,
+          error: null,
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+    
+
 
     panX.addListener(this.onPanXChange);
     panY.addListener(this.onPanYChange);
@@ -212,7 +229,9 @@ class DiscoverMap extends React.Component {
       }),
       duration: 0,
     }).start();
+    
   }
+
 
   onStartShouldSetPanResponder = (e) => {
     // we only want to move the view if they are starting the gesture on top
@@ -302,7 +321,8 @@ class DiscoverMap extends React.Component {
       markers,
       region,
     } = this.state;
-
+    console.log(this.state.currentLongitude)
+    console.log(this.state.currentLatitude)
     return (
       <View style={styles.container}>
         <PanController
