@@ -29,7 +29,7 @@ class ArtistListingScreen extends Component {
             profilePicture: aList[artist].web_photo_url,
             bio: aList[artist].bio_public,
             homebase: aList[artist].homebase,
-            shows: aList[artist].shows[0].show[0].name
+            shows: aList[artist].shows[0]
           }])
         })
       })
@@ -44,7 +44,7 @@ class ArtistListingScreen extends Component {
         <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{`${(listing.listingName)}`}</Text>
           <Text style={styles.homebase}>{`${listing.homebase}`}</Text>
-          <Text style={styles.homebase}>{`${listing.shows}`}</Text>
+          <Text style={styles.homebase}>{`${listing.shows.show[0].name}`}</Text>
         </View>
         <View style={{flex: 1}} />
       </TouchableOpacity>
@@ -81,7 +81,7 @@ class ArtistListingScreen extends Component {
         profilePicture: `${listing.profilePicture}`,
         bio: `${listing.bio}`,
         homebase:`${listing.homebase}`,
-        shows:`${listing.shows}`
+        shows:listing.shows
       },
       listing
     })
