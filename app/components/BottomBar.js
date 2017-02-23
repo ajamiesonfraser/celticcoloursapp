@@ -27,7 +27,7 @@ class BottomBar extends Component {
           title={``}
           onPress={() => this.setState({selectedTab: "tab3"})}>
             <AppNavigator
-              initialRoute={{ident: "MapScreen"}} />
+              initialRoute={{ident: "DiscoverMap"}} />
         </Icon.TabBarItemIOS>
 
         <Icon.TabBarItemIOS

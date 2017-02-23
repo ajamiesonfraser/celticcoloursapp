@@ -7,6 +7,7 @@ import MapScreen from '../screens/MapScreen'
 import ArtistListingScreen from '../screens/ArtistListingScreen'
 import EventDetailScreen  from '../screens/EventDetailScreen'
 import ArtistDetailScreen from '../screens/ArtistDetailScreen'
+import DiscoverMap from '../screens/DiscoverMap'
 
 class AppNavigator extends Component {
 
@@ -30,6 +31,12 @@ class AppNavigator extends Component {
       case "MapScreen":
         return (
           <MapScreen
+            {...globalNavigatorProps} />
+        )
+
+      case "DiscoverMap":
+        return (
+          <DiscoverMap
             {...globalNavigatorProps} />
         )
 
