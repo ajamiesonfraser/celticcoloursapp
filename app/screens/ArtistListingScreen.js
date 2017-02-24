@@ -19,9 +19,10 @@ class ArtistListingScreen extends Component {
   componentDidMount(){
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
     .then((response) => {
-      console.log(response)
+      //console.log(response)
       var aList = response.data
-      Object.keys(aList).map((artist) => {
+     // Object.keys(aList).map((artist) => {
+      for (var artist in aList) {
         this.setState({
           artistName : this.state.artistName.concat([{
             listingName: aList[artist].name, 
@@ -32,7 +33,7 @@ class ArtistListingScreen extends Component {
             shows: aList[artist].shows[0]
           }])
         })
-      })
+      }
     })
     .done()
   }
@@ -60,8 +61,7 @@ class ArtistListingScreen extends Component {
         <ListView
           pageSize={1}
           initialListSize={5}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
+          scrollRenderAheadDistance={5}
           dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
