@@ -26,7 +26,7 @@ class AnimatedPriceMarker extends Component {
             },
           ]}
         >
-          <Text style={styles.dollar}>$</Text>
+          {/*<Text style={styles.dollar}>$</Text>*/}
           <Text style={styles.amount}>{amount}</Text>
         </Animated.View>
         <Animated.View

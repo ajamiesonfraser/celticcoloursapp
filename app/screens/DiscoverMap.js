@@ -8,8 +8,8 @@ import PriceMarker from '../components/AnimatedPriceMarker';
 const screen = Dimensions.get('window');
 
 const ASPECT_RATIO = screen.width / screen.height;
-var LATITUDE = 37.78825;
-var LONGITUDE = -122.4324;
+var LATITUDE = 46.143219;
+var LONGITUDE = -60.195674;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
@@ -149,7 +149,7 @@ class DiscoverMap extends React.Component {
     const markers = [
       {
         id: 0,
-        amount: 99,
+        amount: 'Forever in Our Hearts',
         coordinate: {
           latitude: LATITUDE,
           longitude: LONGITUDE,
@@ -157,7 +157,7 @@ class DiscoverMap extends React.Component {
       },
       {
         id: 1,
-        amount: 199,
+        amount: 'This Love Will Carry',
         coordinate: {
           latitude: LATITUDE + 0.004,
           longitude: LONGITUDE - 0.010,
@@ -165,7 +165,7 @@ class DiscoverMap extends React.Component {
       },
       {
         id: 2,
-        amount: 285,
+        amount: 'Inverness to Inverness',
         coordinate: {
           latitude: LATITUDE - 0.004,
           longitude: LONGITUDE - 0.004,
