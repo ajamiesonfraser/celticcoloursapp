@@ -26,7 +26,7 @@ class EventDetailScreen extends Component {
         <StatusBarBackground/>   
         <ScrollView>
         <View style={styles.contentDetail}>
-            {/*<Image style={styles.listingPicture} source={{uri: this.props.listingPicture}}/>*/}
+            <Image style={styles.listingPicture} source={{uri: this.props.listingPicture}}/>
             <Text style={styles.listingName}>{this.props.listingName}</Text>
             <View style={styles.contentRow}>
               <View>

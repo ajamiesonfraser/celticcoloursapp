@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import {Navigator, Text, StyleSheet} from 'react-native'
 import MyScheduleScreen from '../screens/MyScheduleScreen'
-import ListingShowScreen from '../screens/ListingShowScreen'
 import MapScreen from '../screens/MapScreen'
 import ArtistListingScreen from '../screens/ArtistListingScreen'
 import EventDetailScreen  from '../screens/EventDetailScreen'
@@ -18,14 +17,8 @@ class AppNavigator extends Component {
       case "MyScheduleIndex":
         return (
           <MyScheduleScreen
-            {...globalNavigatorProps} />
-        )
-
-      case "ListingShow":
-        return (
-          <ListingShowScreen
             {...globalNavigatorProps}
-            listing={route.listing} />
+            {...route.passProps} />
         )
 
       case "MapScreen":
@@ -33,6 +26,7 @@ class AppNavigator extends Component {
           <MapScreen
             {...globalNavigatorProps} />
         )
+
 
       case "DiscoverMap":
         return (
@@ -43,7 +37,8 @@ class AppNavigator extends Component {
       case "ArtistListing":
         return (
           <ArtistListingScreen
-            {...globalNavigatorProps} />
+            {...globalNavigatorProps}
+            {...route.passProps} />
         )
 
       case "EventDetail":

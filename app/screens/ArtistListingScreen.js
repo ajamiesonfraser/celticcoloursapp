@@ -10,6 +10,7 @@ import axios from 'axios'
 
 
 class ArtistListingScreen extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -20,7 +21,6 @@ class ArtistListingScreen extends Component {
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
     .then((response) => {
       var aList = response.data
-      //Object.keys(aList).map((artist) => {
         for (var artist in aList) {
         this.setState({
           artistName : this.state.artistName.concat([{
@@ -43,6 +43,7 @@ class ArtistListingScreen extends Component {
         <Image style={styles.listingPicture} source={{uri: listing.profilePicture}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{`${(listing.listingName)}`}</Text>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.listingName}</Text>
           <Text style={styles.homebase}>{`${listing.homebase}`}</Text>
           <Text style={styles.homebase}>{`${listing.shows}`}</Text>
         </View>
@@ -51,6 +52,7 @@ class ArtistListingScreen extends Component {
   }
 
   render() {
+    console.dir(this.props.artistName)
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -81,8 +83,7 @@ class ArtistListingScreen extends Component {
         bio: `${listing.bio}`,
         homebase:`${listing.homebase}`,
         shows:`${listing.shows}`
-      },
-      listing
+      }
     })
   }
 

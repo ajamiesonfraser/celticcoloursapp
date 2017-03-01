@@ -20,8 +20,6 @@ class MyScheduleScreen extends Component {
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
-      // console.log(aList)
-      //Object.keys(aList).map((artist) => { 
         for (var artist in aList) {
         this.setState({
           artistName : this.state.artistName.concat([{
@@ -63,6 +61,7 @@ class MyScheduleScreen extends Component {
   }
 
   render() {
+    console.log(this.props.showName)
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -101,8 +100,7 @@ class MyScheduleScreen extends Component {
         latitude: `${listing.latitude}`,
         description: `${listing.description}`,
         performer: `${listing.performer}`
-      },
-      listing
+      }
     })
   }
 

@@ -10,8 +10,8 @@ const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
 var LATITUDE = 46.143219;
 var LONGITUDE = -60.195674;
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+var LATITUDE_DELTA = 0.3022;
+var LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const ITEM_SPACING = 10;
 const ITEM_PREVIEW = 10;
@@ -203,9 +203,11 @@ class DiscoverMap extends React.Component {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         this.setState({
+          currentRegion: {
           currentLatitude: position.coords.latitude,
           currentLongitude: position.coords.longitude,
           error: null,
+        }
         });
       },
       (error) => this.setState({ error: error.message }),
@@ -342,6 +344,7 @@ class DiscoverMap extends React.Component {
             provider={this.props.provider}
             style={styles.map}
             region={region}
+            showUserLocation={true}
             onRegionChange={this.onRegionChange}
           >
             {markers.map((marker, i) => {

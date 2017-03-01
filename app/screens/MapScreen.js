@@ -1,31 +1,47 @@
 'use strict'
-
-'use strict'
 import React, { Component} from 'react'
-import {Text, View, ListView, TouchableOpacity, StyleSheet } from 'react-native'
-import ViewContainer from '../components/ViewContainer'
+import {Text, View, StyleSheet, Dimensions } from 'react-native'
 import StatusBarBackground from '../components/StatusBarBackground'
-import _ from 'lodash'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import MapView from 'react-native-maps'
 
 
+const {width, height} = Dimensions.get('window')
 
 class MapScreen extends Component {
 
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position)
+        this.setState({ currentRegion: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        }})
+      },
+      (error) => alert(error.message),
+      {timeout: 20000, maximumAge: 1000}
+    )
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      console.log(position)
+      this.setState({currentRegion: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      }})
+    })
+  }
   
   render () {
-    console.log('whatever')
     
     return(
       
-      <ViewContainer style={{backgroundColor:'white'}}>
-      <MapView
-        style={styles.map}
-        showsUserLocation={true}
-      />
-      </ViewContainer>
-      )
+      <View style={styles.container}>
+        <MapView
+          showsUserLocation = {true}
+          style={styles.map}
+          // region={this.state.currentRegion}
+        />
+      </View>
+    )
   }
  }
 
@@ -39,29 +55,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-
-  personRow: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    height: 50
-  },
-
-  personName: {
-    marginLeft: 25
-  },
-
-  personMoreIcon: {
-    color: "green",
-    height: 10,
-    width: 10,
-    marginRight: 25
-  },
-
   map: {
-  	flex: 1
+  	flex: 1,
+    width: width
   }
-
 });
 
 module.exports = MapScreen
