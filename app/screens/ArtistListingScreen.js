@@ -21,9 +21,9 @@ class ArtistListingScreen extends Component {
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
     .then((response) => {
       var aList = response.data
+      var artistName = []
         for (var artist in aList) {
-        this.setState({
-          artistName : this.state.artistName.concat([{
+          artistName = artistName.concat([{
             listingName: aList[artist].name, 
             id: aList[artist].id, 
             profilePicture: aList[artist].web_photo_url,
@@ -31,8 +31,18 @@ class ArtistListingScreen extends Component {
             homebase: aList[artist].homebase,
             shows: aList[artist].shows[0].show[0].name
           }])
-        })
+        // this.setState({
+        //   artistName : this.state.artistName.concat([{
+        //     listingName: aList[artist].name, 
+        //     id: aList[artist].id, 
+        //     profilePicture: aList[artist].web_photo_url,
+        //     bio: aList[artist].bio_public,
+        //     homebase: aList[artist].homebase,
+        //     shows: aList[artist].shows[0].show[0].name
+        //   }])
+        // })
       }
+      this.setState({artistName:artistName})
     })
     .done()
   }
@@ -43,7 +53,6 @@ class ArtistListingScreen extends Component {
         <Image style={styles.listingPicture} source={{uri: listing.profilePicture}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{`${(listing.listingName)}`}</Text>
-          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.listingName}</Text>
           <Text style={styles.homebase}>{`${listing.homebase}`}</Text>
           <Text style={styles.homebase}>{`${listing.shows}`}</Text>
         </View>
@@ -52,7 +61,6 @@ class ArtistListingScreen extends Component {
   }
 
   render() {
-    console.dir(this.props.artistName)
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -60,7 +68,7 @@ class ArtistListingScreen extends Component {
         navTitle = "Artists"/>
         <ListView
           pageSize={1}
-          initialListSize={5}
+          initialListSize={6}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
           dataSource={ds.cloneWithRows(this.state.artistName)}

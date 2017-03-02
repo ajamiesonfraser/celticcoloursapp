@@ -17,8 +17,7 @@ class AppNavigator extends Component {
       case "MyScheduleIndex":
         return (
           <MyScheduleScreen
-            {...globalNavigatorProps}
-            {...route.passProps} />
+            {...globalNavigatorProps} />
         )
 
       case "MapScreen":
@@ -37,8 +36,7 @@ class AppNavigator extends Component {
       case "ArtistListing":
         return (
           <ArtistListingScreen
-            {...globalNavigatorProps}
-            {...route.passProps} />
+            {...globalNavigatorProps}/>
         )
 
       case "EventDetail":
