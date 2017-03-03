@@ -24,7 +24,7 @@ class Navbar extends Component {
             options={['My Events', 'By Day', 'By Artist', 'By Region', 'By Type']}>
             <Icon
               style={styles.buttonIcon}
-              name="angle-down" size={25} />
+              name="angle-down" size={35} />
           </ModalDropdown>
         }
       />
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor:"blue",
   },
   buttonIcon:{
-    marginTop: 15,
+    marginTop: 10,
     marginRight: 20
   }
 })

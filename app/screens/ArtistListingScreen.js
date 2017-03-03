@@ -29,18 +29,8 @@ class ArtistListingScreen extends Component {
             profilePicture: aList[artist].web_photo_url,
             bio: aList[artist].bio_public,
             homebase: aList[artist].homebase,
-            shows: aList[artist].shows[0].show[0].name
+            shows: aList[artist].shows[0]
           }])
-        // this.setState({
-        //   artistName : this.state.artistName.concat([{
-        //     listingName: aList[artist].name, 
-        //     id: aList[artist].id, 
-        //     profilePicture: aList[artist].web_photo_url,
-        //     bio: aList[artist].bio_public,
-        //     homebase: aList[artist].homebase,
-        //     shows: aList[artist].shows[0].show[0].name
-        //   }])
-        // })
       }
       this.setState({artistName:artistName})
     })
@@ -54,13 +44,13 @@ class ArtistListingScreen extends Component {
         <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{`${(listing.listingName)}`}</Text>
           <Text style={styles.homebase}>{`${listing.homebase}`}</Text>
-          <Text style={styles.homebase}>{`${listing.shows}`}</Text>
         </View>
       </TouchableOpacity>
     )
   }
 
   render() {
+    console.log(this.state.artistName.shows)
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -90,7 +80,7 @@ class ArtistListingScreen extends Component {
         profilePicture: `${listing.profilePicture}`,
         bio: `${listing.bio}`,
         homebase:`${listing.homebase}`,
-        shows:`${listing.shows}`
+        shows:listing.shows
       }
     })
   }

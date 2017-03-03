@@ -17,25 +17,27 @@ class MyScheduleScreen extends Component {
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
       var artistName = []
         for (var artist in aList) {
           artistName = artistName.concat([{
+            // artist:aList[]
             listingName: aList[artist].name, 
-              id: aList[artist].id, 
-              startTime: aList[artist].formatted_start_time, 
-              listingPicture: aList[artist].poster_url,
-              listingDate: aList[artist].formatted_date,
-              listingVenue: aList[artist].venue_name,
-              listingCommunity:aList[artist].venue[0].community,
-              latitude: aList[artist].venue[0].latitude,
-              longitude: aList[artist].venue[0].longitude,
-              googleAddress: aList[artist].venue[0].google_maps_link,
-              listingPrice: aList[artist].price,
-              listingSeating: aList[artist].seating,
-              description: aList[artist].description_public,
+            id: aList[artist].id, 
+            startTime: aList[artist].formatted_start_time, 
+            listingPicture: aList[artist].poster_url,
+            listingDate: aList[artist].formatted_date,
+            listingVenue: aList[artist].venue_name,
+            listingCommunity:aList[artist].venue[0].community,
+            latitude: aList[artist].venue[0].latitude,
+            longitude: aList[artist].venue[0].longitude,
+            googleAddress: aList[artist].venue[0].google_maps_link,
+            listingPrice: aList[artist].price,
+            listingSeating: aList[artist].seating,
+            description: aList[artist].description_public,
+            performers: aList[artist].performances[0]
           }])
       }
       this.setState({artistName:artistName})
@@ -48,13 +50,13 @@ class MyScheduleScreen extends Component {
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
         <Image style={styles.listingPicture} source={{uri: listing.listingPicture}}/>
         <View style={styles.listingInfo}>
-          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingName)}`}</Text>
-          <Text style={styles.listingDate}>{`${(listing.listingDate)}`}</Text>
-          <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingVenue)}`}</Text>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.listingName}</Text>
+          <Text style={styles.listingDate}>{listing.listingDate}</Text>
+          <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.listingVenue}</Text>
         </View>
-        <Text style={styles.startTime}>{`${(listing.startTime)}`}</Text>
+        <Text style={styles.startTime}>{listing.startTime}</Text>
         <GetDirectionsButton
-          mapUrl={`${listing.googleAddress}`}/>
+          mapUrl={listing.googleAddress}/>
       </TouchableOpacity>
 
     )
@@ -87,18 +89,18 @@ class MyScheduleScreen extends Component {
     this.props.navigator.push({
       ident: "EventDetail",
       passProps: {
-        listingName:`${listing.listingName}`,
-        listingDate:`${listing.listingDate}`,
-        listingVenue:`${listing.listingVenue}`,
-        listingPicture:`${listing.listingPicture}`,
-        listingCommunity:`${listing.listingCommunity}`,
-        startTime:`${listing.startTime}`,
-        listingPrice:`${listing.listingPrice}`,
-        listingSeating:`${listing.listingSeating}`,
-        longitude: `${listing.longitude}`,
-        latitude: `${listing.latitude}`,
-        description: `${listing.description}`,
-        performer: `${listing.performer}`
+        listingName:listing.listingName,
+        listingDate:listing.listingDate,
+        listingVenue:listing.listingVenue,
+        listingPicture:listing.listingPicture,
+        listingCommunity:listing.listingCommunity,
+        startTime:listing.startTime,
+        listingPrice:listing.listingPrice,
+        listingSeating:listing.listingSeating,
+        longitude: listing.longitude,
+        latitude: listing.latitude,
+        description: listing.description,
+        performers: listing.performers
       }
     })
   }

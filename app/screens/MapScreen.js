@@ -4,10 +4,19 @@ import {Text, View, StyleSheet, Dimensions } from 'react-native'
 import StatusBarBackground from '../components/StatusBarBackground'
 import MapView from 'react-native-maps'
 
+const screen = Dimensions.get('window');
+const ASPECT_RATIO = screen.width / screen.height;
 
-const {width, height} = Dimensions.get('window')
+var LATITUDE_DELTA = 0.3022;
+var LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class MapScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentRegion: []
+    }
+  }
 
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
@@ -16,29 +25,24 @@ class MapScreen extends Component {
         this.setState({ currentRegion: {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA
         }})
       },
       (error) => alert(error.message),
       {timeout: 20000, maximumAge: 1000}
     )
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-      console.log(position)
-      this.setState({currentRegion: {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      }})
-    })
   }
   
   render () {
-    
+    console.log(this.state.currentRegion)
     return(
       
       <View style={styles.container}>
         <MapView
           showsUserLocation = {true}
           style={styles.map}
-          // region={this.state.currentRegion}
+          initialRegion={this.state.currentRegion}
         />
       </View>
     )
@@ -56,8 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   map: {
-  	flex: 1,
-    width: width
+  	flex: 1
   }
 });
 

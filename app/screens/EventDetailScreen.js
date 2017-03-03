@@ -10,16 +10,27 @@ import GetDirectionsButton from '../components/GetDirectionsButton'
 
 class EventDetailScreen extends Component {
 
+  _renderListingRow(listing) {
+    return (
+      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing)}>
+        <View style={styles.listingInfo}>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.id}</Text>
+        </View>
+        <View style={{flex: 1}} />
+      </TouchableOpacity>
+    )
+  }
 
 	render(){
-    console.log(this.props.performer)
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
 			<ViewContainer>
         <Navbar 
         	navTitle = {this.props.listingName}
         	backButton = {
           	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
-          		<Icon name="angle-left" size={25} style={{marginTop:10}}/>
+          		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}
         />
@@ -45,13 +56,33 @@ class EventDetailScreen extends Component {
             <GetDirectionsButton
               mapUrl={`http://maps.apple.com/?daddr=${this.props.latitude},${this.props.longitude}`}/>
             <Text style={styles.description}>{this.props.description}</Text>
+            <Text style={{flex:1}}>Performing Artists</Text>
 
           </View>
+          <ListView
+            dataSource={ds.cloneWithRows(this.props.performers)}
+            renderRow={(listing) => {
+              var rows = [];
+              for(var i in listing) {
+                rows.push(this._renderListingRow(listing[i]));
+              }
+              return (<View>{rows}</View>);
+            }} 
+          />
+          <View style={{height:80}} />
         </ScrollView>
-      </ViewContainer>
-        
+      </ViewContainer>  
 		)
 	}
+  _navigateToArtistDetail(listing) {
+    this.props.navigator.push({
+      ident: "ArtistDetailScreenFromListing",
+      passProps:{
+        id: listing.id,
+        name: listing.name
+      }
+    })
+  }
 }
 
 const styles = StyleSheet.create ({
@@ -88,8 +119,7 @@ const styles = StyleSheet.create ({
     alignItems:'center'
   },
   listingName:{
-    fontSize: 28,
-    paddingBottom: 20,
+    fontSize: 15,
     fontWeight: '100',
     fontFamily: 'Helvetica'
   },

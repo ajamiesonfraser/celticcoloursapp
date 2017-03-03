@@ -14,7 +14,7 @@ class ArtistDetailScreen extends Component {
     return (
       <TouchableOpacity style={styles.listingRow}>
         <View style={styles.listingInfo}>
-          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.shows}</Text>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
         </View>
         <View style={{flex: 1}} />
       </TouchableOpacity>
@@ -46,11 +46,16 @@ class ArtistDetailScreen extends Component {
           initialListSize={5}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.artistName)}
+          dataSource={ds.cloneWithRows(this.props.shows)}
           renderRow={(listing) => {
-            return this._renderListingRow(listing)
+            var rows = [];
+            for(var i = 0; i < listing.length; i++) {
+              rows.push(this._renderListingRow(listing[i]));
+            }
+            return (<View>{rows}</View>);
           }} 
         />
+        <View style={{height:80}} />
         </ScrollView>
       </ViewContainer>
         
@@ -98,8 +103,7 @@ const styles = StyleSheet.create ({
     alignItems:'center'
   },
   listingName:{
-    fontSize: 28,
-    paddingBottom: 20,
+    fontSize: 15,
     fontWeight: '100',
     fontFamily: 'Helvetica'
   },
@@ -110,8 +114,8 @@ const styles = StyleSheet.create ({
     marginBottom: 15
   },
   listingInfo:{
+    justifyContent: 'center',
     flexDirection: "column",
-    width:200,
     marginTop: 15
   },
 })
