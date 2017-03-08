@@ -54,7 +54,8 @@ var MapScreen = React.createClass({
             },
             title: aList[shows].name,
             description: aList[shows].venue_name,
-            photo: aList[shows].poster_url
+            photo: aList[shows].poster_url,
+            image: require ('../assets/musicMapPin.png')
           }])
       }
       this.setState({
@@ -116,11 +117,13 @@ var MapScreen = React.createClass({
               coordinate = {marker.latlng}
               title={marker.title}
               description={marker.description}
+              image={marker.image}
             >
-              <MapView.Callout>
+              <MapView.Callout
+                style={styles.callout}>
                 <View>
-                  <Image source={marker.photo}/>
-                  <Text >{marker.title}</Text>
+                  <Image style={styles.calloutPhoto} source={{uri: marker.photo}}/>
+                  <Text style={styles.calloutTitle}>{marker.title}</Text>
                   <Text>{marker.description}</Text>
                 </View>
               </MapView.Callout>
@@ -139,13 +142,12 @@ var MapScreen = React.createClass({
 
 var styles = StyleSheet.create({
   callout:{
-    flex:1,
-    width: 60
+    height: 200,
+    width: 200
   },
   calloutPhoto:{
-    flexGrow: 1,
-    width: 166,
-    height: 83
+    width: 150,
+    height: 75
   },
   calloutTitle:{
     fontSize:16
