@@ -1,7 +1,7 @@
 'use strict'
 
 import React, {Component} from 'react'
-import { StyleSheet, PropTypes, View, Text, Dimensions, TouchableOpacity } from 'react-native'
+import { StyleSheet, PropTypes, View, Text, Dimensions, TouchableOpacity, Image } from 'react-native'
 import MapView from 'react-native-maps'
 import axios from 'axios'
 
@@ -30,27 +30,12 @@ var MapScreen = React.createClass({
       },
       markers:[{
         latlng: {
-          latitude: 46.139907, 
-          longitude: -60.195829
+          latitude: 1, 
+          longitude: 1
         },
-        title: "Governors Pub",
-        description: "This is the place where we eat and play music"
-      },
-      {
-        latlng: {
-          latitude: 46.142229, 
-          longitude: -60.199739
-        },
-        title: "Joan Harris Cruise Pavilion",
-        description: "The biggest fiddle"
-      },
-      {
-        latlng: {
-          latitude: 46.141500, 
-          longitude: -60.193012
-        },
-        title: "Cape Breton Post",
-        description: "an absolutely shite paper"
+        title: "unknown",
+        description: "unknown",
+        photo: "unknown"
       }]
     };
   },
@@ -59,7 +44,6 @@ var MapScreen = React.createClass({
 
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,poster_url,venue_name,venue')
     .then((response) => {
-      console.log(response.data)
       var aList = response.data
       var markers = []
         for (var shows in aList) {
@@ -69,7 +53,8 @@ var MapScreen = React.createClass({
               longitude: aList[shows].venue[0].longitude
             },
             title: aList[shows].name,
-            description: aList[shows].venue_name
+            description: aList[shows].venue_name,
+            photo: aList[shows].poster_url
           }])
       }
       this.setState({
@@ -131,7 +116,15 @@ var MapScreen = React.createClass({
               coordinate = {marker.latlng}
               title={marker.title}
               description={marker.description}
-            />
+            >
+              <MapView.Callout>
+                <View>
+                  <Image source={marker.photo}/>
+                  <Text >{marker.title}</Text>
+                  <Text>{marker.description}</Text>
+                </View>
+              </MapView.Callout>
+            </MapView.Marker>
           ))}
         </MapView>
         <View style={styles.bubble}>
@@ -145,6 +138,18 @@ var MapScreen = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  callout:{
+    flex:1,
+    width: 60
+  },
+  calloutPhoto:{
+    flexGrow: 1,
+    width: 166,
+    height: 83
+  },
+  calloutTitle:{
+    fontSize:16
+  },
   container: {
     position: 'absolute',
     top: 0,
