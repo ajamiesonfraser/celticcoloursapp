@@ -8,6 +8,8 @@ import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 
+
+
 class EventDetailScreen extends Component {
 
   _renderListingRow(listing) {
@@ -27,7 +29,7 @@ class EventDetailScreen extends Component {
     return(
 			<ViewContainer>
         <Navbar 
-        	navTitle = {this.props.listingName}
+        	navTitle = {this.props.urlData.name}
         	backButton = {
           	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
@@ -37,8 +39,8 @@ class EventDetailScreen extends Component {
         <StatusBarBackground/>   
         <ScrollView>
         <View style={styles.contentDetail}>
-            <Image style={styles.listingPicture} source={{uri: this.props.listingPicture}}/>
-            <Text style={styles.listingName}>{this.props.listingName}</Text>
+            <Image style={styles.listingPicture} source={{uri: this.props.urlData.poster_url}}/>
+            <Text style={styles.listingName}>{this.props.urlData.name}</Text>
             <View style={styles.contentRow}>
               <View>
                 <Text style={styles.detailCategory}>DATE</Text>
@@ -47,20 +49,20 @@ class EventDetailScreen extends Component {
                 <Text style={styles.detailCategory}>TICKETS</Text>
               </View>
               <View style={{marginBottom:15}}>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.listingDate} {this.props.startTime}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'} >{this.props.listingVenue}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.listingCommunity}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.listingPrice} {this.props.listingSeating}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.formatted_date} {this.props.urlData.formatted_start_time}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'} >{this.props.urlData.venue_name}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.venue[0].community}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.price} {this.props.urlData.seating}</Text>
               </View>
             </View>
             <GetDirectionsButton
-              mapUrl={`http://maps.apple.com/?daddr=${this.props.latitude},${this.props.longitude}`}/>
-            <Text style={styles.description}>{this.props.description}</Text>
+              mapUrl={this.props.urlData.venue[0].google_maps_link}/>
+            <Text style={styles.description}>{this.props.urlData.description_public}</Text>
             <Text style={{flex:1}}>Performing Artists</Text>
 
           </View>
           <ListView
-            dataSource={ds.cloneWithRows(this.props.performers)}
+            dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
             renderRow={(listing) => {
               var rows = [];
               for(var i in listing) {
@@ -76,10 +78,9 @@ class EventDetailScreen extends Component {
 	}
   _navigateToArtistDetail(listing) {
     this.props.navigator.push({
-      ident: "ArtistDetailScreenFromListing",
+      ident: "ArtistDetail",
       passProps:{
-        id: listing.id,
-        name: listing.name
+        urlData:this.props.urlData
       }
     })
   }

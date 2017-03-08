@@ -26,27 +26,27 @@ class ArtistDetailScreen extends Component {
     return(
 			<ViewContainer>
         <Navbar 
-        	navTitle = {this.props.listingName}
+        	navTitle = {this.props.urlData.name}
         	backButton = {
           	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
-          		<Icon name="angle-left" size={25} style={{marginTop:10}}/>
+          		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}
         />
         <StatusBarBackground/>   
         <ScrollView>
         <View style={styles.contentDetail}>
-          <Image style={styles.listingPicture} source={{uri: this.props.profilePicture}}/>
-          <Text style={styles.listingName}>{this.props.listingName}</Text>
-          <Text style={styles.homebase}>{this.props.homebase}</Text>
-          <Text style={styles.description}>{this.props.bio}</Text>
+          <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
+          <Text style={styles.listingName}>{this.props.urlData.name}</Text>
+          <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
+          <Text style={styles.description}>{this.props.urlData.bio_public}</Text>
         </View>
         <ListView
           pageSize={1}
           initialListSize={5}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.shows)}
+          dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
           renderRow={(listing) => {
             var rows = [];
             for(var i = 0; i < listing.length; i++) {

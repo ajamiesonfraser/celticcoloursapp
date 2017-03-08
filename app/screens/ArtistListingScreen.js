@@ -14,25 +14,20 @@ class ArtistListingScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      artistName: []
+      listData: []
     }
   }
   componentDidMount(){
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
     .then((response) => {
       var aList = response.data
-      var artistName = []
+      var listData = []
         for (var artist in aList) {
-          artistName = artistName.concat([{
-            listingName: aList[artist].name, 
-            id: aList[artist].id, 
-            profilePicture: aList[artist].web_photo_url,
-            bio: aList[artist].bio_public,
-            homebase: aList[artist].homebase,
-            shows: aList[artist].shows[0]
+          listData = listData.concat([{
+            urlData:aList[artist]
           }])
       }
-      this.setState({artistName:artistName})
+      this.setState({listData:listData})
     })
     .done()
   }
@@ -40,17 +35,16 @@ class ArtistListingScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing) }>
-        <Image style={styles.listingPicture} source={{uri: listing.profilePicture}}/>
+        <Image style={styles.listingPicture} source={{uri: listing.urlData.web_photo_url}}/>
         <View style={styles.listingInfo}>
-          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{`${(listing.listingName)}`}</Text>
-          <Text style={styles.homebase}>{`${listing.homebase}`}</Text>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.name}</Text>
+          <Text style={styles.homebase}>{listing.urlData.homebase}</Text>
         </View>
       </TouchableOpacity>
     )
   }
 
   render() {
-    console.log(this.state.artistName.shows)
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -61,7 +55,7 @@ class ArtistListingScreen extends Component {
           initialListSize={6}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.artistName)}
+          dataSource={ds.cloneWithRows(this.state.listData)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
           }} 
@@ -74,13 +68,7 @@ class ArtistListingScreen extends Component {
     this.props.navigator.push({
       ident: "ArtistDetail",
       passProps: {
-        artistName:`${listing.artistName}`,
-        listingName:`${listing.listingName}`,
-        id: `${listing.id}`,
-        profilePicture: `${listing.profilePicture}`,
-        bio: `${listing.bio}`,
-        homebase:`${listing.homebase}`,
-        shows:listing.shows
+        urlData:listing.urlData
       }
     })
   }

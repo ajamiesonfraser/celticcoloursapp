@@ -9,24 +9,40 @@ import Navbar from '../components/Navbar'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 import axios from 'axios'
 
-class MyScheduleScreen extends Component {
+class ShowsByDateScreen
+ extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      listData: []
+      artistName: []
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
+      console.log(response)
       var aList = response.data
-      var listData = []
+      // console.log(aList)
+      //Object.keys(aList).map((artist) => { 
         for (var artist in aList) {
-          listData = listData.concat([{
-             urlData:aList[artist]
+        this.setState({
+          artistName : this.state.artistName.concat([{
+              listingName: aList[artist].name, 
+              id: aList[artist].id, 
+              startTime: aList[artist].formatted_start_time, 
+              listingPicture: aList[artist].poster_url,
+              listingDate: aList[artist].formatted_date,
+              listingVenue: aList[artist].venue_name,
+              listingCommunity:aList[artist].venue[0].community,
+              latitude: aList[artist].venue[0].latitude,
+              longitude: aList[artist].venue[0].longitude,
+              googleAddress: aList[artist].venue[0].google_maps_link,
+              listingPrice: aList[artist].price,
+              listingSeating: aList[artist].seating,
+              description: aList[artist].description_public,
           }])
+        })
       }
-      this.setState({listData:listData})
     })
     .done()
   }
@@ -34,15 +50,15 @@ class MyScheduleScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
-        <Image style={styles.listingPicture} source={{uri: listing.urlData.poster_url}}/>
+        <Image style={styles.listingPicture} source={{uri: listing.listingPicture}}/>
         <View style={styles.listingInfo}>
-          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
-          <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text>
-          <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
+          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingName)}`}</Text>
+          <Text style={styles.listingDate}>{`${(listing.listingDate)}`}</Text>
+          <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{`${(listing.listingVenue)}`}</Text>
         </View>
-        <Text style={styles.startTime}>{listing.urlData.formatted_start_time}</Text>
+        <Text style={styles.startTime}>{`${(listing.startTime)}`}</Text>
         <GetDirectionsButton
-          mapUrl={listing.urlData.venue[0].google_maps_link}/>
+          mapUrl={`${listing.googleAddress}`}/>
       </TouchableOpacity>
 
     )
@@ -59,7 +75,7 @@ class MyScheduleScreen extends Component {
           initialListSize={5}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.listData)}
+          dataSource={ds.cloneWithRows(this.state.artistName)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
           }}  
@@ -75,8 +91,20 @@ class MyScheduleScreen extends Component {
     this.props.navigator.push({
       ident: "EventDetail",
       passProps: {
-        urlData:listing.urlData
-      }
+        listingName:`${listing.listingName}`,
+        listingDate:`${listing.listingDate}`,
+        listingVenue:`${listing.listingVenue}`,
+        listingPicture:`${listing.listingPicture}`,
+        listingCommunity:`${listing.listingCommunity}`,
+        startTime:`${listing.startTime}`,
+        listingPrice:`${listing.listingPrice}`,
+        listingSeating:`${listing.listingSeating}`,
+        longitude: `${listing.longitude}`,
+        latitude: `${listing.latitude}`,
+        description: `${listing.description}`,
+        performer: `${listing.performer}`
+      },
+      listing
     })
   }
 
@@ -149,4 +177,4 @@ const styles = StyleSheet.create({
 
 });
 
-module.exports = MyScheduleScreen
+module.exports = ShowsByDateScreen
