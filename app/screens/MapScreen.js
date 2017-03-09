@@ -175,13 +175,13 @@ var styles = StyleSheet.create({
     borderRadius: 5
   },
   calloutTitle:{
-    fontSize:16,
+    fontSize:15,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 5
   },
   calloutVenue:{
-    fontSize:14,
+    fontSize:13,
     fontWeight: '100',
     textAlign: 'center',
     marginBottom: 3,
@@ -189,15 +189,15 @@ var styles = StyleSheet.create({
   },
   calloutDate:{
     marginTop:5,
-    fontWeight: '100',
-    fontSize: 13
+    fontWeight: 'bold',
+    fontSize: 11
   },
   calloutTime:{
     color:'#e95644',
     fontSize: 13
   },
   calloutCommunity:{
-    fontSize:13
+    fontSize:11
   },
   container: {
     position: 'absolute',
