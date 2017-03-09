@@ -128,7 +128,8 @@ const styles = StyleSheet.create ({
     backgroundColor: 'blue',
     height: 200,
     width:300,
-    marginBottom: 15
+    marginBottom: 15,
+    borderRadius: 5
   },
 })
 

@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
     width:75,
     marginLeft: 15,
     alignSelf: 'flex-start',
-    marginTop: 10
+    marginTop: 10,
+    borderRadius: 5
   },
   listingName: {
     marginLeft: 15,

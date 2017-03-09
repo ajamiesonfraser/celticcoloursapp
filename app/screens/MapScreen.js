@@ -33,16 +33,20 @@ var MapScreen = React.createClass({
           latitude: 1, 
           longitude: 1
         },
+        community: "unknown",
         title: "unknown",
         description: "unknown",
-        photo: "unknown"
+        photo: "unknown",
+        date: "unknown",
+        startTime: "unknown",
+        endTime: "unknown"
       }]
     };
   },
 
   componentDidMount: function() {
 
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,poster_url,venue_name,venue')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,poster_url,venue_name,venue,formatted_date,formatted_start_time,formatted_end_time')
     .then((response) => {
       var aList = response.data
       var markers = []
@@ -52,10 +56,14 @@ var MapScreen = React.createClass({
               latitude: aList[shows].venue[0].latitude,
               longitude: aList[shows].venue[0].longitude
             },
+            community: aList[shows].venue[0].community,
             title: aList[shows].name,
             description: aList[shows].venue_name,
             photo: aList[shows].poster_url,
-            image: require ('../assets/musicMapPin.png')
+            image: require ('../assets/musicMapPin.png'),
+            date: aList[shows].formatted_date,
+            startTime: aList[shows].formatted_start_time,
+            endTime: aList[shows].formatted_end_time
           }])
       }
       this.setState({
@@ -121,10 +129,15 @@ var MapScreen = React.createClass({
             >
               <MapView.Callout
                 style={styles.callout}>
-                <View>
+                <View style={styles.calloutView1}>
                   <Image style={styles.calloutPhoto} source={{uri: marker.photo}}/>
+                </View>
+                <View style={styles.calloutView2}>
                   <Text style={styles.calloutTitle}>{marker.title}</Text>
-                  <Text>{marker.description}</Text>
+                  <Text style={styles.calloutVenue}>{marker.description}</Text>
+                  <Text style={styles.calloutCommunity}>{marker.community}</Text>
+                  <Text style={styles.calloutDate}>{marker.date}</Text>
+                  <Text style={styles.calloutTime}>{marker.startTime} - {marker.endTime}</Text>
                 </View>
               </MapView.Callout>
             </MapView.Marker>
@@ -142,15 +155,49 @@ var MapScreen = React.createClass({
 
 var styles = StyleSheet.create({
   callout:{
-    height: 200,
-    width: 200
+    padding: 15,
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 230,
+    width: 210
+  },
+  calloutView1: {
+    alignItems: 'center',
+    marginBottom: 10
+  },
+  calloutView2: {
+    alignItems: 'center'
   },
   calloutPhoto:{
     width: 150,
-    height: 75
+    height: 75,
+    borderRadius: 5
   },
   calloutTitle:{
-    fontSize:16
+    fontSize:16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 5
+  },
+  calloutVenue:{
+    fontSize:14,
+    fontWeight: '100',
+    textAlign: 'center',
+    marginBottom: 3,
+    color: '#0076FF'
+  },
+  calloutDate:{
+    marginTop:5,
+    fontWeight: '100',
+    fontSize: 13
+  },
+  calloutTime:{
+    color:'#e95644',
+    fontSize: 13
+  },
+  calloutCommunity:{
+    fontSize:13
   },
   container: {
     position: 'absolute',

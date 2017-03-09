@@ -104,7 +104,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#9B9B9B',
     height: 60,
     width:90,
-    marginLeft: 25
+    marginLeft: 25,
+    borderRadius: 5
   },
   listingName: {
     marginLeft: 15,
