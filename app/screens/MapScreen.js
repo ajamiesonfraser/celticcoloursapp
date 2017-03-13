@@ -28,19 +28,7 @@ var MapScreen = React.createClass({
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      markers:[{
-        latlng: {
-          latitude: 1, 
-          longitude: 1
-        },
-        community: "unknown",
-        title: "unknown",
-        description: "unknown",
-        photo: "unknown",
-        date: "unknown",
-        startTime: "unknown",
-        endTime: "unknown"
-      }]
+      markers:[]
     };
   },
 
@@ -52,20 +40,10 @@ var MapScreen = React.createClass({
       var markers = []
         for (var shows in aList) {
           markers = markers.concat([{
-            latlng: {
-              latitude: aList[shows].venue[0].latitude,
-              longitude: aList[shows].venue[0].longitude
-            },
-            community: aList[shows].venue[0].community,
-            title: aList[shows].name,
-            description: aList[shows].venue_name,
-            photo: aList[shows].poster_url,
-            image: require ('../assets/musicMapPin.png'),
-            date: aList[shows].formatted_date,
-            startTime: aList[shows].formatted_start_time,
-            endTime: aList[shows].formatted_end_time
+            markerData:aList[shows],
+            image: require ('../assets/musicMapPin@3x.png'),
           }])
-      }
+        }
       this.setState({
         markers:markers
       })
@@ -121,27 +99,31 @@ var MapScreen = React.createClass({
         >
           {this.state.markers.map((marker,i) => (
             <MapView.Marker
-            key={i} 
-              coordinate = {marker.latlng}
-              title={marker.title}
-              description={marker.description}
+              key={i} 
+              coordinate = {{
+                latitude: marker.markerData.venue[0].latitude,
+                longitude: marker.markerData.venue[0].longitude
+              }}
+              title={marker.markerData.name}
+              description={marker.markerData.venue_name}
               image={marker.image}
             >
               <MapView.Callout
                 style={styles.callout}>
                 <View style={styles.calloutView1}>
-                  <Image style={styles.calloutPhoto} source={{uri: marker.photo}}/>
+                  <Image style={styles.calloutPhoto} source={{uri: marker.markerData.poster_url}}/>
                 </View>
                 <View style={styles.calloutView2}>
-                  <Text style={styles.calloutTitle}>{marker.title}</Text>
-                  <Text style={styles.calloutVenue}>{marker.description}</Text>
-                  <Text style={styles.calloutCommunity}>{marker.community}</Text>
-                  <Text style={styles.calloutDate}>{marker.date}</Text>
-                  <Text style={styles.calloutTime}>{marker.startTime} - {marker.endTime}</Text>
+                  <Text style={styles.calloutTitle}>{marker.markerData.name}</Text>
+                  <Text style={styles.calloutVenue}>{marker.markerData.venue_name}</Text>
+                  <Text style={styles.calloutCommunity}>{marker.markerData.venue[0].community}</Text>
+                  <Text style={styles.calloutDate}>{marker.markerData.formatted_date}</Text>
+                  <Text style={styles.calloutTime}>{marker.markerData.formatted_start_time} - {marker.markerData.formatted_end_time}</Text>
                 </View>
               </MapView.Callout>
             </MapView.Marker>
           ))}
+
         </MapView>
         <View style={styles.bubble}>
           <Text style={{ textAlign: 'center'}}>
