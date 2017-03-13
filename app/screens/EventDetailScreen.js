@@ -56,12 +56,13 @@ class EventDetailScreen extends Component {
               </View>
             </View>
             <GetDirectionsButton
-              mapUrl={this.props.urlData.venue[0].google_maps_link}/>
+              //mapUrl={this.props.urlData.venue[0].google_maps_link}
+              />
             <Text style={styles.description}>{this.props.urlData.description_public}</Text>
             <Text style={{flex:1}}>Performing Artists</Text>
 
           </View>
-          <ListView
+          {/*<ListView
             dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
             renderRow={(listing) => {
               var rows = [];
@@ -70,7 +71,7 @@ class EventDetailScreen extends Component {
               }
               return (<View>{rows}</View>);
             }} 
-          />
+          />*/}
           <View style={{height:80}} />
         </ScrollView>
       </ViewContainer>  

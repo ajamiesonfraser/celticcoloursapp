@@ -34,7 +34,7 @@ var MapScreen = React.createClass({
 
   componentDidMount: function() {
 
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&field=name,poster_url,venue_name,venue,formatted_date,formatted_start_time,formatted_end_time')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows')
     .then((response) => {
       var aList = response.data
       var markers = []
@@ -109,6 +109,7 @@ var MapScreen = React.createClass({
               image={marker.image}
             >
               <MapView.Callout
+                onPress={(event) => this._navigateToEventDetail(marker)}
                 style={styles.callout}>
                 <View style={styles.calloutView1}>
                   <Image style={styles.calloutPhoto} source={{uri: marker.markerData.poster_url}}/>
@@ -133,6 +134,16 @@ var MapScreen = React.createClass({
       </View>
     );
   },
+
+  _navigateToEventDetail(marker) {
+    this.props.navigator.push({
+      ident: "EventDetail",
+      passProps: {
+        urlData: marker.markerData
+      }
+    })
+  }
+
 });
 
 var styles = StyleSheet.create({
