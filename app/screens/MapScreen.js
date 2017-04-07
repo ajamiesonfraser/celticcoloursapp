@@ -4,6 +4,7 @@ import React, {Component} from 'react'
 import { StyleSheet, PropTypes, View, Text, Dimensions, TouchableOpacity, Image } from 'react-native'
 import MapView from 'react-native-maps'
 import axios from 'axios'
+import _ from 'lodash'
 
 var { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -14,8 +15,6 @@ const LONGITUDE = -60.195829;
 
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
-
 
 var MapScreen = React.createClass({
 
@@ -28,25 +27,40 @@ var MapScreen = React.createClass({
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      markers:[]
+      markers:[],
+      wMarkers: []
     };
   },
 
   componentDidMount: function() {
-
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows')
+    
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
       var markers = []
         for (var shows in aList) {
           markers = markers.concat([{
             markerData:aList[shows],
-            image: require ('../assets/musicMapPin@3x.png'),
+            image: require ('../assets/pin1.png')
           }])
         }
-      this.setState({
-        markers:markers
-      })
+        this.setState({
+          markers:markers
+        })
+    })
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
+    .then((response) =>{
+      var wList = response.data
+      var wMarkers = []
+        for (var workshops in wList) {
+          wMarkers = wMarkers.concat([{
+            wMarkerData : wList[workshops],
+            image : require ('../assets/pin2.png')
+          }])
+        }
+        this.setState({
+          wMarkers:wMarkers
+        })
     })
     .done(),
 
@@ -85,9 +99,19 @@ var MapScreen = React.createClass({
     this.setState({ region });
   },
 
+
+
+
   
 
   render() {
+
+    _.groupBy( this.state.markers, function(value) {
+      if (value.formatted_date === "Friday October 7th") {  
+        return "did it"
+      }
+    })
+
     return (
       <View style={styles.container}>
         <MapView
@@ -97,13 +121,18 @@ var MapScreen = React.createClass({
           onRegionChange={this.onRegionChange}
           showsUserLocation = {true}
         >
-          {this.state.markers.map((marker,i) => (
+          { this.state.markers.map((marker,i) => (
+
+
+
+
             <MapView.Marker
               key={i} 
               coordinate = {{
                 latitude: marker.markerData.venue[0].latitude,
                 longitude: marker.markerData.venue[0].longitude
               }}
+              flat = {true}
               title={marker.markerData.name}
               description={marker.markerData.venue_name}
               image={marker.image}
@@ -124,7 +153,34 @@ var MapScreen = React.createClass({
               </MapView.Callout>
             </MapView.Marker>
           ))}
-
+          {this.state.wMarkers.map((wMarker,i) =>(
+            <MapView.Marker
+              key={i}
+              coordinate = {{
+                latitude : wMarker.wMarkerData.venue[0].latitude,
+                longitude : wMarker.wMarkerData.venue[0].longitude
+              }}
+              flat = {true}
+              title = {wMarker.wMarkerData.name}
+              description = {wMarker.wMarkerData.venue_name}
+              image = {wMarker.image}
+            >
+              <MapView.Callout
+                onPress={(event) => this._navigateToEventDetail(wMarker)}
+                style={styles.callout}>
+                <View style={styles.calloutView1}>
+                  <Image style={styles.calloutPhoto} source={{uri: wMarker.wMarkerData.poster_url}}/>
+                </View>
+                <View style={styles.calloutView2}>
+                  <Text style={styles.calloutTitle}>{wMarker.wMarkerData.name}</Text>
+                  <Text style={styles.calloutVenue}>{wMarker.wMarkerData.venue_name}</Text>
+                  <Text style={styles.calloutCommunity}>{wMarker.wMarkerData.venue[0].community}</Text>
+                  <Text style={styles.calloutDate}>{wMarker.wMarkerData.formatted_date}</Text>
+                  <Text style={styles.calloutTime}>{wMarker.wMarkerData.formatted_start_time} - {wMarker.wMarkerData.formatted_end_time}</Text>
+                </View>
+              </MapView.Callout>
+            </MapView.Marker>
+          ))}
         </MapView>
         <View style={styles.bubble}>
           <Text style={{ textAlign: 'center'}}>

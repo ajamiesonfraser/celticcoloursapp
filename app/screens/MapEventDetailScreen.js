@@ -10,25 +10,28 @@ import GetDirectionsButton from '../components/GetDirectionsButton'
 
 
 
-class EventDetailScreen extends Component {
+class MapEventDetailScreen extends Component {
 
-  _renderListingRow(listing) {
-    return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing)}>
-          <Image style={styles.artistPicture} source={{uri: listing.web_photo_url}}/>
-          <View style={styles.listingInfo}>
-            <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
-          </View>
-      </TouchableOpacity>
-    )
-  }
+  // _renderListingRow(listing) {
+  //   return (
+  //     <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing)}>
+  //       <View style={styles.listingInfo}>
+  //         <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
+  //         <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.id}</Text>
+  //       </View>
+  //       <View style={{flex: 1}} />
+  //     </TouchableOpacity>
+  //   )
+  // }
 
 	render(){
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+    console.log(this.props.urlData)
+    // var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
 			<ViewContainer>
+      
         <Navbar 
-        	navTitle = {this.props.urlData.name}
+        	navTitle = "Hello"
         	backButton = {
           	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
@@ -37,8 +40,9 @@ class EventDetailScreen extends Component {
         />
         <StatusBarBackground/>   
         <ScrollView>
+        
         <View style={styles.contentDetail}>
-            <Image style={styles.listingPicture} source={{uri: this.props.urlData.poster_url}}/>
+            <Image style={styles.listingPicture} source={{uri:this.props.urlData.poster_url}}/>
             <Text style={styles.listingName}>{this.props.urlData.name}</Text>
             <View style={styles.contentRow}>
               <View>
@@ -50,18 +54,19 @@ class EventDetailScreen extends Component {
               <View style={{marginBottom:15}}>
                 <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.formatted_date} {this.props.urlData.formatted_start_time}</Text>
                 <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'} >{this.props.urlData.venue_name}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.venue[0].community}</Text>
+                {/*<Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.venue[0].community}</Text>*/}
                 <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.price} {this.props.urlData.seating}</Text>
               </View>
             </View>
             <GetDirectionsButton
-              mapUrl={this.props.urlData.venue[0].google_maps_link}
+              //mapUrl={this.props.urlData.venue[0].google_maps_link}
               />
             <Text style={styles.description}>{this.props.urlData.description_public}</Text>
-            <Text style={styles.performingTitle}>Performing Artists</Text>
+            <Text style={{flex:1}}>Performing Artists</Text>
 
           </View>
-          <ListView
+
+          {/*<ListView
             dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
             renderRow={(listing) => {
               var rows = [];
@@ -70,20 +75,21 @@ class EventDetailScreen extends Component {
               }
               return (<View>{rows}</View>);
             }} 
-          />
+          />*/}
           <View style={{height:80}} />
         </ScrollView>
+
       </ViewContainer>  
 		)
 	}
-  _navigateToArtistDetail(listing) {
-    this.props.navigator.push({
-      ident: "ArtistDetail2",
-      passProps:{
-        urlData:listing
-      }
-    })
-  }
+  // _navigateToArtistDetail(listing) {
+  //   this.props.navigator.push({
+  //     ident: "ArtistDetail",
+  //     passProps:{
+  //       urlData:this.props.urlData
+  //     }
+  //   })
+  // }
 }
 
 const styles = StyleSheet.create ({
@@ -104,28 +110,12 @@ const styles = StyleSheet.create ({
     marginBottom: 10,
     width: 175
   },
-  performingTitle:{
-    flex: 1,
-    fontSize:18,
-    fontWeight: 'bold',
-    color: '#C7C7CD',
-    marginBottom: 10
-  },
   detailCategory:{
     fontSize:12,
     fontWeight: 'bold',
     color: '#C7C7CD',
     marginRight: 10,
     marginBottom:10
-  },
-  artistPicture:{
-    backgroundColor: '#9B9B9B',
-    height: 50,
-    width:75,
-    marginLeft: 15,
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    borderRadius: 5
   },
   contentRow:{
     flexDirection: 'row'
@@ -135,27 +125,10 @@ const styles = StyleSheet.create ({
     justifyContent: 'center',
     alignItems:'center'
   },
-  listingRow: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    height: 70
-  },
-  listingInfo:{
-    flexDirection: "column",
-    width:200,
-    marginTop: 15
-  },
-  listingItem: {
-    fontSize: 15,
-    fontFamily: 'Helvetica',
-    marginBottom: 5
-  },
   listingName:{
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: '100',
-    fontFamily: 'Helvetica',
-    marginBottom: 15
+    fontFamily: 'Helvetica'
   },
   listingPicture:{
     backgroundColor: 'blue',
@@ -166,4 +139,4 @@ const styles = StyleSheet.create ({
   },
 })
 
-module.exports = EventDetailScreen
+module.exports = MapEventDetailScreen

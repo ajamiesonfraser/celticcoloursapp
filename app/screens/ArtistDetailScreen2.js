@@ -8,18 +8,7 @@ import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 
-class ArtistDetailScreen extends Component {
-
-  _renderListingRow(listing) {
-    return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
-        <View style={styles.listingInfo}>
-          <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
-        </View>
-        <View style={{flex: 1}} />
-      </TouchableOpacity>
-    )
-  }
+class ArtistDetailScreen2 extends Component {
 
 	render(){
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
@@ -41,20 +30,6 @@ class ArtistDetailScreen extends Component {
           <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
           <Text style={styles.description}>{this.props.urlData.bio_public}</Text>
         </View>
-        <ListView
-          pageSize={1}
-          initialListSize={5}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
-          renderRow={(listing) => {
-            var rows = [];
-            for(var i = 0; i < listing.length; i++) {
-              rows.push(this._renderListingRow(listing[i]));
-            }
-            return (<View>{rows}</View>);
-          }} 
-        />
         <View style={{height:80}} />
         </ScrollView>
       </ViewContainer>
@@ -64,7 +39,7 @@ class ArtistDetailScreen extends Component {
 
   _navigateToEventDetail(listing) {
     this.props.navigator.push({
-      ident: "EventDetail2",
+      ident: "EventDetail",
       passProps: {
         urlData:listing
       }
@@ -141,4 +116,4 @@ const styles = StyleSheet.create ({
   },
 })
 
-module.exports = ArtistDetailScreen
+module.exports = ArtistDetailScreen2

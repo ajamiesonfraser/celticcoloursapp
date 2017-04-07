@@ -54,6 +54,7 @@ class BottomBar extends Component {
               }} />
         </Icon.TabBarItemIOS>
 
+
       </TabBarIOS>
     )
   }

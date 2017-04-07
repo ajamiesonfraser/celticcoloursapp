@@ -8,18 +8,9 @@ import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 
-class ArtistDetailScreen extends Component {
 
-  _renderListingRow(listing) {
-    return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
-        <View style={styles.listingInfo}>
-          <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
-        </View>
-        <View style={{flex: 1}} />
-      </TouchableOpacity>
-    )
-  }
+
+class EventDetailScreen2 extends Component {
 
 	render(){
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
@@ -36,36 +27,38 @@ class ArtistDetailScreen extends Component {
         <StatusBarBackground/>   
         <ScrollView>
         <View style={styles.contentDetail}>
-          <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
-          <Text style={styles.listingName}>{this.props.urlData.name}</Text>
-          <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
-          <Text style={styles.description}>{this.props.urlData.bio_public}</Text>
-        </View>
-        <ListView
-          pageSize={1}
-          initialListSize={5}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
-          renderRow={(listing) => {
-            var rows = [];
-            for(var i = 0; i < listing.length; i++) {
-              rows.push(this._renderListingRow(listing[i]));
-            }
-            return (<View>{rows}</View>);
-          }} 
-        />
-        <View style={{height:80}} />
+            <Image style={styles.listingPicture} source={{uri: this.props.urlData.poster_url}}/>
+            <Text style={styles.listingName}>{this.props.urlData.name}</Text>
+            <View style={styles.contentRow}>
+              <View>
+                <Text style={styles.detailCategory}>DATE</Text>
+                <Text style={styles.detailCategory}>VENUE</Text>
+                <Text style={styles.detailCategory}>COMMUNITY</Text>
+                <Text style={styles.detailCategory}>TICKETS</Text>
+              </View>
+              <View style={{marginBottom:15}}>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.formatted_date} {this.props.urlData.formatted_start_time}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'} >{this.props.urlData.venue_name}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.venue[0].community}</Text>
+                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.price} {this.props.urlData.seating}</Text>
+              </View>
+            </View>
+            <GetDirectionsButton
+              mapUrl={this.props.urlData.venue[0].google_maps_link}
+              />
+            <Text style={styles.description}>{this.props.urlData.description_public}</Text>
+            <Text style={styles.performingTitle}>Performing Artists</Text>
+
+          </View>
+          <View style={{height:80}} />
         </ScrollView>
-      </ViewContainer>
-        
+      </ViewContainer>  
 		)
 	}
-
-  _navigateToEventDetail(listing) {
+  _navigateToArtistDetail(listing) {
     this.props.navigator.push({
-      ident: "EventDetail2",
-      passProps: {
+      ident: "ArtistDetail",
+      passProps:{
         urlData:listing
       }
     })
@@ -83,11 +76,6 @@ const styles = StyleSheet.create ({
     alignItems:'center',
     marginLeft:20
   },
-  homebase: {
-    fontSize: 13,
-    fontFamily: "Helvetica",
-    fontWeight: '100'
-  },
   detailData:{
     fontFamily: 'Helvetica',
     fontWeight:'100',
@@ -95,12 +83,28 @@ const styles = StyleSheet.create ({
     marginBottom: 10,
     width: 175
   },
+  performingTitle:{
+    flex: 1,
+    fontSize:18,
+    fontWeight: 'bold',
+    color: '#C7C7CD',
+    marginBottom: 10
+  },
   detailCategory:{
     fontSize:12,
     fontWeight: 'bold',
     color: '#C7C7CD',
     marginRight: 10,
     marginBottom:10
+  },
+  artistPicture:{
+    backgroundColor: '#9B9B9B',
+    height: 50,
+    width:75,
+    marginLeft: 15,
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    borderRadius: 5
   },
   contentRow:{
     flexDirection: 'row'
@@ -115,6 +119,11 @@ const styles = StyleSheet.create ({
     justifyContent: "flex-start",
     alignItems: "center",
     height: 70
+  },
+  listingInfo:{
+    flexDirection: "column",
+    width:200,
+    marginTop: 15
   },
   listingItem: {
     fontSize: 15,
@@ -134,11 +143,6 @@ const styles = StyleSheet.create ({
     marginBottom: 15,
     borderRadius: 5
   },
-  listingInfo:{
-    flexDirection: "column",
-    width:200,
-    marginTop: 15
-  },
 })
 
-module.exports = ArtistDetailScreen
+module.exports = EventDetailScreen2

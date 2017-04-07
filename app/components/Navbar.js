@@ -19,14 +19,8 @@ class Navbar extends Component {
           </Text>
         }
         leftButton= {this.props.backButton}
-        rightButton={
-          <ModalDropdown 
-            options={['My Events', 'By Day', 'By Artist', 'By Region', 'By Type']}>
-            <Icon
-              style={styles.buttonIcon}
-              name="angle-down" size={35} />
-          </ModalDropdown>
-        }
+        rightButton= {this.props.rightButton}
+        
       />
       </View>
 		)
@@ -43,10 +37,6 @@ const styles = StyleSheet.create({
     marginRight:20,
     width: 50,
     backgroundColor:"blue",
-  },
-  buttonIcon:{
-    marginTop: 10,
-    marginRight: 20
   }
 })
 

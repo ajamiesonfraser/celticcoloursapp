@@ -8,16 +8,21 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 import axios from 'axios'
+import ModalDropdown from 'react-native-modal-dropdown'
+
+
 
 class MyScheduleScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      listData: []
+      listData: [],
+      changedData: []
     }
   }
+
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
+    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
       var listData = []
@@ -26,12 +31,21 @@ class MyScheduleScreen extends Component {
              urlData:aList[artist]
           }])
       }
-      this.setState({listData:listData})
+      var grouped = _.groupBy(listData, function(item){
+      return item.urlData.date
+      })
+      var changedData = grouped['2016-10-11']
+      this.setState({
+        listData:listData,
+        changedData:changedData})
     })
     .done()
   }
+
+
   
   _renderListingRow(listing) {
+
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
         <Image style={styles.listingPicture} source={{uri: listing.urlData.poster_url}}/>
@@ -49,17 +63,33 @@ class MyScheduleScreen extends Component {
   }
 
   render() {
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
         <Navbar 
-        navTitle = "My Schedule"/>
+        navTitle = "My Schedule"
+        rightButton={
+          <ModalDropdown 
+            options={[
+              'My Events', 
+              'By Day', 
+              'By Artist', 
+              'By Region', 
+              'By Type'
+            ]}>
+            <Icon
+              style={styles.buttonIcon}
+              name="angle-down" size={35} />
+          </ModalDropdown>
+        }
+        />
         <ListView
           pageSize={1}
           initialListSize={5}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.listData)}
+          dataSource={ds.cloneWithRows(this.state.changedData)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
           }}  
@@ -67,6 +97,7 @@ class MyScheduleScreen extends Component {
       </ViewContainer>
     )
   }
+
 
 
   
@@ -83,6 +114,10 @@ class MyScheduleScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  buttonIcon:{
+    marginTop: 10,
+    marginRight: 20
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
