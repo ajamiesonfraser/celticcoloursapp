@@ -10,7 +10,7 @@ import GetDirectionsButton from '../components/GetDirectionsButton'
 import axios from 'axios'
 import ModalDropdown from 'react-native-modal-dropdown'
 
-const dateOptions = [ {"name":"Friday, Oct. 7", "age":30}, {"name":"Saturday, Oct. 8", "age":31}, {"name":"Sunday, Oct. 9", "age":32}]
+const dateOptions = [ "Friday, Oct. 7", "Saturday, Oct. 8", "Sunday, Oct. 9" ]
 
 
 class MyScheduleScreen extends Component {
@@ -35,7 +35,7 @@ class MyScheduleScreen extends Component {
       var grouped = _.groupBy(listData, function(item){
       return item.urlData.date
       })
-      // var changedData = grouped['2016-10-11']
+      var changedData = grouped['2016-10-11']
       this.setState({
         listData:listData,
         changedData:changedData})
@@ -63,8 +63,14 @@ class MyScheduleScreen extends Component {
     )
   }
 
+  _changeDateSaturday(){
+    this.setState({
+      changedData: grouped['2016-10-07']
+    })
+  }
+
   render() {
-    console.log('schedule is rendering')
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -73,7 +79,9 @@ class MyScheduleScreen extends Component {
         rightButton={
           <ModalDropdown 
             options={dateOptions}
-            onSelect={(idx, value) => this._changeDate}>
+            onPress={() => this._changeDateSaturday}
+            onSelect={(idx, value) => this._changeDateSaturday}
+            >
             <Icon
               style={styles.buttonIcon}
               name="angle-down" size={35} />
@@ -85,7 +93,7 @@ class MyScheduleScreen extends Component {
           initialListSize={5}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.listData)}
+          dataSource={ds.cloneWithRows(this.state.changedData)}
           renderRow={(listing) => {
             return this._renderListingRow(listing)
           }}  

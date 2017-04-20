@@ -13,6 +13,7 @@ class ArtistDetailScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
+        <Image style={styles.showPicture} source={{uri: listing.web_photo_url}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
         </View>
@@ -28,7 +29,7 @@ class ArtistDetailScreen extends Component {
         <Navbar 
         	navTitle = {this.props.urlData.name}
         	backButton = {
-          	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
+          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}
@@ -109,6 +110,15 @@ const styles = StyleSheet.create ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems:'center'
+  },
+  showPicture:{
+    backgroundColor: '#9B9B9B',
+    height: 50,
+    width:75,
+    marginLeft: 15,
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    borderRadius: 5
   },
   listingRow: {
     flexDirection: "row",

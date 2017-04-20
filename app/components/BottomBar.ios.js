@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { StyleSheet, TabBarIOS, TabBarItemIOS, Image } from 'react-native'
 import AppNavigator from '../navigation/AppNavigator'
 import Icon from 'react-native-vector-icons/FontAwesome'
-{/*import axios from 'axios'*/}
 
 class BottomBar extends Component {
 
@@ -37,9 +36,7 @@ class BottomBar extends Component {
           title={``}
           onPress={() => this.setState({selectedTab: "tab1"})}>
           <AppNavigator
-            initialRoute={{
-              ident: "MyScheduleIndex",
-            }} />
+            initialRoute={{ ident: "MyScheduleIndex"}} />
 
         </Icon.TabBarItemIOS>
 
@@ -49,9 +46,7 @@ class BottomBar extends Component {
           title={``}
           onPress={() => this.setState({selectedTab: "tab2"})}>
             <AppNavigator
-              initialRoute={{
-                ident: "ArtistListing",
-              }} />
+              initialRoute={{ident: "ArtistListing"}} />
         </Icon.TabBarItemIOS>
 
 

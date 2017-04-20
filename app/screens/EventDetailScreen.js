@@ -22,15 +22,38 @@ class EventDetailScreen extends Component {
       </TouchableOpacity>
     )
   }
+  renderPerformerList(){
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+    if (this.props.urlData.performances[0]) {
+      return (
+        <ListView
+            dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
+            renderRow={(listing) => {
+              var rows = [];
+              for(var i in listing) {
+                rows.push(this._renderListingRow(listing[i]));
+              }
+              return (<View>{rows}</View>);
+            }} 
+        />
+      );
+    } else {
+      return (
+        <h2>Hey man! Log in to see this section</h2>
+      );
+    }
+  }
+
 
 	render(){
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+    console.log (this.props.urlData)
+    
     return(
 			<ViewContainer>
         <Navbar 
         	navTitle = {this.props.urlData.name}
         	backButton = {
-          	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
+          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}
@@ -61,16 +84,7 @@ class EventDetailScreen extends Component {
             <Text style={styles.performingTitle}>Performing Artists</Text>
 
           </View>
-          <ListView
-            dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
-            renderRow={(listing) => {
-              var rows = [];
-              for(var i in listing) {
-                rows.push(this._renderListingRow(listing[i]));
-              }
-              return (<View>{rows}</View>);
-            }} 
-          />
+          {this.renderPerformerList()}
           <View style={{height:80}} />
         </ScrollView>
       </ViewContainer>  

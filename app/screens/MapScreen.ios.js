@@ -9,7 +9,6 @@ import _ from 'lodash'
 var { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 
-// (Initial Static Location) Mumbai
 const LATITUDE = 46.139907;
 const LONGITUDE = -60.195829;
 
@@ -48,6 +47,7 @@ var MapScreen = React.createClass({
           markers:markers
         })
     })
+    .done(),
     axios.get('https://novastream.ca/xml2json.php?org=23324&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
     .then((response) =>{
       var wList = response.data
@@ -99,18 +99,7 @@ var MapScreen = React.createClass({
     this.setState({ region });
   },
 
-
-
-
-  
-
   render() {
-
-    _.groupBy( this.state.markers, function(value) {
-      if (value.formatted_date === "Friday October 7th") {  
-        return "did it"
-      }
-    })
 
     return (
       <View style={styles.container}>
@@ -122,10 +111,6 @@ var MapScreen = React.createClass({
           showsUserLocation = {true}
         >
           { this.state.markers.map((marker,i) => (
-
-
-
-
             <MapView.Marker
               key={i} 
               coordinate = {{
@@ -166,7 +151,7 @@ var MapScreen = React.createClass({
               image = {wMarker.image}
             >
               <MapView.Callout
-                onPress={(event) => this._navigateToEventDetail(wMarker)}
+                onPress={(event) => this._navigateToEventDetail2(wMarker)}
                 style={styles.callout}>
                 <View style={styles.calloutView1}>
                   <Image style={styles.calloutPhoto} source={{uri: wMarker.wMarkerData.poster_url}}/>
@@ -189,6 +174,15 @@ var MapScreen = React.createClass({
         </View>
       </View>
     );
+  },
+
+  _navigateToEventDetail2(wMarker) {
+    this.props.navigator.push({
+      ident: "EventDetail",
+      passProps: {
+        urlData: wMarker.wMarkerData
+      }
+    })
   },
 
   _navigateToEventDetail(marker) {

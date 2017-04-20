@@ -19,7 +19,7 @@ class EventDetailScreen2 extends Component {
         <Navbar 
         	navTitle = {this.props.urlData.name}
         	backButton = {
-          	<TouchableOpacity style={styles.navBack} onPress={() => this.props.navigator.pop() }>
+          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}

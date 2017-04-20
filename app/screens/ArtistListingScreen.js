@@ -45,6 +45,7 @@ class ArtistListingScreen extends Component {
   }
 
   render() {
+    console.log('artist is rendering')
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
