@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component} from 'react'
-import {Text, View, ListView, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
+import {ActivityIndicator, AsyncStorage, Text, View, ListView, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
 import ViewContainer from '../components/ViewContainer'
 import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'
@@ -10,7 +10,7 @@ import GetDirectionsButton from '../components/GetDirectionsButton'
 import axios from 'axios'
 import ModalDropdown from 'react-native-modal-dropdown'
 
-const dateOptions = [ "Friday, Oct. 7", "Saturday, Oct. 8", "Sunday, Oct. 9" ]
+const dateOptions = [ "Friday, Oct. 6", "Saturday, Oct. 7", "Sunday, Oct. 8", "Monday, Oct. 9", "Tuesday, Oct. 10", "Wednesday, Oct. 11", "Thursday, Oct. 12", "Friday, Oct. 13", "Saturday, Oct. 14" ]
 
 
 class MyScheduleScreen extends Component {
@@ -18,29 +18,83 @@ class MyScheduleScreen extends Component {
     super(props)
     this.state = {
       listData: [],
-      changedData: []
+      // changedData: []
     }
   }
 
-  componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
+  _getShows() {
+    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
-      var aList = response.data
-      var listData = []
-        for (var artist in aList) {
-          listData = listData.concat([{
-             urlData:aList[artist]
-          }])
-      }
-      var grouped = _.groupBy(listData, function(item){
-      return item.urlData.date
-      })
-      var changedData = grouped['2016-10-11']
-      this.setState({
-        listData:listData,
-        changedData:changedData})
+      return response.data
     })
-    .done()
+  }
+
+  _getArtistsFromShows(shows) {
+    var artists = {}
+
+    Object.keys(shows).forEach(key => {
+      if (shows[key].performances) {
+        shows[key].performances.forEach(({ performance }) => {
+          Object.keys(performance).forEach(artistId => {
+            artists[artistId] = performance[artistId]
+          })
+        })
+      }
+    })
+
+    return artists
+  }
+
+  componentDidMount(){
+    Promise.all([
+      AsyncStorage.getItem('shows'),
+      AsyncStorage.getItem('artists')
+    ]).then(([shows, artists]) => {
+
+      if (shows == null) {
+        return this._getShows().then((shows) => {
+          return AsyncStorage.setItem('shows', JSON.stringify(shows)).then(() => {
+            var artists = this._getArtistsFromShows(shows)
+            return AsyncStorage.setItem('artists', JSON.stringify(artists)).then(() => {
+              return {
+                shows,
+                artists
+              }
+            })
+          })
+        })
+      }
+
+      var showsParsed = JSON.parse(shows)
+      var artistsParsed;
+
+      // have to load artists
+      if (artists == null) {
+        artistsParsed = this._getArtistsFromShows(showsParsed) 
+      } else {
+        artistsParsed = JSON.parse(artists)
+      }
+
+      return {
+        shows: showsParsed,
+        artists: artistsParsed
+      }
+    }).then(({ shows, artists }) => {
+      console.log({ shows, artists })
+
+      var listData = []
+      for (var id in shows) {
+        listData = listData.concat([{
+          urlData: shows[id]
+        }])
+      }
+
+      this.setState({
+        listData,
+        artists,
+        shows
+      })
+    })
   }
 
 
@@ -63,14 +117,13 @@ class MyScheduleScreen extends Component {
     )
   }
 
-  _changeDateSaturday(){
-    this.setState({
-      changedData: grouped['2016-10-07']
-    })
-  }
+  // _changeDateSaturday(){
+  //   this.setState({
+  //     changedData: grouped['2017-10-07']
+  //   })
+  // }
 
   render() {
-
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
@@ -79,8 +132,8 @@ class MyScheduleScreen extends Component {
         rightButton={
           <ModalDropdown 
             options={dateOptions}
-            onPress={() => this._changeDateSaturday}
-            onSelect={(idx, value) => this._changeDateSaturday}
+            // onPress={() => this._changeDateSaturday}
+            // onSelect={(idx, value) => this._changeDateSaturday}
             >
             <Icon
               style={styles.buttonIcon}
@@ -88,16 +141,19 @@ class MyScheduleScreen extends Component {
           </ModalDropdown>
         }
         />
-        <ListView
-          pageSize={1}
-          initialListSize={5}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.changedData)}
-          renderRow={(listing) => {
-            return this._renderListingRow(listing)
-          }}  
-        />
+
+        {this.state.shows != null && this.state.artists != null
+          ? <ListView
+              pageSize={1}
+              initialListSize={5}
+              scrollRenderAheadDistance={1}
+              enableEmptySections={true}
+              dataSource={ds.cloneWithRows(this.state.listData)}
+              renderRow={(listing) => {
+                return this._renderListingRow(listing)
+              }}  
+            />
+          : <ActivityIndicator size={'large'}/>}
       </ViewContainer>
     )
   }

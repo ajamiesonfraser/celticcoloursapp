@@ -33,7 +33,7 @@ var MapScreen = React.createClass({
 
   componentDidMount: function() {
     
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
+    axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
       var markers = []
@@ -48,7 +48,7 @@ var MapScreen = React.createClass({
         })
     })
     .done(),
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
+    axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
     .then((response) =>{
       var wList = response.data
       var wMarkers = []

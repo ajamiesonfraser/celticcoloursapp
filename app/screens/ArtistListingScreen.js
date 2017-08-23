@@ -18,7 +18,7 @@ class ArtistListingScreen extends Component {
     }
   }
   componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23324&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
+    axios.get('https://novastream.ca/xml2json.php?org=23998&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
     .then((response) => {
       var aList = response.data
       var listData = []

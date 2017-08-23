@@ -13,6 +13,7 @@ import GetDirectionsButton from '../components/GetDirectionsButton'
 class EventDetailScreen2 extends Component {
 
 	render(){
+    console.log('this.props.urlData = ', this.props.urlData);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
 			<ViewContainer>

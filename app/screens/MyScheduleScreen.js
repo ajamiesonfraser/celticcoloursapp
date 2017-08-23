@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component} from 'react'
-import {Text, View, ListView, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
+import {AsyncStorage, Text, View, ListView, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
 import ViewContainer from '../components/ViewContainer'
 import StatusBarBackground from '../components/StatusBarBackground'
 import _ from 'lodash'

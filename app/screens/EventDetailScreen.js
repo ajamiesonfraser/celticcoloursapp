@@ -2,15 +2,23 @@
 
 import React, { Component } from 'React'
 import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, ListView } from 'react-native'
+import HTML from 'react-native-render-html'
 import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
+import ArtistDetailScreen2 from './ArtistDetailScreen2'
 
 
 
 class EventDetailScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentArtistDetail: null
+    }
+  }
 
   _renderListingRow(listing) {
     return (
@@ -44,12 +52,27 @@ class EventDetailScreen extends Component {
     }
   }
 
+  renderArtistDetailModal() {
+    if (this.state.currentArtistDetail != null) {
+      return (
+        <ArtistDetailScreen2
+          artist={this.state.currentArtistDetail}
+          onModalClose={() => {
+            this.setState({ currentArtistDetail: null })
+          }}
+        />
+      )
+    }
+  }
+
 
 	render(){
     console.log (this.props.urlData)
     
     return(
 			<ViewContainer>
+        {this.renderArtistDetailModal()}
+
         <Navbar 
         	navTitle = {this.props.urlData.name}
         	backButton = {
@@ -80,7 +103,9 @@ class EventDetailScreen extends Component {
             <GetDirectionsButton
               mapUrl={this.props.urlData.venue[0].google_maps_link}
               />
-            <Text style={styles.description}>{this.props.urlData.description_public}</Text>
+
+            <HTML html={this.props.urlData.description_public.replace(/<i>/g, '').replace(/<\/i>/g, '')}/>
+            {/*<Text style={styles.description}>{this.props.urlData.description_public}</Text>*/}
             <Text style={styles.performingTitle}>Performing Artists</Text>
 
           </View>
@@ -91,12 +116,15 @@ class EventDetailScreen extends Component {
 		)
 	}
   _navigateToArtistDetail(listing) {
+    this.setState({ currentArtistDetail: listing })
+
+    /*console.log('listing = ', listing)
     this.props.navigator.push({
       ident: "ArtistDetail2",
       passProps:{
         urlData:listing
       }
-    })
+    })*/
   }
 }
 

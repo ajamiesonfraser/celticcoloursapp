@@ -2,6 +2,7 @@
 
 import React, { Component } from 'React'
 import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, ListView } from 'react-native'
+import HTML from 'react-native-render-html'
 import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
@@ -23,6 +24,8 @@ class ArtistDetailScreen extends Component {
   }
 
 	render(){
+    const htmlReplaced = this.props.urlData.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
 			<ViewContainer>
@@ -40,7 +43,7 @@ class ArtistDetailScreen extends Component {
           <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
           <Text style={styles.listingName}>{this.props.urlData.name}</Text>
           <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
-          <Text style={styles.description}>{this.props.urlData.bio_public}</Text>
+          <HTML html={htmlReplaced}/>
         </View>
         <ListView
           pageSize={1}

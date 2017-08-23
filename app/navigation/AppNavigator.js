@@ -17,6 +17,8 @@ class AppNavigator extends Component {
   _renderScene(route, navigator) {
     var globalNavigatorProps = { navigator }
 
+    console.log('globalNavigatorProps = ', globalNavigatorProps)
+
     switch(route.ident) {
       case "MyScheduleIndex":
         return (

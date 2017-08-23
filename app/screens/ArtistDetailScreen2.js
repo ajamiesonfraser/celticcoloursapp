@@ -1,7 +1,9 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, ListView } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, ScrollView, ListView } from 'react-native'
+import Modal from 'react-native-modal'
+import HTML from 'react-native-render-html'
 import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
@@ -9,31 +11,39 @@ import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 
 class ArtistDetailScreen2 extends Component {
+  static propTypes = {
+    artist: React.PropTypes.object.isRequired,
+    onModalClose: React.PropTypes.func.isRequired
+  }
 
 	render(){
+    const htmlReplaced = this.props.artist.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
-			<ViewContainer>
-        <Navbar 
-        	navTitle = {this.props.urlData.name}
-        	backButton = {
-          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
-          		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
-          	</TouchableOpacity>
-        	}
-        />
-        <StatusBarBackground/>   
-        <ScrollView>
-        <View style={styles.contentDetail}>
-          <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
-          <Text style={styles.listingName}>{this.props.urlData.name}</Text>
-          <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
-          <Text style={styles.description}>{this.props.urlData.bio_public}</Text>
-        </View>
-        <View style={{height:80}} />
-        </ScrollView>
-      </ViewContainer>
-        
+      <TouchableWithoutFeedback onPress={this.props.onModalClose}>
+  			<Modal isVisible={true}>
+          {/*<Navbar 
+          	navTitle = {this.props.urlData.name}
+          	backButton = {
+            	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
+            		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
+            	</TouchableOpacity>
+          	}
+          />
+          <StatusBarBackground/>   
+          <ScrollView>*/}
+          <View style={styles.contentDetail}>
+            <Image style={styles.listingPicture} source={{uri: this.props.artist.web_photo_url}}/>
+            <Text style={styles.listingName}>{this.props.artist.name}</Text>
+            <Text style={styles.homebase}>{this.props.artist.homebase}</Text>
+            <HTML html={htmlReplaced}/>
+            {/*<Text style={styles.description}>{this.props.urlData.bio_public}</Text>*/}
+          </View>
+          <View style={{height:80}} />
+          {/*</ScrollView>*/}
+        </Modal>
+      </TouchableWithoutFeedback>
 		)
 	}
 
@@ -83,7 +93,11 @@ const styles = StyleSheet.create ({
   contentDetail:{
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems:'center',
+    backgroundColor: 'white',
+    marginTop: 50,
+    padding: 22,
+    borderRadius: 5
   },
   listingRow: {
     flexDirection: "row",
