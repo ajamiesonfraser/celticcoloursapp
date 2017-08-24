@@ -9,13 +9,48 @@ import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 import ArtistDetail from './ArtistDetail'
+import DetailScreen from './DetailScreen'
+import EventDetailModal from './EventDetailModal'
+import Client from '../services/Client'
 
 class ArtistDetailScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentEventDetail: null
+    }
+  }
+
+  renderEventDetailModal() {
+    if (this.state.currentEventDetail != null) {
+      const event = this.state.currentEventDetail
+
+      return (
+        <EventDetailModal
+          event={event}
+          onViewEventPress={() => {
+            this.setState({ currentEventDetail: null }, () => {
+              this.props.navigator.push({
+                ident: 'EventDetail',
+                passProps: {
+                  urlData: event
+                }
+              })
+            })
+          }}
+          onModalClose={() => {
+            this.setState({ currentEventDetail: null })
+          }}
+        />
+      )
+    }
+  }
 
   _renderListingRow(listing) {
+    console.log('render listing ', listing)
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
-        <Image style={styles.showPicture} source={{uri: listing.web_photo_url}}/>
+        <Image style={styles.showPicture} source={{uri: listing.poster_url}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
         </View>
@@ -24,54 +59,44 @@ class ArtistDetailScreen extends Component {
     )
   }
 
-	render(){
-    const htmlReplaced = this.props.urlData.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
-
+  renderPerformanceList() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    return(
-			<ViewContainer>
-        <Navbar 
-        	navTitle = {this.props.urlData.name}
-        	backButton = {
-          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
-          		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
-          	</TouchableOpacity>
-        	}
-        />
-        <StatusBarBackground/>   
-        <ScrollView>
-          <View style={{
-            paddingHorizontal: 25
-          }}>
-            <ArtistDetail artist={this.props.urlData}/>
-          </View>
-          <ListView
-            pageSize={1}
-            initialListSize={5}
-            scrollRenderAheadDistance={1}
-            enableEmptySections={true}
-            dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
-            renderRow={(listing) => {
-              var rows = [];
-              for(var i = 0; i < listing.length; i++) {
-                rows.push(this._renderListingRow(listing[i]));
-              }
-              return (<View>{rows}</View>);
-            }} 
-          />
-          <View style={{height:80}} />
-        </ScrollView>
-      </ViewContainer>
-        
+
+    return (
+      <ListView
+        pageSize={1}
+        initialListSize={5}
+        scrollRenderAheadDistance={1}
+        enableEmptySections={true}
+        dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
+        renderRow={(listing) => {
+          return (
+            <View>
+              {listing.map((el, i) => {
+                const realListing = Client.getShowById(el.id)
+                return this._renderListingRow(realListing)
+              })}
+            </View>
+          );
+        }} 
+      />
+    )
+  }
+
+	render(){
+    return (
+      <DetailScreen {...this.props}>
+        {this.renderEventDetailModal()}
+        <ArtistDetail artist={this.props.urlData}/>
+        {this.renderPerformanceList()}
+      </DetailScreen>
 		)
 	}
 
   _navigateToEventDetail(listing) {
-    this.props.navigator.push({
-      ident: "EventDetail2",
-      passProps: {
-        urlData:listing
-      }
+    // NOTE: listing is full object, not just nested object
+    this.setState({
+      currentEventDetail: listing
     })
   }
 }

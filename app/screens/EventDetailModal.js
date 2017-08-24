@@ -2,28 +2,28 @@
 
 import React, { Component } from 'React'
 import {
-  Button,
   StyleSheet,
   View,
   Text,
   Image,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   ScrollView,
   ListView
 } from 'react-native'
+import Button from 'react-native-button'
 import Modal from 'react-native-modal'
-import HTML from 'react-native-render-html'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import ViewContainer from '../components/ViewContainer'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
-import ArtistDetail from './ArtistDetail'
+import EventDetail from './EventDetail'
 
 
-class ArtistDetailModal extends Component {
+class EventDetailModal extends Component {
   static propTypes = {
-    artist: React.PropTypes.object.isRequired,
+    event: React.PropTypes.object.isRequired,
+    onViewEventPress: React.PropTypes.func.isRequired,
     onModalClose: React.PropTypes.func.isRequired
   }
 
@@ -35,23 +35,32 @@ class ArtistDetailModal extends Component {
         justifyContent: 'center'
       }}>
         <Button
-          title='Close'
+          containerStyle={styles.buttonPrimaryContainerStyle}
+          style={styles.buttonPrimaryStyle}
+          onPress={this.props.onViewEventPress}
+        >
+          View Event
+        </Button>
+        <Button
+          containerStyle={styles.buttonContainerStyle}
+          style={styles.buttonStyle}
           onPress={this.props.onModalClose}
-        />
+        >
+          Close
+        </Button>
       </View>
     );
   }
 
-	render() {
-    const htmlReplaced = this.props.artist.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
-
+	render(){
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+
     return(
       <Modal isVisible={true} onRequestClose={this.props.onModalClose}>
         <View>
           <View style={styles.contentDetail}>
             <ScrollView>
-              <ArtistDetail artist={this.props.artist}/>
+              <EventDetail showDetails={false} event={this.props.event}/>
             </ScrollView>
             {this.renderModalBottom()}
           </View>
@@ -59,15 +68,6 @@ class ArtistDetailModal extends Component {
       </Modal>
 		)
 	}
-
-  _navigateToEventDetail(listing) {
-    this.props.navigator.push({
-      ident: "EventDetail",
-      passProps: {
-        urlData:listing
-      }
-    })
-  }
 }
 
 const styles = StyleSheet.create ({
@@ -81,11 +81,6 @@ const styles = StyleSheet.create ({
     alignItems:'center',
     marginLeft:20
   },
-  homebase: {
-    fontSize: 13,
-    fontFamily: "Helvetica",
-    fontWeight: '100'
-  },
   detailData:{
     fontFamily: 'Helvetica',
     fontWeight:'100',
@@ -93,12 +88,28 @@ const styles = StyleSheet.create ({
     marginBottom: 10,
     width: 175
   },
+  performingTitle:{
+    flex: 1,
+    fontSize:18,
+    fontWeight: 'bold',
+    color: '#C7C7CD',
+    marginBottom: 10
+  },
   detailCategory:{
     fontSize:12,
     fontWeight: 'bold',
     color: '#C7C7CD',
     marginRight: 10,
     marginBottom:10
+  },
+  artistPicture:{
+    backgroundColor: '#9B9B9B',
+    height: 50,
+    width:75,
+    marginLeft: 15,
+    alignSelf: 'flex-start',
+    marginTop: 10,
+    borderRadius: 5
   },
   contentRow:{
     flexDirection: 'row'
@@ -118,6 +129,11 @@ const styles = StyleSheet.create ({
     alignItems: "center",
     height: 70
   },
+  listingInfo:{
+    flexDirection: "column",
+    width:200,
+    marginTop: 15
+  },
   listingItem: {
     fontSize: 15,
     fontFamily: 'Helvetica',
@@ -136,11 +152,39 @@ const styles = StyleSheet.create ({
     marginBottom: 15,
     borderRadius: 5
   },
-  listingInfo:{
-    flexDirection: "column",
-    width:200,
-    marginTop: 15
+
+  buttonContainerStyle: {
+    flex: 0,
+    justifyContent: 'center',
+    marginHorizontal: 3,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#3d97e8'
   },
+
+  buttonStyle: {
+    fontSize: 14,
+    color: '#3d97e8'
+  },
+  
+  buttonPrimaryContainerStyle: {
+    flex: 0,
+    justifyContent: 'center',
+    marginHorizontal: 3,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    backgroundColor: '#3d97e8',
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#3d97e8'
+  },
+
+  buttonPrimaryStyle: {
+    fontSize: 14,
+    color: '#fff'
+  }
 })
 
-module.exports = ArtistDetailModal
+module.exports = EventDetailModal

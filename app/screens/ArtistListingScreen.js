@@ -49,8 +49,7 @@ class ArtistListingScreen extends Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar 
-        navTitle = "Artists"/>
+        <Navbar navTitle = "Artists"/>
         <ListView
           pageSize={1}
           initialListSize={6}

@@ -1,72 +1,46 @@
-'use strict'
-
-import React, { Component } from 'React'
+import React, { Component } from 'react'
 import {
-  Button,
-  StyleSheet,
-  View,
-  Text,
   Image,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   ScrollView,
-  ListView
+  StyleSheet,
+  TouchableOpacity,
+  View
 } from 'react-native'
-import Modal from 'react-native-modal'
-import HTML from 'react-native-render-html'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ViewContainer from '../components/ViewContainer'
+import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
-import GetDirectionsButton from '../components/GetDirectionsButton'
-import ArtistDetail from './ArtistDetail'
 
-
-class ArtistDetailModal extends Component {
+class DetailScreen extends Component {
   static propTypes = {
-    artist: React.PropTypes.object.isRequired,
-    onModalClose: React.PropTypes.func.isRequired
-  }
+    navigator: React.PropTypes.object.isRequired,
+    urlData: React.PropTypes.object.isRequired
+  };
 
-  renderModalBottom() {
+  render() {
     return (
-      <View style={{
-        marginTop: 25,
-        flexDirection: 'row',
-        justifyContent: 'center'
-      }}>
-        <Button
-          title='Close'
-          onPress={this.props.onModalClose}
+      <ViewContainer>
+        <Navbar 
+          navTitle={this.props.urlData.name}
+          backButton={
+            <TouchableOpacity
+              style={styles.navBack}
+              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
+              onPress={() => this.props.navigator.pop()}
+            >
+              <Icon name="angle-left" size={35} style={{marginTop:10}}/>
+            </TouchableOpacity>
+          }
         />
-      </View>
-    );
-  }
-
-	render() {
-    const htmlReplaced = this.props.artist.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
-
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    return(
-      <Modal isVisible={true} onRequestClose={this.props.onModalClose}>
-        <View>
-          <View style={styles.contentDetail}>
-            <ScrollView>
-              <ArtistDetail artist={this.props.artist}/>
-            </ScrollView>
-            {this.renderModalBottom()}
+        <StatusBarBackground/>   
+        <ScrollView>
+          <View style={{ paddingHorizontal: 25 }}>
+            {this.props.children}
           </View>
-        </View>
-      </Modal>
-		)
-	}
-
-  _navigateToEventDetail(listing) {
-    this.props.navigator.push({
-      ident: "EventDetail",
-      passProps: {
-        urlData:listing
-      }
-    })
+          <View style={{ height: 80 }} />
+        </ScrollView>
+      </ViewContainer>
+    )
   }
 }
 
@@ -106,10 +80,15 @@ const styles = StyleSheet.create ({
   contentDetail:{
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems:'center',
-    backgroundColor: 'white',
-    marginTop: 50,
-    padding: 22,
+    alignItems:'center'
+  },
+  showPicture:{
+    backgroundColor: '#9B9B9B',
+    height: 50,
+    width:75,
+    marginLeft: 15,
+    alignSelf: 'flex-start',
+    marginTop: 10,
     borderRadius: 5
   },
   listingRow: {
@@ -143,4 +122,4 @@ const styles = StyleSheet.create ({
   },
 })
 
-module.exports = ArtistDetailModal
+module.exports = DetailScreen

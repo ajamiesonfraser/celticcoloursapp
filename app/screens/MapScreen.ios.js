@@ -108,9 +108,9 @@ var MapScreen = React.createClass({
           style={styles.map}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
-          showsUserLocation = {true}
+          showsUserLocation={true}
         >
-          { this.state.markers.map((marker,i) => (
+          {this.state.markers.map((marker,i) => (
             <MapView.Marker
               key={i} 
               coordinate = {{

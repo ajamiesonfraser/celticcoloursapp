@@ -5,7 +5,6 @@ import MyScheduleScreen from '../screens/MyScheduleScreen'
 import MapScreen from '../screens/MapScreen'
 import ArtistListingScreen from '../screens/ArtistListingScreen'
 import EventDetailScreen  from '../screens/EventDetailScreen'
-import EventDetailScreen2 from '../screens/EventDetailScreen2'
 import MapEventDetailScreen from '../screens/MapEventDetailScreen'
 import ArtistDetailScreen from '../screens/ArtistDetailScreen'
 
@@ -40,13 +39,6 @@ class AppNavigator extends Component {
       case "EventDetail":
         return (
           <EventDetailScreen
-            {...globalNavigatorProps}
-            {...route.passProps} />
-        )
-
-      case "EventDetail2":
-        return (
-          <EventDetailScreen2
             {...globalNavigatorProps}
             {...route.passProps} />
         )
