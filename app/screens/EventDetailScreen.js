@@ -6,7 +6,6 @@ import HTML from 'react-native-render-html'
 import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
-import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 import ArtistDetailScreen2 from './ArtistDetailScreen2'
 
@@ -80,8 +79,7 @@ class EventDetailScreen extends Component {
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}
-        />
-        <StatusBarBackground/>   
+        />  
         <ScrollView>
         <View style={styles.contentDetail}>
             <Image style={styles.listingPicture} source={{uri: this.props.urlData.poster_url}}/>
@@ -104,7 +102,7 @@ class EventDetailScreen extends Component {
               mapUrl={this.props.urlData.venue[0].google_maps_link}
               />
 
-            <HTML html={this.props.urlData.description_public.replace(/<i>/g, '').replace(/<\/i>/g, '')}/>
+            <HTML htmlStyles={styles.description} html={this.props.urlData.description_public.replace(/<i>/g, '').replace(/<\/i>/g, '')}/>
             {/*<Text style={styles.description}>{this.props.urlData.description_public}</Text>*/}
             <Text style={styles.performingTitle}>Performing Artists</Text>
 
@@ -130,6 +128,7 @@ class EventDetailScreen extends Component {
 
 const styles = StyleSheet.create ({
   description:{
+    padding:30,
     margin:30,
     fontFamily: 'Helvetica',
     fontWeight:'100'
@@ -175,7 +174,8 @@ const styles = StyleSheet.create ({
   contentDetail:{
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems:'center',
+    padding:30
   },
   listingRow: {
     flexDirection: "row",

@@ -31,7 +31,7 @@ class ArtistDetailScreen2 extends Component {
             	</TouchableOpacity>
           	}
           />
-          <StatusBarBackground/>   
+          <StatusBarBackground/>
           <ScrollView>*/}
           <View style={styles.contentDetail}>
             <Image style={styles.listingPicture} source={{uri: this.props.artist.web_photo_url}}/>

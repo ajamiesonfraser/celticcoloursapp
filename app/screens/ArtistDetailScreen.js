@@ -6,7 +6,6 @@ import HTML from 'react-native-render-html'
 import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
-import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 
 class ArtistDetailScreen extends Component {
@@ -36,8 +35,7 @@ class ArtistDetailScreen extends Component {
           		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
           	</TouchableOpacity>
         	}
-        />
-        <StatusBarBackground/>   
+        /> 
         <ScrollView>
         <View style={styles.contentDetail}>
           <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
@@ -90,7 +88,8 @@ const styles = StyleSheet.create ({
   homebase: {
     fontSize: 13,
     fontFamily: "Helvetica",
-    fontWeight: '100'
+    fontWeight: '100',
+    marginBottom: 15
   },
   detailData:{
     fontFamily: 'Helvetica',
@@ -112,7 +111,8 @@ const styles = StyleSheet.create ({
   contentDetail:{
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems:'center'
+    alignItems:'center',
+    padding:30
   },
   showPicture:{
     backgroundColor: '#9B9B9B',
