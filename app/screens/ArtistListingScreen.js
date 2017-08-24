@@ -7,44 +7,38 @@ import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 import axios from 'axios'
-
+import ListingScreen from './ListingScreen'
+import Client from '../services/Client'
 
 class ArtistListingScreen extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      listData: []
-    }
-  }
-  componentDidMount(){
-    axios.get('https://novastream.ca/xml2json.php?org=23998&type=artists&field=name,web_photo_url,id,bio_public,homebase,shows')
-    .then((response) => {
-      var aList = response.data
-      var listData = []
-        for (var artist in aList) {
-          listData = listData.concat([{
-            urlData:aList[artist]
-          }])
-      }
-      this.setState({listData:listData})
-    })
-    .done()
-  }
-    
-  _renderListingRow(listing) {
-    return (
-      <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing) }>
-        <Image style={styles.listingPicture} source={{uri: listing.urlData.web_photo_url}}/>
-        <View style={styles.listingInfo}>
-          <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.name}</Text>
-          <Text style={styles.homebase}>{listing.urlData.homebase}</Text>
-        </View>
-      </TouchableOpacity>
-    )
-  }
-
   render() {
+    return (
+      <ViewContainer style={{backgroundColor:'white'}}>
+        <Navbar navTitle='Artists'/>
+        <ListingScreen
+          listData={Object.keys(Client.data.artists).map((key) => {
+            return { urlData: Client.getArtistById(key) }
+          })}
+          renderItemPicture={(listing, style) => {
+            return (
+              <Image style={style} source={{uri: listing.urlData.web_photo_url}}/>
+            )
+          }}
+          renderItem={(listing, style) => {
+            return (
+              <View style={style}>
+                <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.name}</Text>
+                <Text style={styles.homebase}>{listing.urlData.homebase}</Text>
+              </View>
+            )
+          }}
+          onItemPress={(listing) => {
+            this._navigateToArtistDetail(listing)
+          }}
+        />
+      </ViewContainer>
+    )
+
     console.log('artist is rendering')
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
@@ -99,13 +93,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     height: 100
-  },
-  listingPicture:{
-    backgroundColor: '#9B9B9B',
-    height: 60,
-    width:90,
-    marginLeft: 25,
-    borderRadius: 5
   },
   listingName: {
     marginLeft: 15,

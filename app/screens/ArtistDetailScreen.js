@@ -88,6 +88,8 @@ class ArtistDetailScreen extends Component {
       <DetailScreen {...this.props}>
         {this.renderEventDetailModal()}
         <ArtistDetail artist={this.props.urlData}/>
+
+        <Text style={styles.performancesTitle}>Upcoming Performances</Text>
         {this.renderPerformanceList()}
       </DetailScreen>
 		)
@@ -131,6 +133,12 @@ const styles = StyleSheet.create ({
     marginRight: 10,
     marginBottom:10
   },
+  performancesTitle:{
+    marginVertical: 10,
+    fontSize:18,
+    fontWeight: 'bold',
+    color: '#C7C7CD'
+  },
   contentRow:{
     flexDirection: 'row'
   },
@@ -143,7 +151,7 @@ const styles = StyleSheet.create ({
     backgroundColor: '#9B9B9B',
     height: 50,
     width:75,
-    marginLeft: 15,
+    marginRight: 15,
     alignSelf: 'flex-start',
     marginTop: 10,
     borderRadius: 5

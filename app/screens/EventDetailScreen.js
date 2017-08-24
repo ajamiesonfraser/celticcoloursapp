@@ -107,18 +107,18 @@ const styles = StyleSheet.create ({
     marginBottom: 10,
     width: 175
   },
-  performingTitle:{
-    marginVertical: 10,
-    fontSize:18,
-    fontWeight: 'bold',
-    color: '#C7C7CD'
-  },
   detailCategory:{
     fontSize:12,
     fontWeight: 'bold',
     color: '#C7C7CD',
     marginRight: 10,
     marginBottom:10
+  },
+  performingTitle:{
+    marginVertical: 10,
+    fontSize:18,
+    fontWeight: 'bold',
+    color: '#C7C7CD'
   },
   artistPicture:{
     backgroundColor: '#9B9B9B',
