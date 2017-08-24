@@ -3,11 +3,12 @@
 import React, { Component } from 'React'
 import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, ListView } from 'react-native'
 import HTML from 'react-native-render-html'
-import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ViewContainer from '../components/ViewContainer'
 import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
+import ArtistDetail from './ArtistDetail'
 
 class ArtistDetailScreen extends Component {
 
@@ -39,27 +40,26 @@ class ArtistDetailScreen extends Component {
         />
         <StatusBarBackground/>   
         <ScrollView>
-        <View style={styles.contentDetail}>
-          <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
-          <Text style={styles.listingName}>{this.props.urlData.name}</Text>
-          <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
-          <HTML html={htmlReplaced}/>
-        </View>
-        <ListView
-          pageSize={1}
-          initialListSize={5}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
-          renderRow={(listing) => {
-            var rows = [];
-            for(var i = 0; i < listing.length; i++) {
-              rows.push(this._renderListingRow(listing[i]));
-            }
-            return (<View>{rows}</View>);
-          }} 
-        />
-        <View style={{height:80}} />
+          <View style={{
+            paddingHorizontal: 25
+          }}>
+            <ArtistDetail artist={this.props.urlData}/>
+          </View>
+          <ListView
+            pageSize={1}
+            initialListSize={5}
+            scrollRenderAheadDistance={1}
+            enableEmptySections={true}
+            dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
+            renderRow={(listing) => {
+              var rows = [];
+              for(var i = 0; i < listing.length; i++) {
+                rows.push(this._renderListingRow(listing[i]));
+              }
+              return (<View>{rows}</View>);
+            }} 
+          />
+          <View style={{height:80}} />
         </ScrollView>
       </ViewContainer>
         

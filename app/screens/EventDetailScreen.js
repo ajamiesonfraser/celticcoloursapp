@@ -8,9 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
-import ArtistDetailScreen2 from './ArtistDetailScreen2'
-
-
+import ArtistDetailModal from './ArtistDetailModal'
 
 class EventDetailScreen extends Component {
   constructor(props) {
@@ -55,7 +53,7 @@ class EventDetailScreen extends Component {
   renderArtistDetailModal() {
     if (this.state.currentArtistDetail != null) {
       return (
-        <ArtistDetailScreen2
+        <ArtistDetailModal
           artist={this.state.currentArtistDetail}
           onModalClose={() => {
             this.setState({ currentArtistDetail: null })
@@ -70,7 +68,7 @@ class EventDetailScreen extends Component {
     console.log (this.props.urlData)
     
     return(
-			<ViewContainer>
+			<View>
         {this.renderArtistDetailModal()}
 
         <Navbar 
@@ -112,19 +110,11 @@ class EventDetailScreen extends Component {
           {this.renderPerformerList()}
           <View style={{height:80}} />
         </ScrollView>
-      </ViewContainer>  
+      </View>  
 		)
 	}
   _navigateToArtistDetail(listing) {
     this.setState({ currentArtistDetail: listing })
-
-    /*console.log('listing = ', listing)
-    this.props.navigator.push({
-      ident: "ArtistDetail2",
-      passProps:{
-        urlData:listing
-      }
-    })*/
   }
 }
 
