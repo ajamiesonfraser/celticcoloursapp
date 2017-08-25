@@ -1,7 +1,7 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { Linking, StyleSheet, View, Text, Button, TouchableOpacity, Image } from 'react-native'
+import { Linking, StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 
 class OpenURLButton extends React.Component {
   static propTypes = {

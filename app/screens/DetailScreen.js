@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import {
-  Image,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -9,7 +8,6 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ViewContainer from '../components/ViewContainer'
 import Navbar from '../components/Navbar'
-import StatusBarBackground from '../components/StatusBarBackground'
 
 class DetailScreen extends Component {
   static propTypes = {
@@ -32,7 +30,6 @@ class DetailScreen extends Component {
             </TouchableOpacity>
           }
         />
-        <StatusBarBackground/>   
         <ScrollView>
           <View style={{ paddingHorizontal: 25 }}>
             {this.props.children}
@@ -45,81 +42,11 @@ class DetailScreen extends Component {
 }
 
 const styles = StyleSheet.create ({
-  description:{
-    margin:30,
-    fontFamily: 'Helvetica',
-    fontWeight:'100'
-  },
   navBack:{
     justifyContent:'center',
     alignItems:'center',
     marginLeft:20
-  },
-  homebase: {
-    fontSize: 13,
-    fontFamily: "Helvetica",
-    fontWeight: '100'
-  },
-  detailData:{
-    fontFamily: 'Helvetica',
-    fontWeight:'100',
-    fontSize:12,
-    marginBottom: 10,
-    width: 175
-  },
-  detailCategory:{
-    fontSize:12,
-    fontWeight: 'bold',
-    color: '#C7C7CD',
-    marginRight: 10,
-    marginBottom:10
-  },
-  contentRow:{
-    flexDirection: 'row'
-  },
-  contentDetail:{
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems:'center'
-  },
-  showPicture:{
-    backgroundColor: '#9B9B9B',
-    height: 50,
-    width:75,
-    marginLeft: 15,
-    alignSelf: 'flex-start',
-    marginTop: 10,
-    borderRadius: 5
-  },
-  listingRow: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    height: 70
-  },
-  listingItem: {
-    fontSize: 15,
-    fontFamily: 'Helvetica',
-    marginBottom: 5
-  },
-  listingName:{
-    fontSize: 20,
-    fontWeight: '100',
-    fontFamily: 'Helvetica',
-    marginBottom: 15
-  },
-  listingPicture:{
-    backgroundColor: 'blue',
-    height: 200,
-    width:300,
-    marginBottom: 15,
-    borderRadius: 5
-  },
-  listingInfo:{
-    flexDirection: "column",
-    width:200,
-    marginTop: 15
-  },
+  }
 })
 
 module.exports = DetailScreen

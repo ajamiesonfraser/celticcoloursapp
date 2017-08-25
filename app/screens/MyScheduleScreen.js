@@ -14,14 +14,9 @@ import {
 import CheckBox from 'react-native-check-box'
 import Button from 'react-native-button'
 import ViewContainer from '../components/ViewContainer'
-import StatusBarBackground from '../components/StatusBarBackground'
-import _ from 'lodash'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
-import GetDirectionsButton from '../components/GetDirectionsButton'
-import axios from 'axios'
 import Modal from 'react-native-modal'
-import ModalDropdown from 'react-native-modal-dropdown'
 import ListingScreen from './ListingScreen'
 
 import Client from '../services/Client'
@@ -85,7 +80,7 @@ class MyScheduleScreen extends Component {
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
-      // changedData: []
+
     }
   }
 
@@ -397,22 +392,11 @@ class MyScheduleScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  buttonIcon:{
-    marginTop: 10,
-    marginRight: 20
-  },
   modal: {
     backgroundColor: 'white',
     marginTop: 50,
     padding: 22,
     borderRadius: 5
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    color: 'red'
   },
   listingInfo:{
     flex: 1,
@@ -463,29 +447,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica'
   },
 
-  listingMoreIcon: {
-    color: "green",
-    height: 10,
-    width: 10,
-    marginRight: 25,
-  },
-
-  buttonContainerStyle: {
-    flex: 0,
-    justifyContent: 'center',
-    marginHorizontal: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: '#3d97e8'
-  },
-
-  buttonStyle: {
-    fontSize: 14,
-    color: '#3d97e8'
-  },
-
   buttonPrimaryContainerStyle: {
     flex: 0,
     justifyContent: 'center',
@@ -501,17 +462,6 @@ const styles = StyleSheet.create({
   buttonPrimaryStyle: {
     fontSize: 14,
     color: '#fff'
-  },
-
-  buttonsRow: {
-    justifyContent: 'flex-start',
-    flexDirection: "row",
-  },
-
-  
-  buttonStyle: {
-    fontSize: 14,
-    color: '#3d97e8'
   },
   
   buttonText: {

@@ -7,6 +7,7 @@ import ArtistListingScreen from '../screens/ArtistListingScreen'
 import EventDetailScreen  from '../screens/EventDetailScreen'
 import MapEventDetailScreen from '../screens/MapEventDetailScreen'
 import ArtistDetailScreen from '../screens/ArtistDetailScreen'
+import ContactScreen from '../screens/ContactScreen'
 
 
 
@@ -56,6 +57,13 @@ class AppNavigator extends Component {
             {...globalNavigatorProps}
             {...route.passProps} />
         )
+      
+        case "ContactScreen":
+          return (
+            <ContactScreen
+              {...globalNavigatorProps}
+              {...route.passProps}/>
+          )
 
       default:
         return (

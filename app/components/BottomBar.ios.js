@@ -62,6 +62,15 @@ class BottomBar extends Component {
               initialRoute={{ident: "ArtistListing"}} />
         </Icon.TabBarItemIOS>
 
+        <Icon.TabBarItemIOS
+          selected={this.state.selectedTab === "tab4"}
+          icon={require('../assets/fiddle.png')}
+          title={``}
+          onPress={() => Client.events.emit('switch tab', 'tab4')}>
+            <AppNavigator
+              initialRoute={{ident: "ContactScreen"}} />
+        </Icon.TabBarItemIOS>
+
 
       </TabBarIOS>
     )

@@ -1,13 +1,8 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, ListView } from 'react-native'
-import HTML from 'react-native-render-html'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import ViewContainer from '../components/ViewContainer'
+import { StyleSheet, View, Text, Image, TouchableOpacity, ListView } from 'react-native'
 import Navbar from '../components/Navbar'
-import StatusBarBackground from '../components/StatusBarBackground'
-import GetDirectionsButton from '../components/GetDirectionsButton'
 import ArtistDetail from './ArtistDetail'
 import DetailScreen from './DetailScreen'
 import EventDetailModal from './EventDetailModal'
@@ -109,49 +104,13 @@ class ArtistDetailScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create ({
-  description:{
-    margin:30,
-    fontFamily: 'Helvetica',
-    fontWeight:'100'
-  },
-  navBack:{
-    justifyContent:'center',
-    alignItems:'center',
-    marginLeft:20
-  },
-  homebase: {
-    fontSize: 13,
-    fontFamily: "Helvetica",
-    fontWeight: '100'
-  },
-  detailData:{
-    fontFamily: 'Helvetica',
-    fontWeight:'100',
-    fontSize:12,
-    marginBottom: 10,
-    width: 175
-  },
-  detailCategory:{
-    fontSize:12,
-    fontWeight: 'bold',
-    color: '#C7C7CD',
-    marginRight: 10,
-    marginBottom:10
-  },
+const styles = StyleSheet.create ({ 
   performancesTitle:{
+    textAlign:'center',
     marginVertical: 10,
     fontSize:18,
     fontWeight: 'bold',
     color: '#C7C7CD'
-  },
-  contentRow:{
-    flexDirection: 'row'
-  },
-  contentDetail:{
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems:'center'
   },
   showPicture:{
     backgroundColor: '#9B9B9B',
@@ -172,19 +131,6 @@ const styles = StyleSheet.create ({
     fontSize: 15,
     fontFamily: 'Helvetica',
     marginBottom: 5
-  },
-  listingName:{
-    fontSize: 20,
-    fontWeight: '100',
-    fontFamily: 'Helvetica',
-    marginBottom: 15
-  },
-  listingPicture:{
-    backgroundColor: 'blue',
-    height: 200,
-    width:300,
-    marginBottom: 15,
-    borderRadius: 5
   },
   listingInfo:{
     flexDirection: "column",
