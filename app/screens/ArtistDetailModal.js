@@ -46,7 +46,7 @@ class ArtistDetailModal extends Component {
     const htmlReplaced = this.props.artist.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    return(
+    return (
       <Modal isVisible={true} onRequestClose={this.props.onModalClose}>
         <View>
           <View style={styles.contentDetail}>

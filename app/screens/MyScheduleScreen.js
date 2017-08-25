@@ -28,6 +28,44 @@ import Client from '../services/Client'
 
 const dateOptions = [ "Friday, Oct. 6", "Saturday, Oct. 7", "Sunday, Oct. 8", "Monday, Oct. 9", "Tuesday, Oct. 10", "Wednesday, Oct. 11", "Thursday, Oct. 12", "Friday, Oct. 13", "Saturday, Oct. 14" ]
 
+/** NOTE: in JS, month numbers start at zero, so we use 9 even though it is the 10th month */
+const EVENT_DATES = [
+  new Date(2017, 9, 6),
+  new Date(2017, 9, 7),
+  new Date(2017, 9, 8),
+  new Date(2017, 9, 9),
+  new Date(2017, 9, 10),
+  new Date(2017, 9, 11),
+  new Date(2017, 9, 12),
+  new Date(2017, 9, 13),
+  new Date(2017, 9, 14)
+]
+
+const DAYS_OF_WEEK = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+]
+
+const MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
 const FilterTypes = {
   ALL: 'all',
   CONCERTS: 'concerts',
@@ -39,9 +77,11 @@ class MyScheduleScreen extends Component {
     super(props)
     this.state = {
       listData: [],
+      currentListData: null,
 
-      showConcerts: true,
-      showWorkshops: true,
+      
+      typeFilter: FilterTypes.ALL,
+      dateFilter: 'all',
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
@@ -51,23 +91,19 @@ class MyScheduleScreen extends Component {
 
   componentDidMount() {
     this.dataLoadedHandler = Client.events.addListener('data loaded', (data) => {
-      const { artists, shows } = data
+      const { artists, workshops, shows } = data
 
-      console.log({ shows, artists })
-
-      //const listData = Object.keys(shows).map(showId => ({ urlData: shows[showId] }))
-
-      var listData = []
-      for (var id in shows) {
-        listData = listData.concat([{
-          urlData: shows[id]
-        }])
-      }
+      const listData = Object.keys(shows).map(showId => {
+        return { urlData: shows[showId], type: 'show' }
+      }).concat(Object.keys(workshops).map(workshopId => {
+        return { urlData: workshops[workshopId], type: 'workshop' }
+      }))
 
       this.setState({
-        listData,
         artists,
-        shows
+        shows,
+        listData,
+        currentListData: listData,
       })
     })
 
@@ -114,11 +150,6 @@ class MyScheduleScreen extends Component {
   // }
 
   renderTypeFilterModal() {
-    const oldState = {
-      showConcerts: this.state.showConcerts,
-      showWorkshops: this.state.showWorkshops
-    }
-
     return (
       <Modal isVisible={this.state.showingTypeFilterModal}>
         <View style={styles.modal}>
@@ -132,17 +163,41 @@ class MyScheduleScreen extends Component {
           <View style={{
             marginVertical: 25
           }}>
-            <CheckBox
-              rightText='Concerts'
-              isChecked={this.state.showConcerts}
-              onClick={() => this.setState({ showConcerts: !this.state.showConcerts })}
-            />
+            <Picker
+              selectedValue={this.state.typeFilter}
+              onValueChange={(itemValue, itemIndex) => {
+                this.setState({
+                  typeFilter: itemValue,
+                  currentListData: this.state.listData.filter((el) => {
+                    // filter by type
+                    if (itemValue != FilterTypes.ALL) {
+                      switch (itemValue) {
+                        case FilterTypes.CONCERTS:
+                          if (el.type != 'show') {
+                            return false
+                          }
+                          break
+                        case FilterTypes.WORKSHOPS:
+                          if (el.type != 'workshop') {
+                            return false
+                          }
+                          break
+                      }
+                    }
 
-            <CheckBox
-              rightText='Workshops'
-              isChecked={this.state.showWorkshops}
-              onClick={() => this.setState({ showWorkshops: !this.state.showWorkshops })}
-            />
+                    return true
+                  })
+                })
+
+
+              }}>
+
+
+              <Picker.Item label='Concerts &amp; Events' value={FilterTypes.ALL} />
+              <Picker.Item label='Official Concerts' value={FilterTypes.CONCERTS} />
+              <Picker.Item label='Community events' value={FilterTypes.WORKSHOPS} />
+              
+            </Picker>
           </View>
 
           <View style={{
@@ -166,33 +221,59 @@ class MyScheduleScreen extends Component {
     )
   }
 
+  renderDateFilterModal() {
+    return (
+      <Modal isVisible={this.state.showingDateFilterModal}>
+        <View style={styles.modal}>
+          <View>
+            <Picker
+              selectedValue={String(this.state.dateFilter)}
+              onValueChange={(itemValue, itemIndex) => this.setState({ dateFilter: String(itemValue) })}>
+
+              <Picker.Item
+                label='All days'
+                value='all'
+              />
+              
+              {EVENT_DATES.map((el, i) => {
+                return (
+                  <Picker.Item
+                    label={`${DAYS_OF_WEEK[el.getDay()]}, ${MONTH_NAMES[el.getMonth()]} ${el.getDate()}`}
+                    value={String(el)}
+                    key={i}
+                  />
+                )
+              })}
+              
+            </Picker>
+          </View>
+
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}>
+            <Button
+              containerStyle={styles.buttonPrimaryContainerStyle}
+              style={styles.buttonPrimaryStyle}
+              onPress={() => {
+                this.setState({
+                  showingDateFilterModal: false
+                })
+              }}
+            >
+              Close
+            </Button>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
   render() {
-    const currentListData = this.state.listData
-    console.log({ currentListData })
-
-    switch (this.state.filterMode) {
-      case FilterTypes.CONCERTS:
-        break
-      case FilterTypes.WORKSHOPS:
-        break
-    }
-
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar navTitle="My Schedule"
-          rightButton={
-            <ModalDropdown 
-              options={dateOptions}
-              // onPress={() => this._changeDateSaturday}
-              // onSelect={(idx, value) => this._changeDateSaturday}
-            >
-              <Icon
-                style={styles.buttonIcon}
-                name="angle-down" size={35}
-              />
-            </ModalDropdown>}
-        />
+        <Navbar navTitle="My Schedule"/>
 
         <View style={{
           height: 40
@@ -209,32 +290,58 @@ class MyScheduleScreen extends Component {
               onPress={() => {
                 this.setState({
                   showingTypeFilterModal: true
-                });
+                })
               }}
             >
-              Type
+              <View style={styles.filterButtonContent}>
+                <Text style={styles.buttonText}>Type</Text>
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
+            </Button>
+            <Button
+              containerStyle={styles.filterButtonContainerStyle}
+              style={styles.filterButton}
+              onPress={() => {
+                this.setState({
+                  showingDateFilterModal: true
+                })
+              }}
+            >
+              <View style={styles.filterButtonContent}>
+                <Text style={styles.buttonText}>Date</Text>
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
             </Button>
             <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
-              Date
-            </Button>
-            <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
-              Region
+              <View style={styles.filterButtonContent}>
+                <Text style={styles.buttonText}>Region</Text>
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
             </Button>
           </View>
         </View>
 
         {this.renderTypeFilterModal()}
+        {this.renderDateFilterModal()}
 
-        {this.state.shows != null && this.state.artists != null
+        {this.state.currentListData != null
           ? <ListingScreen
-              listData={this.state.listData}
+              listData={this.state.currentListData}
               renderItemPicture={(listing, style) => {
                 return (
                   <Image style={style} source={{uri: listing.urlData.poster_url}}/>
                 )
               }}
               renderItem={(listing, style) => {
-                console.log('render item: ', listing)
                 return (
                   <View style={style}>
                     <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
@@ -382,6 +489,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 
+  
+  buttonStyle: {
+    fontSize: 14,
+    color: '#3d97e8'
+  },
+  
+  buttonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#3d97e8'
+  },
+
   filterButtonContainerStyle: {
     flex: 1,
     flexDirection: 'row',
@@ -389,17 +508,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 3,
-    paddingVertical: 5,
+    paddingVertical: 3,
     paddingHorizontal: 8,
     borderRadius: 3,
-    borderWidth: 1,
     borderColor: '#3d97e8'
   },
 
+  filterButtonContent: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  
   filterButton: {
     flex: 1,
     fontSize: 14,
     color: '#3d97e8',
+  },
+
+  filterDropdownIcon: {
+    marginLeft: 5,
+    color: '#3d97e8'
   }
 
 });

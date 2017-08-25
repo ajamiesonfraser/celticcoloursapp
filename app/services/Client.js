@@ -11,16 +11,17 @@ const Client = {
 
   data: {
     shows: {},
+    workshops: {},
     artists: {}
   },
 
   _loadShows() {
-    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
+    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,date_unix,date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
     .then(response => response.data)
   },
 
   _loadWorkshops() {
-    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
+    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,date_unix,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
     .then(response => response.data)
   },
 
@@ -141,14 +142,19 @@ const Client = {
   //     byId: (id) => Client.data[type][id]
   //   }
   // },
+
+
+  getShowById(id) {
+    return Client.data.shows[id]
+  },
+
+  getWorkshopById(id) {
+    return Client.data.workshops[id]
+  },
   
   getArtistById(id) {
     return Client.data.artists[id]
   },
-
-  getShowById(id) {
-    return Client.data.shows[id]
-  }
 }
 
 module.exports = Client

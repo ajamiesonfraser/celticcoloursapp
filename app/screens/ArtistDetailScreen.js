@@ -21,33 +21,7 @@ class ArtistDetailScreen extends Component {
     }
   }
 
-  renderEventDetailModal() {
-    if (this.state.currentEventDetail != null) {
-      const event = this.state.currentEventDetail
-
-      return (
-        <EventDetailModal
-          event={event}
-          onViewEventPress={() => {
-            this.setState({ currentEventDetail: null }, () => {
-              this.props.navigator.push({
-                ident: 'EventDetail',
-                passProps: {
-                  urlData: event
-                }
-              })
-            })
-          }}
-          onModalClose={() => {
-            this.setState({ currentEventDetail: null })
-          }}
-        />
-      )
-    }
-  }
-
   _renderListingRow(listing) {
-    console.log('render listing ', listing)
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
         <Image style={styles.showPicture} source={{uri: listing.poster_url}}/>
@@ -81,6 +55,31 @@ class ArtistDetailScreen extends Component {
         }} 
       />
     )
+  }
+
+  renderEventDetailModal() {
+    if (this.state.currentEventDetail != null) {
+      const event = this.state.currentEventDetail
+
+      return (
+        <EventDetailModal
+          event={event}
+          onViewEventPress={() => {
+            this.setState({ currentEventDetail: null }, () => {
+              this.props.navigator.push({
+                ident: 'EventDetail',
+                passProps: {
+                  urlData: event
+                }
+              })
+            })
+          }}
+          onModalClose={() => {
+            this.setState({ currentEventDetail: null })
+          }}
+        />
+      )
+    }
   }
 
 	render(){
