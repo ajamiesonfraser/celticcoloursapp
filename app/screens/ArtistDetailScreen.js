@@ -3,17 +3,27 @@
 import React, { Component } from 'React'
 import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, ListView } from 'react-native'
 import HTML from 'react-native-render-html'
-import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
+import ViewContainer from '../components/ViewContainer'
 import Navbar from '../components/Navbar'
 import GetDirectionsButton from '../components/GetDirectionsButton'
+import ArtistDetail from './ArtistDetail'
+import DetailScreen from './DetailScreen'
+import EventDetailModal from './EventDetailModal'
+import Client from '../services/Client'
 
 class ArtistDetailScreen extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentEventDetail: null
+    }
+  }
 
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
-        <Image style={styles.showPicture} source={{uri: listing.web_photo_url}}/>
+        <Image style={styles.showPicture} source={{uri: listing.poster_url}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
         </View>
@@ -22,54 +32,71 @@ class ArtistDetailScreen extends Component {
     )
   }
 
-	render(){
-    const htmlReplaced = this.props.urlData.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
-
+  renderPerformanceList() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    return(
-			<ViewContainer>
-        <Navbar 
-        	navTitle = {this.props.urlData.name}
-        	backButton = {
-          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
-          		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
-          	</TouchableOpacity>
-        	}
-        /> 
-        <ScrollView>
-        <View style={styles.contentDetail}>
-          <Image style={styles.listingPicture} source={{uri: this.props.urlData.web_photo_url}}/>
-          <Text style={styles.listingName}>{this.props.urlData.name}</Text>
-          <Text style={styles.homebase}>{this.props.urlData.homebase}</Text>
-          <HTML html={htmlReplaced}/>
-        </View>
-        <ListView
-          pageSize={1}
-          initialListSize={5}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
-          renderRow={(listing) => {
-            var rows = [];
-            for(var i = 0; i < listing.length; i++) {
-              rows.push(this._renderListingRow(listing[i]));
-            }
-            return (<View>{rows}</View>);
-          }} 
+
+    return (
+      <ListView
+        pageSize={1}
+        initialListSize={5}
+        scrollRenderAheadDistance={1}
+        enableEmptySections={true}
+        dataSource={ds.cloneWithRows(this.props.urlData.shows[0])}
+        renderRow={(listing) => {
+          return (
+            <View>
+              {listing.map((el, i) => {
+                const realListing = Client.getShowById(el.id)
+                return this._renderListingRow(realListing)
+              })}
+            </View>
+          );
+        }} 
+      />
+    )
+  }
+
+  renderEventDetailModal() {
+    if (this.state.currentEventDetail != null) {
+      const event = this.state.currentEventDetail
+
+      return (
+        <EventDetailModal
+          event={event}
+          onViewEventPress={() => {
+            this.setState({ currentEventDetail: null }, () => {
+              this.props.navigator.push({
+                ident: 'EventDetail',
+                passProps: {
+                  urlData: event
+                }
+              })
+            })
+          }}
+          onModalClose={() => {
+            this.setState({ currentEventDetail: null })
+          }}
         />
-        <View style={{height:80}} />
-        </ScrollView>
-      </ViewContainer>
-        
+      )
+    }
+  }
+
+	render(){
+    return (
+      <DetailScreen {...this.props}>
+        {this.renderEventDetailModal()}
+        <ArtistDetail artist={this.props.urlData}/>
+
+        <Text style={styles.performancesTitle}>Upcoming Performances</Text>
+        {this.renderPerformanceList()}
+      </DetailScreen>
 		)
 	}
 
   _navigateToEventDetail(listing) {
-    this.props.navigator.push({
-      ident: "EventDetail2",
-      passProps: {
-        urlData:listing
-      }
+    // NOTE: listing is full object, not just nested object
+    this.setState({
+      currentEventDetail: listing
     })
   }
 }
@@ -105,6 +132,12 @@ const styles = StyleSheet.create ({
     marginRight: 10,
     marginBottom:10
   },
+  performancesTitle:{
+    marginVertical: 10,
+    fontSize:18,
+    fontWeight: 'bold',
+    color: '#C7C7CD'
+  },
   contentRow:{
     flexDirection: 'row'
   },
@@ -118,7 +151,7 @@ const styles = StyleSheet.create ({
     backgroundColor: '#9B9B9B',
     height: 50,
     width:75,
-    marginLeft: 15,
+    marginRight: 15,
     alignSelf: 'flex-start',
     marginTop: 10,
     borderRadius: 5

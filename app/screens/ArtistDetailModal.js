@@ -1,49 +1,62 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { StyleSheet, View, Text, Image, TouchableOpacity, TouchableWithoutFeedback, ScrollView, ListView } from 'react-native'
+import {
+  Button,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  ScrollView,
+  ListView
+} from 'react-native'
 import Modal from 'react-native-modal'
 import HTML from 'react-native-render-html'
-import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Navbar from '../components/Navbar'
+import ViewContainer from '../components/ViewContainer'
 import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
+import ArtistDetail from './ArtistDetail'
 
-class ArtistDetailScreen2 extends Component {
+
+class ArtistDetailModal extends Component {
   static propTypes = {
     artist: React.PropTypes.object.isRequired,
     onModalClose: React.PropTypes.func.isRequired
   }
 
-	render(){
+  renderModalBottom() {
+    return (
+      <View style={{
+        marginTop: 25,
+        flexDirection: 'row',
+        justifyContent: 'center'
+      }}>
+        <Button
+          title='Close'
+          onPress={this.props.onModalClose}
+        />
+      </View>
+    );
+  }
+
+	render() {
     const htmlReplaced = this.props.artist.bio_public.replace(/<i>/g, '').replace(/<\/i>/g, '')
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    return(
-      <TouchableWithoutFeedback onPress={this.props.onModalClose}>
-  			<Modal isVisible={true}>
-          {/*<Navbar 
-          	navTitle = {this.props.urlData.name}
-          	backButton = {
-            	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
-            		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
-            	</TouchableOpacity>
-          	}
-          />
-          <StatusBarBackground/>
-          <ScrollView>*/}
+    return (
+      <Modal isVisible={true} onRequestClose={this.props.onModalClose}>
+        <View>
           <View style={styles.contentDetail}>
-            <Image style={styles.listingPicture} source={{uri: this.props.artist.web_photo_url}}/>
-            <Text style={styles.listingName}>{this.props.artist.name}</Text>
-            <Text style={styles.homebase}>{this.props.artist.homebase}</Text>
-            <HTML html={htmlReplaced}/>
-            {/*<Text style={styles.description}>{this.props.urlData.bio_public}</Text>*/}
+            <ScrollView>
+              <ArtistDetail artist={this.props.artist}/>
+            </ScrollView>
+            {this.renderModalBottom()}
           </View>
-          <View style={{height:80}} />
-          {/*</ScrollView>*/}
-        </Modal>
-      </TouchableWithoutFeedback>
+        </View>
+      </Modal>
 		)
 	}
 
@@ -130,4 +143,4 @@ const styles = StyleSheet.create ({
   },
 })
 
-module.exports = ArtistDetailScreen2
+module.exports = ArtistDetailModal

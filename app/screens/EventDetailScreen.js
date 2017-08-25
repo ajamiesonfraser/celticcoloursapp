@@ -7,9 +7,10 @@ import ViewContainer from '../components/ViewContainer'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 import GetDirectionsButton from '../components/GetDirectionsButton'
-import ArtistDetailScreen2 from './ArtistDetailScreen2'
-
-
+import ArtistDetailModal from './ArtistDetailModal'
+import EventDetail from './EventDetail'
+import DetailScreen from './DetailScreen'
+import Client from '../services/Client'
 
 class EventDetailScreen extends Component {
   constructor(props) {
@@ -17,6 +18,9 @@ class EventDetailScreen extends Component {
     this.state = {
       currentArtistDetail: null
     }
+  }
+
+  componentDidMount() {
   }
 
   _renderListingRow(listing) {
@@ -31,22 +35,26 @@ class EventDetailScreen extends Component {
   }
   renderPerformerList(){
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    if (this.props.urlData.performances[0]) {
+    if (this.props.urlData.performances && this.props.urlData.performances[0]) {
       return (
         <ListView
-            dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
-            renderRow={(listing) => {
-              var rows = [];
-              for(var i in listing) {
-                rows.push(this._renderListingRow(listing[i]));
-              }
-              return (<View>{rows}</View>);
-            }} 
+          dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
+          renderRow={(listing) => {
+            var rows = [];
+            for(var i in listing) {
+              rows.push(this._renderListingRow(listing[i]));
+            }
+            return (<View>{rows}</View>);
+          }} 
         />
       );
     } else {
       return (
-        <h2>Hey man! Log in to see this section</h2>
+        <Text style={{
+          fontStyle: 'italic'
+        }}>
+          No performances to show
+        </Text>
       );
     }
   }
@@ -54,7 +62,7 @@ class EventDetailScreen extends Component {
   renderArtistDetailModal() {
     if (this.state.currentArtistDetail != null) {
       return (
-        <ArtistDetailScreen2
+        <ArtistDetailModal
           artist={this.state.currentArtistDetail}
           onModalClose={() => {
             this.setState({ currentArtistDetail: null })
@@ -64,65 +72,19 @@ class EventDetailScreen extends Component {
     }
   }
 
-
 	render(){
-    console.log (this.props.urlData)
-    
     return(
-			<ViewContainer>
+      <DetailScreen {...this.props}>
         {this.renderArtistDetailModal()}
+        <EventDetail showDetails={true} event={this.props.urlData}/>
 
-        <Navbar 
-        	navTitle = {this.props.urlData.name}
-        	backButton = {
-          	<TouchableOpacity style={styles.navBack} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} onPress={() => this.props.navigator.pop() }>
-          		<Icon name="angle-left" size={35} style={{marginTop:10}}/>
-          	</TouchableOpacity>
-        	}
-        />  
-        <ScrollView>
-        <View style={styles.contentDetail}>
-            <Image style={styles.listingPicture} source={{uri: this.props.urlData.poster_url}}/>
-            <Text style={styles.listingName}>{this.props.urlData.name}</Text>
-            <View style={styles.contentRow}>
-              <View>
-                <Text style={styles.detailCategory}>DATE</Text>
-                <Text style={styles.detailCategory}>VENUE</Text>
-                <Text style={styles.detailCategory}>COMMUNITY</Text>
-                <Text style={styles.detailCategory}>TICKETS</Text>
-              </View>
-              <View style={{marginBottom:15}}>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.formatted_date} {this.props.urlData.formatted_start_time}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'} >{this.props.urlData.venue_name}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.venue[0].community}</Text>
-                <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.urlData.price} {this.props.urlData.seating}</Text>
-              </View>
-            </View>
-            <GetDirectionsButton
-              mapUrl={this.props.urlData.venue[0].google_maps_link}
-              />
-
-            <HTML htmlStyles={styles.description} html={this.props.urlData.description_public.replace(/<i>/g, '').replace(/<\/i>/g, '')}/>
-            {/*<Text style={styles.description}>{this.props.urlData.description_public}</Text>*/}
-            <Text style={styles.performingTitle}>Performing Artists</Text>
-
-          </View>
-          {this.renderPerformerList()}
-          <View style={{height:80}} />
-        </ScrollView>
-      </ViewContainer>  
+        <Text style={styles.performingTitle}>Performing Artists</Text>
+        {this.renderPerformerList()}
+      </DetailScreen>
 		)
 	}
   _navigateToArtistDetail(listing) {
     this.setState({ currentArtistDetail: listing })
-
-    /*console.log('listing = ', listing)
-    this.props.navigator.push({
-      ident: "ArtistDetail2",
-      passProps:{
-        urlData:listing
-      }
-    })*/
   }
 }
 
@@ -145,13 +107,6 @@ const styles = StyleSheet.create ({
     marginBottom: 10,
     width: 175
   },
-  performingTitle:{
-    flex: 1,
-    fontSize:18,
-    fontWeight: 'bold',
-    color: '#C7C7CD',
-    marginBottom: 10
-  },
   detailCategory:{
     fontSize:12,
     fontWeight: 'bold',
@@ -159,11 +114,17 @@ const styles = StyleSheet.create ({
     marginRight: 10,
     marginBottom:10
   },
+  performingTitle:{
+    marginVertical: 10,
+    fontSize:18,
+    fontWeight: 'bold',
+    color: '#C7C7CD'
+  },
   artistPicture:{
     backgroundColor: '#9B9B9B',
     height: 50,
     width:75,
-    marginLeft: 15,
+    marginRight: 15,
     alignSelf: 'flex-start',
     marginTop: 10,
     borderRadius: 5
