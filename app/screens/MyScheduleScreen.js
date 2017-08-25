@@ -85,7 +85,7 @@ class MyScheduleScreen extends Component {
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
-      // changedData: []
+
     }
   }
 
@@ -131,23 +131,10 @@ class MyScheduleScreen extends Component {
         </View>
         <Text style={styles.startTime}>{listing.urlData.formatted_start_time}</Text>
 
-        {/* <View style={styles.buttonsRow}>
-          <Button containerStyle={styles.buttonContainerStyle} style={styles.buttonStyle}>
-            View Event
-          </Button>
-
-          <GetDirectionsButton mapUrl={listing.urlData.venue[0].google_maps_link}/>
-        </View> */}
       </TouchableOpacity>
 
     )
   }
-
-  // _changeDateSaturday(){
-  //   this.setState({
-  //     changedData: grouped['2017-10-07']
-  //   })
-  // }
 
   renderTypeFilterModal() {
     return (
@@ -378,22 +365,11 @@ class MyScheduleScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  buttonIcon:{
-    marginTop: 10,
-    marginRight: 20
-  },
   modal: {
     backgroundColor: 'white',
     marginTop: 50,
     padding: 22,
     borderRadius: 5
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    color: 'red'
   },
   listingInfo:{
     flex: 1,
@@ -444,29 +420,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica'
   },
 
-  listingMoreIcon: {
-    color: "green",
-    height: 10,
-    width: 10,
-    marginRight: 25,
-  },
-
-  buttonContainerStyle: {
-    flex: 0,
-    justifyContent: 'center',
-    marginHorizontal: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: '#3d97e8'
-  },
-
-  buttonStyle: {
-    fontSize: 14,
-    color: '#3d97e8'
-  },
-
   buttonPrimaryContainerStyle: {
     flex: 0,
     justifyContent: 'center',
@@ -482,17 +435,6 @@ const styles = StyleSheet.create({
   buttonPrimaryStyle: {
     fontSize: 14,
     color: '#fff'
-  },
-
-  buttonsRow: {
-    justifyContent: 'flex-start',
-    flexDirection: "row",
-  },
-
-  
-  buttonStyle: {
-    fontSize: 14,
-    color: '#3d97e8'
   },
   
   buttonText: {

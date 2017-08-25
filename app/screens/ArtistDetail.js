@@ -2,21 +2,16 @@
 
 import React, { Component } from 'React'
 import {
-  Button,
   StyleSheet,
   View,
   Text,
   Image,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  ScrollView,
   ListView
 } from 'react-native'
 import Modal from 'react-native-modal'
 import HTML from 'react-native-render-html'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ViewContainer from '../components/ViewContainer'
-import StatusBarBackground from '../components/StatusBarBackground'
 import GetDirectionsButton from '../components/GetDirectionsButton'
 
 class ArtistDetail extends Component {
@@ -40,53 +35,15 @@ class ArtistDetail extends Component {
 }
 
 const styles = StyleSheet.create ({
-  description:{
-    margin:30,
-    fontFamily: 'Helvetica',
-    fontWeight:'100'
-  },
-  navBack:{
-    justifyContent:'center',
-    alignItems:'center',
-    marginLeft:20
-  },
   homebase: {
     fontSize: 13,
     fontFamily: "Helvetica",
     fontWeight: '100'
   },
-  detailData:{
-    fontFamily: 'Helvetica',
-    fontWeight:'100',
-    fontSize:12,
-    marginBottom: 10,
-    width: 175
-  },
-  detailCategory:{
-    fontSize:12,
-    fontWeight: 'bold',
-    color: '#C7C7CD',
-    marginRight: 10,
-    marginBottom:10
-  },
-  contentRow:{
-    flexDirection: 'row'
-  },
   contentDetail:{
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems:'center'
-  },
-  listingRow: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    height: 70
-  },
-  listingItem: {
-    fontSize: 15,
-    fontFamily: 'Helvetica',
-    marginBottom: 5
   },
   listingName:{
     fontSize: 20,
@@ -100,12 +57,7 @@ const styles = StyleSheet.create ({
     width:300,
     marginBottom: 15,
     borderRadius: 5
-  },
-  listingInfo:{
-    flexDirection: "column",
-    width:200,
-    marginTop: 15
-  },
+  }
 })
 
 module.exports = ArtistDetail

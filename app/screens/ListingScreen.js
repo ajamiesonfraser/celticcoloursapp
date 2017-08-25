@@ -52,17 +52,6 @@ class ListingScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  buttonIcon:{
-    marginTop: 10,
-    marginRight: 20
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    color: 'red'
-  },
   listingInfo:{
     flex: 1,
     flexDirection: "column"
@@ -72,17 +61,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     color: "#F6655E",
     fontSize: 17
-  },
-   listingDate: {
-    paddingBottom: 5,
-    fontSize: 13,
-    fontFamily: "Helvetica",
-    fontWeight: '100'
-  },
-  listingVenue: {
-    color: '#0076FF',
-    paddingBottom: 5,
-    fontSize: 11
   },
   listingRow: {
     flexDirection: "row",
@@ -103,43 +81,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     alignSelf: 'flex-start',
     borderRadius: 5
-  },
-  listingName: {
-    flexDirection: 'column',
-    fontSize: 17,
-    paddingBottom: 5,
-    fontWeight: '100',
-    fontFamily: 'Helvetica'
-  },
-
-  listingMoreIcon: {
-    color: "green",
-    height: 10,
-    width: 10,
-    marginRight: 25,
-  },
-
-  buttonContainerStyle: {
-    flex: 0,
-    justifyContent: 'center',
-    marginHorizontal: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 8,
-    borderRadius: 3,
-    borderWidth: 1,
-    borderColor: '#3d97e8'
-  },
-
-  buttonStyle: {
-    fontSize: 14,
-    color: '#3d97e8'
-  },
-
-  buttonsRow: {
-    justifyContent: 'flex-start',
-    flexDirection: "row",
   }
-
 });
 
 module.exports = ListingScreen
