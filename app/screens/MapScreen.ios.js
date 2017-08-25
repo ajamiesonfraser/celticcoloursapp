@@ -5,6 +5,7 @@ import { StyleSheet, PropTypes, View, Text, Dimensions, TouchableOpacity, Image 
 import MapView from 'react-native-maps'
 import axios from 'axios'
 import _ from 'lodash'
+import Client from '../services/Client'
 
 var { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -31,7 +32,7 @@ var MapScreen = React.createClass({
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     
     axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
@@ -47,7 +48,7 @@ var MapScreen = React.createClass({
           markers:markers
         })
     })
-    .done(),
+    .done()
     axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
     .then((response) =>{
       var wList = response.data
@@ -62,7 +63,30 @@ var MapScreen = React.createClass({
           wMarkers:wMarkers
         })
     })
-    .done(),
+    .done()
+
+    this.dataLoadedHandler = Client.events.addListener('data loaded', (data) => {
+      const markers = data.shows.map((el) => {
+        return {
+          markerData: el,
+          image: require ('../assets/pin1.png')
+        }
+      })
+
+      const wMarkers = data.workshops.map((el) => {
+        return {
+          wMarkerData: el,
+          image: require ('../assets/pin2.png')
+        }
+      })
+
+      this.setState({
+        markers,
+        wMarkers
+      })
+    })
+
+    Client.loadData()
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -92,6 +116,7 @@ var MapScreen = React.createClass({
   },
 
   componentWillUnmount: function() {
+    this.dataLoadedHandler.remove()
     navigator.geolocation.clearWatch(this.watchID);
   },
 

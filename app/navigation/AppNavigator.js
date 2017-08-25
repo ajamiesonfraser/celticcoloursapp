@@ -9,10 +9,7 @@ import MapEventDetailScreen from '../screens/MapEventDetailScreen'
 import ArtistDetailScreen from '../screens/ArtistDetailScreen'
 import ContactScreen from '../screens/ContactScreen'
 
-
-
 class AppNavigator extends Component {
-
   _renderScene(route, navigator) {
     var globalNavigatorProps = { navigator }
 

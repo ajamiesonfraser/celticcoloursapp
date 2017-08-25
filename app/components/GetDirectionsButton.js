@@ -2,6 +2,7 @@
 
 import React, { Component } from 'React'
 import { Linking, StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import Button from 'react-native-button'
 
 class OpenURLButton extends React.Component {
   static propTypes = {
@@ -20,12 +21,9 @@ class OpenURLButton extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity
-        onPress={this.handleClick}>
-        <Image 
-        	source={require('../assets/getDirections.png')}
-        	style={styles.button} />
-      </TouchableOpacity>
+			<Button onPress={this.handleClick}>
+				Get Directions
+			</Button>
     );
   }
 }
