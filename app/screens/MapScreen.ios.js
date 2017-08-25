@@ -34,7 +34,7 @@ var MapScreen = React.createClass({
 
   componentDidMount() {
     
-    axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
+    /*axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
     .then((response) => {
       var aList = response.data
       var markers = []
@@ -63,21 +63,26 @@ var MapScreen = React.createClass({
           wMarkers:wMarkers
         })
     })
-    .done()
+    .done()*/
 
     this.dataLoadedHandler = Client.events.addListener('data loaded', (data) => {
-      const markers = data.shows.map((el) => {
+      const markers = Object.keys(data.shows).map((key) => {
         return {
-          markerData: el,
+          markerData: Client.getShowById(key),
           image: require ('../assets/pin1.png')
         }
       })
 
-      const wMarkers = data.workshops.map((el) => {
+      const wMarkers = Object.keys(data.workshops).map((key) => {
         return {
-          wMarkerData: el,
+          wMarkerData: Client.getWorkshopById(key),
           image: require ('../assets/pin2.png')
         }
+      })
+
+      console.log({
+        markers,
+        wMarkers
       })
 
       this.setState({
