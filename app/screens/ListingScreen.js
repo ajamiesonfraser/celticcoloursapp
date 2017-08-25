@@ -9,11 +9,23 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 
 class ListingScreen extends Component {
   static propTypes = {
-    listData: React.PropTypes.array.isRequired,
+    listData: React.PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.object
+    ]).isRequired,
     renderItem: React.PropTypes.func.isRequired,
     renderItemPicture: React.PropTypes.func,
     getItemRightText: React.PropTypes.func,
     onItemPress: React.PropTypes.func.isRequired,
+    sections: React.PropTypes.bool
+  }
+
+  _renderSectionHeader = (sectionData, category) => {
+    if (this.props.sections) {
+      return (
+        <Text style={{fontWeight: "700"}}>{category}</Text>
+      )
+    }
   }
 
   _renderListingRow(listing, i) {
@@ -33,18 +45,25 @@ class ListingScreen extends Component {
   }
 
   render() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+    var ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+    })
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <ListView
           pageSize={1}
-          initialListSize={5}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.props.listData)}
+          dataSource={this.props.sections
+            ? ds.cloneWithRowsAndSections(this.props.listData)
+            : ds.cloneWithRows(this.props.listData)}
           renderRow={(listing, sectionId, rowId) => {
             return this._renderListingRow(listing, rowId)
-          }}  
+          }}
+          renderSectionHeader={this.props.sections
+            ? this._renderSectionHeader
+            : null}
         />
       </View>
     )

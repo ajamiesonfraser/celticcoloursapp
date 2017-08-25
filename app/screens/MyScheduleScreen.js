@@ -113,6 +113,36 @@ class MyScheduleScreen extends Component {
   componentWillUnmount() {
     this.dataLoadedHandler.remove()
   }
+
+  _applyFilters() {
+    const filteredByType = this.state.listData.filter((el) => {
+      // filter by type
+      if (this.state.typeFilter != FilterTypes.ALL) {
+        switch (this.state.typeFilter) {
+          case FilterTypes.CONCERTS:
+            if (el.type != 'show') {
+              return false
+            }
+            break
+          case FilterTypes.WORKSHOPS:
+            if (el.type != 'workshop') {
+              return false
+            }
+            break
+        }
+      }
+
+      return true
+    })
+
+    const filteredByDate = filteredByType.filter((el) => {
+      return true
+    })
+
+    this.setState({
+      currentListData: filteredByDate
+    })
+  }
   
   _renderListingRow(listing, i) {
     return (
@@ -130,24 +160,9 @@ class MyScheduleScreen extends Component {
           <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
         </View>
         <Text style={styles.startTime}>{listing.urlData.formatted_start_time}</Text>
-
-        {/* <View style={styles.buttonsRow}>
-          <Button containerStyle={styles.buttonContainerStyle} style={styles.buttonStyle}>
-            View Event
-          </Button>
-
-          <GetDirectionsButton mapUrl={listing.urlData.venue[0].google_maps_link}/>
-        </View> */}
       </TouchableOpacity>
-
     )
   }
-
-  // _changeDateSaturday(){
-  //   this.setState({
-  //     changedData: grouped['2017-10-07']
-  //   })
-  // }
 
   renderTypeFilterModal() {
     return (
@@ -167,29 +182,10 @@ class MyScheduleScreen extends Component {
               selectedValue={this.state.typeFilter}
               onValueChange={(itemValue, itemIndex) => {
                 this.setState({
-                  typeFilter: itemValue,
-                  currentListData: this.state.listData.filter((el) => {
-                    // filter by type
-                    if (itemValue != FilterTypes.ALL) {
-                      switch (itemValue) {
-                        case FilterTypes.CONCERTS:
-                          if (el.type != 'show') {
-                            return false
-                          }
-                          break
-                        case FilterTypes.WORKSHOPS:
-                          if (el.type != 'workshop') {
-                            return false
-                          }
-                          break
-                      }
-                    }
-
-                    return true
-                  })
+                  typeFilter: itemValue
+                }, () => {
+                  this._applyFilters()
                 })
-
-
               }}>
 
 
@@ -270,7 +266,32 @@ class MyScheduleScreen extends Component {
   }
 
   render() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
+    const listDataByDate = {}
+
+    if (this.state.currentListData != null) {
+      this.state.currentListData.forEach((el) => {
+        if (el.urlData.date != null) {
+          const [year, month, day] = el.urlData.date.split('-')
+          const dateObject = new Date(year, month - 1, day)
+          const dateFormatted = `${DAYS_OF_WEEK[dateObject.getDay()]}, ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
+
+          if (!listDataByDate[dateFormatted]) {
+            listDataByDate[dateFormatted] = []
+          }
+
+          listDataByDate[dateFormatted].push(el)
+        }
+      })
+
+      // now work each sub-item
+      for (let key in listDataByDate) {
+        listDataByDate[key].sort((a, b) => {
+          // compare times, date does not matter
+          return Date.parse(`01/01/2011 ${a.urlData.formatted_start_time}`) - Date.parse(`01/01/2011 ${b.urlData.formatted_start_time}`)
+        })
+      }
+    }
+
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
         <Navbar navTitle="My Schedule"/>
@@ -278,7 +299,6 @@ class MyScheduleScreen extends Component {
         <View style={{
           height: 40
         }}>
-        
           <View style={{
             flex: 1,
             flexDirection: 'row',
@@ -333,31 +353,30 @@ class MyScheduleScreen extends Component {
         {this.renderTypeFilterModal()}
         {this.renderDateFilterModal()}
 
-        {this.state.currentListData != null
-          ? <ListingScreen
-              listData={this.state.currentListData}
-              renderItemPicture={(listing, style) => {
-                return (
-                  <Image style={style} source={{uri: listing.urlData.poster_url}}/>
-                )
-              }}
-              renderItem={(listing, style) => {
-                return (
-                  <View style={style}>
-                    <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
-                    <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text>
-                    <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
-                  </View>
-                )
-              }}
-              getItemRightText={(listing) => {
-                return listing.urlData.formatted_start_time
-              }}
-              onItemPress={(listing) => {
-                this._navigateToEventDetail(listing)
-              }}
-            />
-          : <ActivityIndicator size={'large'}/>}
+        <ListingScreen
+          listData={listDataByDate}
+          renderItemPicture={(listing, style) => {
+            return (
+              <Image style={style} source={{uri: listing.urlData.poster_url}}/>
+            )
+          }}
+          renderItem={(listing, style) => {
+            return (
+              <View style={style}>
+                <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
+                <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text>
+                <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
+              </View>
+            )
+          }}
+          getItemRightText={(listing) => {
+            return listing.urlData.formatted_start_time
+          }}
+          onItemPress={(listing) => {
+            this._navigateToEventDetail(listing)
+          }}
+          sections={true}
+        />
       </ViewContainer>
     )
   }
@@ -497,8 +516,8 @@ const styles = StyleSheet.create({
   
   buttonText: {
     fontSize: 14,
-    fontWeight: '500',
-    color: '#3d97e8'
+    fontWeight: '300',
+    color: '#FD3443'
   },
 
   filterButtonContainerStyle: {
@@ -524,12 +543,12 @@ const styles = StyleSheet.create({
   filterButton: {
     flex: 1,
     fontSize: 14,
-    color: '#3d97e8',
+    color: 'red',
   },
 
   filterDropdownIcon: {
     marginLeft: 5,
-    color: '#3d97e8'
+    color: '#FD3443'
   }
 
 });

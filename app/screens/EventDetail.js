@@ -132,7 +132,6 @@ const styles = StyleSheet.create ({
   listingPicture:{
     backgroundColor: 'blue',
     height: 200,
-    width:300,
     marginBottom: 15,
     borderRadius: 5
   },

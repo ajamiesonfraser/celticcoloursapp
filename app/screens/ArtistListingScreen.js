@@ -38,24 +38,6 @@ class ArtistListingScreen extends Component {
         />
       </ViewContainer>
     )
-
-    console.log('artist is rendering')
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
-    return (
-      <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar navTitle = "Artists"/>
-        <ListView
-          pageSize={1}
-          initialListSize={6}
-          scrollRenderAheadDistance={1}
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(this.state.listData)}
-          renderRow={(listing) => {
-            return this._renderListingRow(listing)
-          }} 
-        />
-      </ViewContainer>
-    )
   }
 
   _navigateToArtistDetail(listing) {
@@ -95,10 +77,9 @@ const styles = StyleSheet.create({
     height: 100
   },
   listingName: {
-    marginLeft: 15,
-    flexDirection: 'row',
-    width: 175,
+    flexDirection: 'column',
     fontSize: 17,
+    paddingBottom: 5,
     fontWeight: '100',
     fontFamily: 'Helvetica'
   },
