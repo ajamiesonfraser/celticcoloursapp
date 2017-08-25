@@ -67,6 +67,13 @@ class ArtistDetailScreen extends Component {
                   urlData: event
                 }
               })
+
+              /*Client.events.emit('switch tab', {
+                name: 'tab1',
+                passProps: {
+                  urlData: event
+                }
+              })*/
             })
           }}
           onModalClose={() => {

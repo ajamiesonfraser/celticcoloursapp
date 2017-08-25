@@ -13,9 +13,10 @@ class BottomBar extends Component {
   }
 
   componentDidMount() {
-    this.switchTabHandler = Client.events.addListener('switch tab', (tab) => {
+    this.switchTabHandler = Client.events.addListener('switch tab', (data) => {
       this.setState({
-        selectedTab: tab
+        selectedTab: data.name,
+        passProps: data.passProps
       })
     })
   }
@@ -37,7 +38,7 @@ class BottomBar extends Component {
           selected={this.state.selectedTab === "tab3"}
           icon={require('../assets/compass.png')}
           title={``}
-          onPress={() => Client.events.emit('switch tab', 'tab3')}>
+          onPress={() => Client.events.emit('switch tab', { name: 'tab3' })}>
             <AppNavigator
               initialRoute={{ident: "MapScreen"}} />
         </Icon.TabBarItemIOS>
@@ -46,7 +47,7 @@ class BottomBar extends Component {
           selected={this.state.selectedTab === "tab1"}
           icon={require('../assets/home.png')}
           title={``}
-          onPress={() => Client.events.emit('switch tab', 'tab1')}>
+          onPress={() => Client.events.emit('switch tab', { name: 'tab1' })}>
           <AppNavigator
             initialRoute={{ ident: "MyScheduleIndex"}} />
 
@@ -56,7 +57,7 @@ class BottomBar extends Component {
           selected={this.state.selectedTab === "tab2"}
           icon={require('../assets/fiddle.png')}
           title={``}
-          onPress={() => Client.events.emit('switch tab', 'tab2')}>
+          onPress={() => Client.events.emit('switch tab', { name: 'tab2' })}>
             <AppNavigator
               initialRoute={{ident: "ArtistListing"}} />
         </Icon.TabBarItemIOS>
