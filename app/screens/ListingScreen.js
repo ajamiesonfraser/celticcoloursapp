@@ -70,21 +70,26 @@ class ListingScreen extends Component {
       },
       sectionHeaderHasChanged: (s1, s2) => {
         return s1 !== s2
+      },
+      getRowData: (blob, sId, rId) => {
+        console.log('getRowData ', blob)
+      },
+      getSectionHeaderData: (blob, sId) => {
+        console.log('getSectionHeaderData ', blob)
       }
     })
 
     if (this.props.sections) {
-      // const blob = { rows: {}, sections: {} }
-      // blob.sectionIds = Object.keys(this.props.listData)
+      const blob = { rows: {}, sections: {} }
+      blob.sectionIds = Object.keys(this.props.listData)
 
-      // blob.rowIdsBySection = blob.sectionIds.map((sectionId, index) => {
-      //   return this.props.listData[sectionId]
-      // })
+      blob.rowIdsBySection = blob.sectionIds.map((sectionId, index) => {
+        return this.props.listData[sectionId]
+      })
 
-      // console.log('blob = ', blob)
+      console.log('blob = ', blob)
 
-      // ds = ds.cloneWithRowsAndSections(blob, blob.sectionIds, blob.rowIdsBySection)
-      ds = ds.cloneWithRowsAndSections(this.props.listData)
+      ds = ds.cloneWithRowsAndSections(blob, blob.sectionIds, blob.rowIdsBySection)
     } else {
       ds = ds.cloneWithRows(this.props.listData)
     }

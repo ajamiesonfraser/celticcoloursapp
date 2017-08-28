@@ -37,7 +37,7 @@ class NoItineraryItemsScreen extends Component {
         </Text>
         <Button
           style={styles.buttonPrimaryStyle}
-          containerStyle={[styles.buttonPrimaryContainerStyle, { marginTop: 10 }]}
+          containerStyle={[styles.buttonPrimaryContainerStyle, { marginTop: 15 }]}
           onPress={this.props.onViewAllEventsPress}
         >
           View all events
