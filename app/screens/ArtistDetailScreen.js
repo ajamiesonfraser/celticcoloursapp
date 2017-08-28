@@ -42,7 +42,7 @@ class ArtistDetailScreen extends Component {
           return (
             <View>
               {listing.map((el, i) => {
-                const realListing = Client.getShowById(el.id)
+                const realListing = { id: el.id, ...Client.getShowById(el.id) }
                 return this._renderListingRow(realListing)
               })}
             </View>

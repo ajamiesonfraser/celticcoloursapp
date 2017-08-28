@@ -13,14 +13,15 @@ class Navbar extends Component {
 		return (
       <View>
 			<NavigationBar
-        title = {
-          <Text style={styles.navTitle}>
-            {this.props.navTitle}
-          </Text>
-        }
+        title={{
+          title: this.props.navTitle,
+          style: {
+            fontSize: 16,
+            fontWeight: '300'
+          }
+        }}
         leftButton= {this.props.backButton}
         rightButton= {this.props.rightButton}
-        
       />
       </View>
 		)
@@ -30,8 +31,8 @@ class Navbar extends Component {
 
 const styles = StyleSheet.create({
    navTitle:{
-    justifyContent:'center',
-    alignItems:'center'
+     justifyContent:'center',
+     alignItems:'center'
   },
   dropdown:{
     marginRight:20,

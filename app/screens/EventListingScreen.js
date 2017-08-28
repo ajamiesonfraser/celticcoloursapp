@@ -11,6 +11,7 @@ import {
   Image,
   Picker
 } from 'react-native'
+import ModalDropdown from 'react-native-modal-dropdown'
 import CheckBox from 'react-native-check-box'
 import Button from 'react-native-button'
 import ViewContainer from '../components/ViewContainer'
@@ -18,6 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Navbar from '../components/Navbar'
 import Modal from 'react-native-modal'
 import ListingScreen from './ListingScreen'
+import NoItineraryItemsScreen from './NoItineraryItemsScreen'
 
 import Client from '../services/Client'
 
@@ -25,15 +27,15 @@ const dateOptions = [ "Friday, Oct. 6", "Saturday, Oct. 7", "Sunday, Oct. 8", "M
 
 /** NOTE: in JS, month numbers start at zero, so we use 9 even though it is the 10th month */
 const EVENT_DATES = [
-  new Date(2017, 9, 6),
-  new Date(2017, 9, 7),
-  new Date(2017, 9, 8),
-  new Date(2017, 9, 9),
-  new Date(2017, 9, 10),
-  new Date(2017, 9, 11),
-  new Date(2017, 9, 12),
-  new Date(2017, 9, 13),
-  new Date(2017, 9, 14)
+  '2017-10-06',
+  '2017-10-07',
+  '2017-10-08',
+  '2017-10-09',
+  '2017-10-10',
+  '2017-10-11',
+  '2017-10-12',
+  '2017-10-13',
+  '2017-10-14',
 ]
 
 const DAYS_OF_WEEK = [
@@ -64,10 +66,23 @@ const MONTH_NAMES = [
 const FilterTypes = {
   ALL: 'all',
   CONCERTS: 'concerts',
-  WORKSHOPS: 'workshops'
+  WORKSHOPS: 'community events'
 }
 
-class MyScheduleScreen extends Component {
+const stringDateToFormattedDate = (stringDate, includeYear=true) => {
+  const [year, month, day] = stringDate.split('-').map(x => parseInt(x, 10))
+  const dateObject = new Date(year, month - 1, day)
+  
+  let str = `${DAYS_OF_WEEK[dateObject.getDay()]} ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
+
+  if (includeYear) {
+    str += ` ${dateObject.getFullYear()}`
+  }
+
+  return str
+}
+
+class EventListingScreen extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -77,6 +92,7 @@ class MyScheduleScreen extends Component {
       
       typeFilter: FilterTypes.ALL,
       dateFilter: 'all',
+      showingMyItinerary: false,
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
@@ -89,10 +105,12 @@ class MyScheduleScreen extends Component {
       const { artists, workshops, shows } = data
 
       const listData = Object.keys(shows).map(showId => {
-        return { urlData: shows[showId], type: 'show' }
+        return { urlData: { id: showId, ...shows[showId] }, type: 'show' }
       }).concat(Object.keys(workshops).map(workshopId => {
-        return { urlData: workshops[workshopId], type: 'workshop' }
+        return { urlData: { id: workshopId, ...workshops[workshopId] }, type: 'workshop' }
       }))
+
+      console.log({listData})
 
       this.setState({
         artists,
@@ -110,7 +128,15 @@ class MyScheduleScreen extends Component {
   }
 
   _applyFilters() {
-    const filteredByType = this.state.listData.filter((el) => {
+    let listData = this.state.listData
+
+    if (this.state.showingMyItinerary) {
+      listData = listData.filter(({ urlData }) => Client.isEventInItinerary(urlData))
+    }
+
+    console.log('typeFilter: ' + this.state.typeFilter);
+
+    const filteredByType = listData.filter((el) => {
       // filter by type
       if (this.state.typeFilter != FilterTypes.ALL) {
         switch (this.state.typeFilter) {
@@ -127,12 +153,16 @@ class MyScheduleScreen extends Component {
         }
       }
 
+      console.log('showing el.type = ' + el.type);
+
       return true
     })
 
-    const filteredByDate = filteredByType.filter((el) => {
-      return true
-    })
+    console.log('this.state.dateFilter : ', this.state.dateFilter)
+
+    const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
+      ? filteredByType.filter(x => this.state.dateFilter == x.urlData.date)
+      : filteredByType
 
     this.setState({
       currentListData: filteredByDate
@@ -212,51 +242,85 @@ class MyScheduleScreen extends Component {
     )
   }
 
-  renderDateFilterModal() {
+  renderFilterBar() {
     return (
-      <Modal isVisible={this.state.showingDateFilterModal}>
-        <View style={styles.modal}>
-          <View>
-            <Picker
-              selectedValue={String(this.state.dateFilter)}
-              onValueChange={(itemValue, itemIndex) => this.setState({ dateFilter: String(itemValue) })}>
+      <View style={{
+        height: 40
+      }}>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          justifyContent: 'space-between'
+        }}>
+          <ModalDropdown
+            defaultIndex={0}
+            options={['Concerts & Events', 'Official Concerts', 'Community Events']}
+            style={styles.filterButtonContainerStyle}
+            textStyle={styles.filterButton}
+            onSelect={(idx, value) => {
+              let typeValue;
 
-              <Picker.Item
-                label='All days'
-                value='all'
+              switch (value) {
+                case 'Concerts & Events':
+                  typeValue = FilterTypes.ALL;
+                  break;
+                case 'Official Concerts':
+                  typeValue = FilterTypes.CONCERTS;
+                  break;
+                case 'Community Events':
+                  typeValue = FilterTypes.WORKSHOPS;
+                  break;
+              }
+
+              this.setState({
+                typeFilter: typeValue
+              }, () => {
+               this._applyFilters() 
+              })
+            }}
+          >
+            <View style={styles.filterButtonContent}>
+              <Text style={styles.buttonText}>Type</Text>
+              <Icon
+                style={styles.filterDropdownIcon}
+                name="angle-down" size={18}
               />
-              
-              {EVENT_DATES.map((el, i) => {
-                return (
-                  <Picker.Item
-                    label={`${DAYS_OF_WEEK[el.getDay()]}, ${MONTH_NAMES[el.getMonth()]} ${el.getDate()}`}
-                    value={String(el)}
-                    key={i}
-                  />
-                )
-              })}
-              
-            </Picker>
-          </View>
-
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'center'
-          }}>
-            <Button
-              containerStyle={styles.buttonPrimaryContainerStyle}
-              style={styles.buttonPrimaryStyle}
-              onPress={() => {
-                this.setState({
-                  showingDateFilterModal: false
-                })
-              }}
-            >
-              Close
-            </Button>
-          </View>
+            </View>
+          </ModalDropdown>
+          <ModalDropdown
+            defaultIndex={0}
+            options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
+            style={styles.filterButtonContainerStyle}
+            textStyle={styles.filterButton}
+            onSelect={(idx, value) => {
+              this.setState({
+                dateFilter: value != 'all'
+                  ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
+                  : value
+              }, () => {
+               this._applyFilters() 
+              })
+            }}
+          >
+            <View style={styles.filterButtonContent}>
+              <Text style={styles.buttonText}>Date</Text>
+              <Icon
+                style={styles.filterDropdownIcon}
+                name="angle-down" size={18}
+              />
+            </View>
+          </ModalDropdown>
+          <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
+            <View style={styles.filterButtonContent}>
+              <Text style={styles.buttonText}>Region</Text>
+              <Icon
+                style={styles.filterDropdownIcon}
+                name="angle-down" size={18}
+              />
+            </View>
+          </Button>
         </View>
-      </Modal>
+      </View>
     )
   }
 
@@ -268,13 +332,13 @@ class MyScheduleScreen extends Component {
         if (el.urlData.date != null) {
           const [year, month, day] = el.urlData.date.split('-')
           const dateObject = new Date(year, month - 1, day)
-          const dateFormatted = `${DAYS_OF_WEEK[dateObject.getDay()]}, ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
+          //const dateFormatted = `${DAYS_OF_WEEK[dateObject.getDay()]}, ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
 
-          if (!listDataByDate[dateFormatted]) {
-            listDataByDate[dateFormatted] = []
+          if (!listDataByDate[el.urlData.date]) {
+            listDataByDate[el.urlData.date] = []
           }
 
-          listDataByDate[dateFormatted].push(el)
+          listDataByDate[el.urlData.date].push(el)
         }
       })
 
@@ -287,66 +351,57 @@ class MyScheduleScreen extends Component {
       }
     }
 
+    console.log({listDataByDate})
+
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar navTitle="My Schedule"/>
-
-        <View style={{
-          height: 40
-        }}>
-          <View style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }}>
-            <Button
-              containerStyle={styles.filterButtonContainerStyle}
-              style={styles.filterButton}
-              onPress={() => {
-                this.setState({
-                  showingTypeFilterModal: true
-                })
-              }}
-            >
-              <View style={styles.filterButtonContent}>
-                <Text style={styles.buttonText}>Type</Text>
-                <Icon
-                  style={styles.filterDropdownIcon}
-                  name="angle-down" size={18}
-                />
-              </View>
-            </Button>
-            <Button
-              containerStyle={styles.filterButtonContainerStyle}
-              style={styles.filterButton}
-              onPress={() => {
-                this.setState({
-                  showingDateFilterModal: true
-                })
-              }}
-            >
-              <View style={styles.filterButtonContent}>
-                <Text style={styles.buttonText}>Date</Text>
-                <Icon
-                  style={styles.filterDropdownIcon}
-                  name="angle-down" size={18}
-                />
-              </View>
-            </Button>
-            <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
-              <View style={styles.filterButtonContent}>
-                <Text style={styles.buttonText}>Region</Text>
-                <Icon
-                  style={styles.filterDropdownIcon}
-                  name="angle-down" size={18}
-                />
-              </View>
-            </Button>
-          </View>
-        </View>
+        <Navbar
+          navTitle="Upcoming Events"
+          rightButton={
+            (!this.state.showingMyItinerary)
+              ? <Button
+                  style={styles.buttonPrimaryStyle}
+                  containerStyle={styles.navbarButtonContainer}
+                  onPress={() => {
+                    this.setState({
+                      showingMyItinerary: true
+                    }, () => {
+                      this._applyFilters()
+                    })
+                  }}
+                >
+                  My itinerary
+                </Button>
+              : <Button
+                  style={styles.buttonPrimaryStyle}
+                  containerStyle={styles.navbarButtonContainer}
+                  onPress={() => {
+                    this.setState({
+                      showingMyItinerary: false
+                    }, () => {
+                      this._applyFilters()
+                    })
+                  }}
+                >
+                  View all
+                </Button>
+          }
+        />
 
         {this.renderTypeFilterModal()}
-        {this.renderDateFilterModal()}
+
+        {this.renderFilterBar()}
+
+        {this.state.showingMyItinerary && this.state.currentListData.length == 0
+          ? <NoItineraryItemsScreen
+              filterType={this.state.typeFilter == FilterTypes.ALL ? 'events' : this.state.typeFilter}
+              onViewAllEventsPress={() => {
+                this.setState({ showingMyItinerary: false }, () => {
+                  this._applyFilters()
+                })
+              }}
+            />
+          : null}
 
         <ListingScreen
           listData={listDataByDate}
@@ -359,13 +414,18 @@ class MyScheduleScreen extends Component {
             return (
               <View style={style}>
                 <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
-                <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text>
+                {/* <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text> */}
                 <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
               </View>
             )
           }}
           getItemRightText={(listing) => {
             return listing.urlData.formatted_start_time
+          }}
+          getSectionHeaderText={(sectionData) => {
+            if (sectionData.length != 0) {
+              return sectionData[0].urlData.formatted_date
+            }
           }}
           onItemPress={(listing) => {
             this._navigateToEventDetail(listing)
@@ -460,9 +520,11 @@ const styles = StyleSheet.create({
   },
 
   buttonPrimaryStyle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#fff'
   },
+
+  navbarButtonContainer: [],
   
   buttonText: {
     fontSize: 14,
@@ -499,8 +561,12 @@ const styles = StyleSheet.create({
   filterDropdownIcon: {
     marginLeft: 5,
     color: '#FD3443'
-  }
+  },
 
 });
 
-module.exports = MyScheduleScreen
+styles.navbarButtonContainer = [styles.buttonPrimaryContainerStyle, {
+  marginVertical: 8
+}]
+
+module.exports = EventListingScreen

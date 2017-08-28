@@ -49,7 +49,7 @@ class BottomBar extends Component {
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab1' })}>
           <AppNavigator
-            initialRoute={{ ident: "MyScheduleIndex"}} />
+            initialRoute={{ ident: 'EventListing'}} />
 
         </Icon.TabBarItemIOS>
 

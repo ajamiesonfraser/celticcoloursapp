@@ -1,7 +1,7 @@
 'use strict'
 import React, { Component } from 'react'
 import {Navigator, Text, StyleSheet} from 'react-native'
-import MyScheduleScreen from '../screens/MyScheduleScreen'
+import EventListingScreen from '../screens/EventListingScreen'
 import MapScreen from '../screens/MapScreen'
 import ArtistListingScreen from '../screens/ArtistListingScreen'
 import EventDetailScreen  from '../screens/EventDetailScreen'
@@ -16,9 +16,9 @@ class AppNavigator extends Component {
     console.log('globalNavigatorProps = ', globalNavigatorProps)
 
     switch(route.ident) {
-      case "MyScheduleIndex":
+      case 'EventListing':
         return (
-          <MyScheduleScreen
+          <EventListingScreen
             {...globalNavigatorProps} />
         )
 

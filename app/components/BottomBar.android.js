@@ -10,26 +10,26 @@ class BottomBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      selectedTab: "MyScheduleIndex"
-      }
+      selectedTab: 'EventListing'
     }
+  }
 
   render(){
     console.log('trying something')
     var navigationView = (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
         <TouchableOpacity 
-          onPress= {() => this._navigateToMap.bind(this), console.log('fuck me right?')}
+          onPress= {() => this._navigateToMap.bind(this)}
         >
           <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Discover</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          onPress= {() => this._navigateToSchedule.bind(this), console.log('dear lord will this ever end?') }
+          onPress= {() => this._navigateToSchedule.bind(this)}
         >
           <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Schedule</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          onPress= {() => this._navigateToArtist.bind(this), console.log('this is hateful')}
+          onPress= {() => this._navigateToArtist.bind(this)}
         >
           <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Artists</Text>
         </TouchableOpacity>
@@ -60,7 +60,7 @@ class BottomBar extends Component {
   }
   _navigateToSchedule(){
     this.props.navigator.replace({
-        ident:"MyScheduleIndex"})
+        ident: 'EventListing'})
   }
   _navigateToArtist(){
     this.props.navigator.replace({

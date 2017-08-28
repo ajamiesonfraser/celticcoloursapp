@@ -16,6 +16,7 @@ class ListingScreen extends Component {
     renderItem: React.PropTypes.func.isRequired,
     renderItemPicture: React.PropTypes.func,
     getItemRightText: React.PropTypes.func,
+    getSectionHeaderText: React.PropTypes.func,
     onItemPress: React.PropTypes.func.isRequired,
     sections: React.PropTypes.bool
   }
@@ -23,7 +24,25 @@ class ListingScreen extends Component {
   _renderSectionHeader = (sectionData, category) => {
     if (this.props.sections) {
       return (
-        <Text style={{fontWeight: "700"}}>{category}</Text>
+        <View style={{
+          backgroundColor: '#fff',
+          paddingVertical: 10,
+          paddingHorizontal: 10,
+          shadowColor: '#aaa',
+          shadowOffset: {
+            width: 0,
+            height: 2
+          },
+          shadowRadius: 8,
+          shadowOpacity: 0.2
+        }}>
+          <Text style={{
+            color: '#333',
+            fontSize: 16
+          }}>
+            {this.props.getSectionHeaderText(sectionData)}
+          </Text>
+        </View>
       )
     }
   }
@@ -46,18 +65,38 @@ class ListingScreen extends Component {
 
   render() {
     var ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
-      sectionHeaderHasChanged: (s1, s2) => s1 !== s2
+      rowHasChanged: (r1, r2) => {
+        return r1 !== r2
+      },
+      sectionHeaderHasChanged: (s1, s2) => {
+        return s1 !== s2
+      }
     })
+
+    if (this.props.sections) {
+      // const blob = { rows: {}, sections: {} }
+      // blob.sectionIds = Object.keys(this.props.listData)
+
+      // blob.rowIdsBySection = blob.sectionIds.map((sectionId, index) => {
+      //   return this.props.listData[sectionId]
+      // })
+
+      // console.log('blob = ', blob)
+
+      // ds = ds.cloneWithRowsAndSections(blob, blob.sectionIds, blob.rowIdsBySection)
+      ds = ds.cloneWithRowsAndSections(this.props.listData)
+    } else {
+      ds = ds.cloneWithRows(this.props.listData)
+    }
+    
     return (
       <View style={{ flex: 1 }}>
         <ListView
           pageSize={1}
+          automaticallyAdjustContentInsets={false}
           scrollRenderAheadDistance={1}
           enableEmptySections={true}
-          dataSource={this.props.sections
-            ? ds.cloneWithRowsAndSections(this.props.listData)
-            : ds.cloneWithRows(this.props.listData)}
+          dataSource={ds}
           renderRow={(listing, sectionId, rowId) => {
             return this._renderListingRow(listing, rowId)
           }}
