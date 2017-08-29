@@ -423,6 +423,8 @@ class EventListingScreen extends Component {
             return listing.urlData.formatted_start_time
           }}
           getSectionHeaderText={(sectionData) => {
+            console.log('sectionData = ', sectionData);
+
             if (sectionData.length != 0) {
               return sectionData[0].urlData.formatted_date
             }
@@ -535,7 +537,6 @@ const styles = StyleSheet.create({
   filterButtonContainerStyle: {
     flex: 1,
     flexDirection: 'row',
-    paddingHorizontal: 30,
     alignItems: 'center',
     justifyContent: 'center',
     margin: 3,

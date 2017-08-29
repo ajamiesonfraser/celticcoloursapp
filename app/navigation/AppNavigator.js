@@ -1,6 +1,7 @@
 'use strict'
 import React, { Component } from 'react'
-import {Navigator, Text, StyleSheet} from 'react-native'
+import {Text, StyleSheet} from 'react-native'
+import { Navigator } from 'react-native-deprecated-custom-components'
 import EventListingScreen from '../screens/EventListingScreen'
 import MapScreen from '../screens/MapScreen'
 import ArtistListingScreen from '../screens/ArtistListingScreen'
@@ -77,7 +78,9 @@ class AppNavigator extends Component {
         style={styles.navigatorStyles}
         renderScene={this._renderScene}
         configureScene={(route) => ({
-          ...route.sceneConfig || Navigator.SceneConfigs.FloatFromRight })} />
+          ...route.sceneConfig || Navigator.SceneConfigs.FloatFromRight
+        })}
+      />
     )
   }
 
