@@ -36,6 +36,44 @@ class EventDetail extends Component {
     }
   }
 
+  renderAddToItineraryButton() {
+    if (this.state.isInItinerary) {
+      return (
+        <Button onPress={() => {
+          Client.removeEventFromItinerary(this.props.event).then(() => {
+            this.setState({ isInItinerary: false });
+          });
+        }}>
+          Remove from my itinerary
+        </Button>
+      )
+    }
+
+    return (
+      <Button onPress={() => {
+        Client.addEventToItinerary(this.props.event).then(() => {
+          this.setState({ isInItinerary: true });
+        });
+      }}>
+        Add to my itinerary
+      </Button>
+    )
+  }
+
+  renderDetails() {
+    if (this.props.showDetails) {
+      return (
+        <View>
+          {this.renderAddToItineraryButton()}
+          <GetDirectionsButton
+            mapUrl={this.props.event.venue[0].google_maps_link}
+          />
+          <HTML html={this.props.event.description_public}/>
+        </View>
+      )
+    }
+  }
+
 	render() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return (
@@ -56,29 +94,7 @@ class EventDetail extends Component {
             <Text style={styles.detailData} numberOfLines={1} ellipsizeMode={'tail'}>{this.props.event.price} {this.props.event.seating}</Text>
           </View>
         </View>
-        {this.props.showDetails && this.state.isInItinerary
-          ? <Button onPress={() => {
-              Client.removeEventFromItinerary(this.props.event).then(() => {
-                this.setState({ isInItinerary: false });
-              });
-            }}>
-              Remove from my itinerary
-            </Button>
-          : <Button onPress={() => {
-              Client.addEventToItinerary(this.props.event).then(() => {
-                this.setState({ isInItinerary: true });
-              });
-            }}>
-              Add to my itinerary
-            </Button>}
-        {this.props.showDetails
-          ? <GetDirectionsButton
-              mapUrl={this.props.event.venue[0].google_maps_link}
-            />
-          : null}
-        {this.props.showDetails
-          ? <HTML html={this.props.event.description_public}/>
-          : null}
+        {this.renderDetails()}
       </View>
 		)
 	}
