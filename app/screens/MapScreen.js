@@ -5,6 +5,7 @@ import { StyleSheet, PropTypes, View, Text, Dimensions, TouchableOpacity, Image 
 import MapView from 'react-native-maps'
 import axios from 'axios'
 import _ from 'lodash'
+import Screen from './Screen'
 import Client from '../services/Client'
 
 var { width, height } = Dimensions.get('window');
@@ -132,7 +133,11 @@ var MapScreen = React.createClass({
   render() {
 
     return (
-      <View style={styles.container}>
+      <Screen
+        navTitle='Discover Nearby'
+        canGoBack={this.props.navigator.getCurrentRoutes().length > 1}
+        onBack={() => this.props.navigator.pop()}
+      >
         <MapView
           ref="map"
           style={styles.map}
@@ -202,7 +207,7 @@ var MapScreen = React.createClass({
             {`${this.state.region.latitude.toPrecision(7)}, ${this.state.region.longitude.toPrecision(7)}`}
           </Text>
         </View>
-      </View>
+      </Screen>
     );
   },
 

@@ -10,7 +10,6 @@ class ArtistListingScreen extends Component {
   render() {
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar navTitle='Artists'/>
         <ListingScreen
           listData={Object.keys(Client.data.artists).map((key) => {
             return { urlData: Client.getArtistById(key) }
@@ -49,8 +48,6 @@ class ArtistListingScreen extends Component {
 
 const styles = StyleSheet.create({
   homebase: {
-    marginLeft: 15,
-    paddingBottom: 5,
     fontSize: 13,
     fontFamily: "Helvetica",
     fontWeight: '100'
@@ -58,8 +55,8 @@ const styles = StyleSheet.create({
   listingName: {
     flexDirection: 'column',
     fontSize: 17,
-    paddingBottom: 5,
-    fontWeight: '100',
+    fontWeight: '400',
+    color: '#333',
     fontFamily: 'Helvetica'
   }
 });

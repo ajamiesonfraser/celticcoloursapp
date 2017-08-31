@@ -40,7 +40,11 @@ class BottomBar extends Component {
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab3' })}>
             <AppNavigator
-              initialRoute={{ident: "MapScreen"}} />
+              initialRoute={{
+                ident: "MapScreen",
+                title: 'Discover Nearby'
+              }}
+            />
         </Icon.TabBarItemIOS>
 
         <Icon.TabBarItemIOS
@@ -49,7 +53,11 @@ class BottomBar extends Component {
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab1' })}>
           <AppNavigator
-            initialRoute={{ ident: 'EventListing'}} />
+            initialRoute={{
+              ident: 'EventListing',
+              title: 'Upcoming Events'
+            }}
+          />
 
         </Icon.TabBarItemIOS>
 
@@ -59,7 +67,11 @@ class BottomBar extends Component {
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab2' })}>
             <AppNavigator
-              initialRoute={{ident: "ArtistListing"}} />
+              initialRoute={{
+                ident: "ArtistListing",
+                title: 'Artists'
+              }}
+            />
         </Icon.TabBarItemIOS>
 
         <Icon.TabBarItemIOS
@@ -68,7 +80,11 @@ class BottomBar extends Component {
           title={``}
           onPress={() => Client.events.emit('switch tab', 'tab4')}>
             <AppNavigator
-              initialRoute={{ident: "ContactScreen"}} />
+              initialRoute={{
+                ident: "ContactScreen",
+                title: 'Contact'
+              }}
+            />
         </Icon.TabBarItemIOS>
 
 

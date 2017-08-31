@@ -3,7 +3,14 @@ import { StyleSheet, ToolbarAndroid, Image, View, DrawerLayoutAndroid, Text, Tou
 import AppNavigator from '../navigation/AppNavigator'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import MyToolbar from '../components/MyToolbar'
+import Client from '../services/Client'
 {/*import axios from 'axios'*/}
+
+const ROUTES = [
+  { title: 'Discover Nearby', ident: 'MapScreen' },
+  { title: 'Upcoming Events', ident: 'EventListing' },
+  { title: 'Artists', ident: 'ArtistListing' },
+]
 
 class BottomBar extends Component {
 
@@ -14,25 +21,39 @@ class BottomBar extends Component {
     }
   }
 
-  render(){
+  componentDidMount() {
+    this.openDrawerListener = Client.events.addListener('open drawer', () => {
+      console.log('this = ', this)
+      this._setDrawer()
+    })
+  }
+
+  componentWillUnmount() {
+    this.openDrawerListener.remove()
+  }
+
+  render() {
     console.log('trying something')
     var navigationView = (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
-        <TouchableOpacity 
-          onPress= {() => this._navigateToMap.bind(this)}
-        >
-          <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Discover</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          onPress= {() => this._navigateToSchedule.bind(this)}
-        >
-          <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Schedule</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          onPress= {() => this._navigateToArtist.bind(this)}
-        >
-          <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Artists</Text>
-        </TouchableOpacity>
+        {ROUTES.map((el, i) => {
+          return (
+            <TouchableOpacity 
+              onPress={() => {
+                this._closeDrawer()
+                this.refs.NAV.refs.appNavigator.resetTo({
+                  ident: el.ident,
+                  title: el.title
+                })
+              }}
+              key={i}
+            >
+              <Text style={{ margin: 10, fontSize: 15, textAlign: 'left' }}>
+                {el.title}
+              </Text>
+            </TouchableOpacity>
+          )
+        })}
       </View>
     );
     return (
@@ -41,36 +62,22 @@ class BottomBar extends Component {
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => navigationView}
         ref={'DRAWER'}>
-        <MyToolbar 
-          style={styles.toolbar}
-          title={'Tryin It'}
-          navigator={this.props.navigator}
-          sidebarRef={()=>this._setDrawer()}/>
         <AppNavigator
-            initialRoute={{
-              ident: this.state.selectedTab,
-        }} />
+          ref={'NAV'}
+          initialRoute={{
+            ident: this.state.selectedTab,
+            title: 'Celtic Colours App'
+          }}
+        />
       </DrawerLayoutAndroid>
     ) 
   }
-  _navigateToMap() {
-    this.props.navigator.replace({
-      ident:'MapScreen'
-    })
-  }
-  _navigateToSchedule(){
-    this.props.navigator.replace({
-        ident: 'EventListing'})
-  }
-  _navigateToArtist(){
-    this.props.navigator.replace({
-        ident:"ArtistListing"})
-  }
 
-  _setDrawer() {
+  _setDrawer = () => {
     this.refs['DRAWER'].openDrawer()
   }
-  _closeDrawer() {
+
+  _closeDrawer = () => {
     this.refs['DRAWER'].closeDrawer()
   }
 }

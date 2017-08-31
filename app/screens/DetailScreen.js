@@ -5,9 +5,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import ViewContainer from '../components/ViewContainer'
-import Navbar from '../components/Navbar'
+import Screen from './Screen'
 
 class DetailScreen extends Component {
   static propTypes = {
@@ -17,26 +15,14 @@ class DetailScreen extends Component {
 
   render() {
     return (
-      <ViewContainer>
-        <Navbar 
-          navTitle={this.props.urlData.name}
-          backButton={
-            <TouchableOpacity
-              style={styles.navBack}
-              hitSlop={{top: 20, bottom: 20, left: 20, right: 20}}
-              onPress={() => this.props.navigator.pop()}
-            >
-              <Icon name="angle-left" size={35} style={{marginTop:10}}/>
-            </TouchableOpacity>
-          }
-        />
+      <View>
         <ScrollView>
           <View style={{ paddingHorizontal: 25 }}>
             {this.props.children}
           </View>
           <View style={{ height: 80 }} />
         </ScrollView>
-      </ViewContainer>
+      </View>
     )
   }
 }

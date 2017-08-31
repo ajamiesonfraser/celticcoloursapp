@@ -134,8 +134,6 @@ class EventListingScreen extends Component {
       listData = listData.filter(({ urlData }) => Client.isEventInItinerary(urlData))
     }
 
-    console.log('typeFilter: ' + this.state.typeFilter);
-
     const filteredByType = listData.filter((el) => {
       // filter by type
       if (this.state.typeFilter != FilterTypes.ALL) {
@@ -242,6 +240,41 @@ class EventListingScreen extends Component {
     )
   }
 
+  renderViewItineraryButton() {
+    return (
+      <View>
+        {(!this.state.showingMyItinerary)
+          ? <Button
+              style={styles.buttonStyle}
+              containerStyle={styles.navbarButtonContainer}
+              onPress={() => {
+                this.setState({
+                  showingMyItinerary: true
+                }, () => {
+                  this._applyFilters()
+                })
+              }}
+            >
+              View my itinerary
+            </Button>
+          : <Button
+              style={styles.buttonStyle}
+              containerStyle={styles.navbarButtonContainer}
+              onPress={() => {
+                this.setState({
+                  showingMyItinerary: false
+                }, () => {
+                  this._applyFilters()
+                })
+              }}
+            >
+              View all events
+            </Button>
+        }
+      </View>
+    )
+  }
+
   renderFilterBar() {
     return (
       <View style={{
@@ -252,73 +285,90 @@ class EventListingScreen extends Component {
           flexDirection: 'row',
           justifyContent: 'space-between'
         }}>
-          <ModalDropdown
-            defaultIndex={0}
-            options={['Concerts & Events', 'Official Concerts', 'Community Events']}
-            style={styles.filterButtonContainerStyle}
-            textStyle={styles.filterButton}
-            onSelect={(idx, value) => {
-              let typeValue;
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}>
+            {this.renderViewItineraryButton()}
+          </View>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+          }}>
 
-              switch (value) {
-                case 'Concerts & Events':
-                  typeValue = FilterTypes.ALL;
-                  break;
-                case 'Official Concerts':
-                  typeValue = FilterTypes.CONCERTS;
-                  break;
-                case 'Community Events':
-                  typeValue = FilterTypes.WORKSHOPS;
-                  break;
-              }
+            <ModalDropdown
+              defaultIndex={0}
+              options={['Concerts & Events', 'Official Concerts', 'Community Events']}
+              style={styles.filterButtonContainerStyle}
+              textStyle={styles.filterButton}
+              onSelect={(idx, value) => {
+                let typeValue;
 
-              this.setState({
-                typeFilter: typeValue
-              }, () => {
-               this._applyFilters() 
-              })
-            }}
-          >
-            <View style={styles.filterButtonContent}>
-              <Text style={styles.buttonText}>Type</Text>
-              <Icon
-                style={styles.filterDropdownIcon}
-                name="angle-down" size={18}
-              />
-            </View>
-          </ModalDropdown>
-          <ModalDropdown
-            defaultIndex={0}
-            options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
-            style={styles.filterButtonContainerStyle}
-            textStyle={styles.filterButton}
-            onSelect={(idx, value) => {
-              this.setState({
-                dateFilter: value != 'all'
-                  ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
-                  : value
-              }, () => {
-               this._applyFilters() 
-              })
-            }}
-          >
-            <View style={styles.filterButtonContent}>
-              <Text style={styles.buttonText}>Date</Text>
-              <Icon
-                style={styles.filterDropdownIcon}
-                name="angle-down" size={18}
-              />
-            </View>
-          </ModalDropdown>
-          <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
-            <View style={styles.filterButtonContent}>
-              <Text style={styles.buttonText}>Region</Text>
-              <Icon
-                style={styles.filterDropdownIcon}
-                name="angle-down" size={18}
-              />
-            </View>
-          </Button>
+                switch (value) {
+                  case 'Concerts & Events':
+                    typeValue = FilterTypes.ALL;
+                    break;
+                  case 'Official Concerts':
+                    typeValue = FilterTypes.CONCERTS;
+                    break;
+                  case 'Community Events':
+                    typeValue = FilterTypes.WORKSHOPS;
+                    break;
+                }
+
+                this.setState({
+                  typeFilter: typeValue
+                }, () => {
+                this._applyFilters() 
+                })
+              }}
+            >
+              <View style={styles.filterButtonContent}>
+                <Text style={styles.buttonText}>Type</Text>
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
+            </ModalDropdown>
+            <ModalDropdown
+              defaultIndex={0}
+              options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
+              style={styles.filterButtonContainerStyle}
+              textStyle={styles.filterButton}
+              onSelect={(idx, value) => {
+                this.setState({
+                  dateFilter: value != 'all'
+                    ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
+                    : value
+                }, () => {
+                this._applyFilters() 
+                })
+              }}
+            >
+              <View style={styles.filterButtonContent}>
+                <Text style={styles.buttonText}>Date</Text>
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
+            </ModalDropdown>
+
+
+
+            {/* <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
+              <View style={styles.filterButtonContent}>
+                <Text style={styles.buttonText}>Region</Text>
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
+            </Button> */}
+          </View>
         </View>
       </View>
     )
@@ -355,41 +405,9 @@ class EventListingScreen extends Component {
 
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
-        <Navbar
-          navTitle="Upcoming Events"
-          rightButton={
-            (!this.state.showingMyItinerary)
-              ? <Button
-                  style={styles.buttonPrimaryStyle}
-                  containerStyle={styles.navbarButtonContainer}
-                  onPress={() => {
-                    this.setState({
-                      showingMyItinerary: true
-                    }, () => {
-                      this._applyFilters()
-                    })
-                  }}
-                >
-                  My itinerary
-                </Button>
-              : <Button
-                  style={styles.buttonPrimaryStyle}
-                  containerStyle={styles.navbarButtonContainer}
-                  onPress={() => {
-                    this.setState({
-                      showingMyItinerary: false
-                    }, () => {
-                      this._applyFilters()
-                    })
-                  }}
-                >
-                  View all
-                </Button>
-          }
-        />
+        
 
         {this.renderTypeFilterModal()}
-
         {this.renderFilterBar()}
 
         {this.state.showingMyItinerary && this.state.currentListData.length == 0
@@ -407,7 +425,10 @@ class EventListingScreen extends Component {
           listData={listDataByDate}
           renderItemPicture={(listing, style) => {
             return (
-              <Image style={style} source={{uri: listing.urlData.poster_url}}/>
+              <Image
+                source={{uri: listing.urlData.poster_url}}
+                style={style}
+              />
             )
           }}
           renderItem={(listing, style) => {
@@ -438,10 +459,6 @@ class EventListingScreen extends Component {
     )
   }
 
-
-
-  
-
   _navigateToEventDetail(listing) {
     this.props.navigator.push({
       ident: "EventDetail",
@@ -450,7 +467,6 @@ class EventListingScreen extends Component {
       }
     })
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -504,8 +520,8 @@ const styles = StyleSheet.create({
   listingName: {
     flexDirection: 'column',
     fontSize: 17,
-    paddingBottom: 5,
-    fontWeight: '100',
+    fontWeight: '400',
+    color: '#333',
     fontFamily: 'Helvetica'
   },
 
@@ -525,8 +541,24 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#fff'
   },
+  
+  buttonStyle: {
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: '700'
+  },
 
   navbarButtonContainer: [],
+
+  buttonContainerStyle: {
+    flex: 0,
+    justifyContent: 'center',
+    marginHorizontal: 3,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    backgroundColor: '#F57373',
+    borderRadius: 3
+  },
   
   buttonText: {
     fontSize: 14,
@@ -566,7 +598,7 @@ const styles = StyleSheet.create({
 
 });
 
-styles.navbarButtonContainer = [styles.buttonPrimaryContainerStyle, {
+styles.navbarButtonContainer = [styles.buttonContainerStyle, {
   marginVertical: 8
 }]
 

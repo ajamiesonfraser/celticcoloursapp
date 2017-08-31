@@ -85,6 +85,7 @@ class EventDetail extends Component {
   _navigateToArtistDetail(listing) {
     this.props.navigator.push({
       ident: "ArtistDetail",
+      title: listing.name,
       passProps:{
         urlData: listing
       }

@@ -10,17 +10,18 @@ Text
 var ToolbarAndroid = require('ToolbarAndroid');
 
 class MyToolbar extends Component {
-render() {
-  var navigator = this.props.navigator;
-   return (
-    <ToolbarAndroid
-     title={this.props.title}
-     navIcon={require('../assets/ic-menu-white.png')}
-     style = {styles.toolbar}
-     titleColor={'white'} 
-     onIconClicked={this.props.sidebarRef}/>
+  render() {
+    var navigator = this.props.navigator;
+    return (
+      <ToolbarAndroid
+        title={this.props.title}
+        navIcon={require('../assets/ic-menu-white.png')}
+        style = {styles.toolbar}
+        titleColor={'white'} 
+        onIconClicked={this.props.sidebarRef}
+      />
     );
- }
+  }
 }
 const styles = StyleSheet.create({
 //define your own style  
