@@ -1,8 +1,10 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { Linking, StyleSheet, View, TouchableOpacity, Image } from 'react-native'
+import { Linking, StyleSheet, View, TouchableOpacity, Image, Text, Dimensions } from 'react-native'
 import Button from 'react-native-button'
+
+var { width, height } = Dimensions.get('window');
 
 class OpenURLButton extends React.Component {
   static propTypes = {
@@ -21,9 +23,13 @@ class OpenURLButton extends React.Component {
 
   render() {
     return (
-			<Button onPress={this.handleClick}>
-				Get Directions
-			</Button>
+			<TouchableOpacity style={styles.button} onPress={()=>{
+				}}>
+				<Text>Get Directions</Text>
+			</TouchableOpacity>
+			// <Button onPress={this.handleClick}>
+			// 	Get Directions
+			// </Button>
     );
   }
 }
@@ -50,7 +56,9 @@ const styles = StyleSheet.create({
   	},
   	button: {
 	    padding: 10,
-	    width: 126
+			width: width / 3,
+			borderColor:"#0076FF",
+			borderWidth:1
   	},
   	text: {
     	color: 'white',

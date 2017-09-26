@@ -5,9 +5,10 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   ListView
 } from 'react-native'
+import Image from 'react-native-image-progress'
+import ProgressBar from 'react-native-progress/Circle'
 import Modal from 'react-native-modal'
 import HTML from 'react-native-render-html'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -25,7 +26,7 @@ class ArtistDetail extends Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
       <View style={styles.contentDetail}>
-        <Image style={styles.listingPicture} source={{uri: this.props.artist.web_photo_url}}/>
+        <Image indicator={ProgressBar} style={styles.listingPicture} source={{uri: this.props.artist.web_photo_url}}/>
         <Text style={styles.listingName}>{this.props.artist.name}</Text>
         <Text style={styles.homebase}>{this.props.artist.homebase}</Text>
         <HTML html={htmlReplaced}/>

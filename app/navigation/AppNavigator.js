@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import {Navigator, Text, StyleSheet, View} from 'react-native'
 //import { Navigator } from 'react-native-deprecated-custom-components'
 import EventListingScreen from '../screens/EventListingScreen'
+import MyItineraryScreen from '../screens/MyItineraryScreen'
 import MapScreen from '../screens/MapScreen'
 import ArtistListingScreen from '../screens/ArtistListingScreen'
 import EventDetailScreen  from '../screens/EventDetailScreen'
@@ -35,11 +36,17 @@ class AppNavigator extends Component {
   _renderScene(route, navigator) {
     var globalNavigatorProps = { navigator }
 
-    console.log('globalNavigatorProps = ', globalNavigatorProps)
+    // console.log('globalNavigatorProps = ', globalNavigatorProps)
 
-    console.log('this.refs = ', this.refs)
+    // console.log('this.refs = ', this.refs)
 
     switch(route.ident) {
+      case 'MyItineraryScreen':
+        return (
+          <MyItineraryScreen
+            {...globalNavigatorProps} />
+        )
+        
       case 'EventListing':
         return (
           <EventListingScreen
@@ -96,7 +103,7 @@ class AppNavigator extends Component {
   render() {
     let navTitle = 'Celtic Colours App'
 
-    console.log('refs: ', this.refs)
+    // console.log('refs: ', this.refs)
 
     if (this.refs.appNavigator != null) {
       const currentRoutes = this.refs.appNavigator.getCurrentRoutes()

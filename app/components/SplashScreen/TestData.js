@@ -22,7 +22,7 @@ class TestData extends Component {
       .then((response) => response.json())
       .then((responseData) => {
         this.setState({date: responseData.date})
-       	console.log('blah blah blah')
+       	// console.log('blah blah blah')
       })
       .done();
   }

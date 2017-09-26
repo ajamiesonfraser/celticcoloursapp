@@ -14,4 +14,4 @@ Object.keys(showsJson).forEach(key => {
 	}
 });
 
-console.log('artists = ', artists);
+// console.log('artists = ', artists);

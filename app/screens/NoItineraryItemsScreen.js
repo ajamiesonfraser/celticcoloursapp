@@ -34,14 +34,7 @@ class NoItineraryItemsScreen extends Component {
           textAlign: 'center'
         }}>
           To add an event to your itinerary, click "Add to my itinerary" on the detail screen for the event.
-        </Text>
-        <Button
-          style={styles.buttonPrimaryStyle}
-          containerStyle={[styles.buttonPrimaryContainerStyle, { marginTop: 15 }]}
-          onPress={this.props.onViewAllEventsPress}
-        >
-          View all events
-        </Button>
+        </Text>        
       </View>
     )
   }

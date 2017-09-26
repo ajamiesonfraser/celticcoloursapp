@@ -1,7 +1,9 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { StyleSheet, View, Text, Image, TouchableOpacity, ListView } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native'
+import Image from 'react-native-image-progress'
+import ProgressBar from 'react-native-progress/Circle'
 import Navbar from '../components/Navbar'
 import ArtistDetail from './ArtistDetail'
 import DetailScreen from './DetailScreen'
@@ -19,7 +21,7 @@ class ArtistDetailScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToEventDetail(listing) }>
-        <Image style={styles.showPicture} source={{uri: listing.poster_url}}/>
+        <Image indicator={ProgressBar} style={styles.showPicture} source={{uri: listing.poster_url}}/>
         <View style={styles.listingInfo}>
           <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
         </View>

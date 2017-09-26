@@ -25,7 +25,7 @@ class MapEventDetailScreen extends Component {
   // }
 
 	render(){
-    console.log(this.props.urlData)
+    // console.log(this.props.urlData)
     // var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     return(
 			<ViewContainer>

@@ -8,9 +8,11 @@ import {
   ListView,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Picker
 } from 'react-native'
+
+import Image from 'react-native-image-progress'
+import ProgressBar from 'react-native-progress/Circle'
 import ModalDropdown from 'react-native-modal-dropdown'
 import CheckBox from 'react-native-check-box'
 import Button from 'react-native-button'
@@ -87,12 +89,14 @@ class EventListingScreen extends Component {
     super(props)
     this.state = {
       listData: [],
+
       currentListData: null,
+      regionFilterListData:[],
 
       
       typeFilter: FilterTypes.ALL,
       dateFilter: 'all',
-      showingMyItinerary: false,
+      regionFilter: 'all',
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
@@ -110,13 +114,31 @@ class EventListingScreen extends Component {
         return { urlData: { id: workshopId, ...workshops[workshopId] }, type: 'workshop' }
       }))
 
-      console.log({listData})
+      let regionFilterListData = ['all'];
+      for(var i = 0 ; i < listData.length ; i++){
+        let customFields = listData[i].urlData['custom-fields'][0];
+        let customField = customFields['custom-field'][0]
+        let value = customField['value']
+        let flag = true;
+
+        for(var j = 0 ; j < regionFilterListData.length ; j++){
+          if(value == regionFilterListData[j]){
+            flag = false;
+            break;
+          }
+        }
+
+        if(flag){
+          regionFilterListData.push(value);
+        }
+      }
 
       this.setState({
         artists,
         shows,
         listData,
         currentListData: listData,
+        regionFilterListData
       })
     })
 
@@ -128,11 +150,7 @@ class EventListingScreen extends Component {
   }
 
   _applyFilters() {
-    let listData = this.state.listData
-
-    if (this.state.showingMyItinerary) {
-      listData = listData.filter(({ urlData }) => Client.isEventInItinerary(urlData))
-    }
+    let listData = this.state.listData   
 
     const filteredByType = listData.filter((el) => {
       // filter by type
@@ -151,19 +169,34 @@ class EventListingScreen extends Component {
         }
       }
 
-      console.log('showing el.type = ' + el.type);
+      // console.log('showing el.type = ' + el.type);
 
       return true
     })
 
-    console.log('this.state.dateFilter : ', this.state.dateFilter)
+    // console.log('this.state.dateFilter : ', this.state.dateFilter)
 
     const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
       ? filteredByType.filter(x => this.state.dateFilter == x.urlData.date)
       : filteredByType
 
+    
+     let filterdByRegion = [];
+    if(this.state.regionFilter == 'all'){
+      filterdByRegion = filteredByDate;
+    }else{
+      for(var i = 0 ; i < filteredByDate.length ; i++){
+        let customFields = listData[i].urlData['custom-fields'][0];
+        let customField = customFields['custom-field'][0]
+        let value = customField['value']
+        if(this.state.regionFilter == value){
+          filterdByRegion.push(filteredByDate[i]);
+        }
+      }
+    }
+
     this.setState({
-      currentListData: filteredByDate
+      currentListData: filterdByRegion
     })
   }
   
@@ -175,7 +208,7 @@ class EventListingScreen extends Component {
         key={i}
       >
         <View style={styles.listingPictureWrapper}>
-          <Image style={styles.listingPicture} source={{uri: listing.urlData.poster_url}}/>
+          <Image indicator={ProgressBar} style={styles.listingPicture} source={{uri: listing.urlData.poster_url}}/>
         </View>
         <View style={styles.listingInfo}>
           <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
@@ -240,40 +273,6 @@ class EventListingScreen extends Component {
     )
   }
 
-  renderViewItineraryButton() {
-    return (
-      <View>
-        {(!this.state.showingMyItinerary)
-          ? <Button
-              style={styles.buttonStyle}
-              containerStyle={styles.navbarButtonContainer}
-              onPress={() => {
-                this.setState({
-                  showingMyItinerary: true
-                }, () => {
-                  this._applyFilters()
-                })
-              }}
-            >
-              View my itinerary
-            </Button>
-          : <Button
-              style={styles.buttonStyle}
-              containerStyle={styles.navbarButtonContainer}
-              onPress={() => {
-                this.setState({
-                  showingMyItinerary: false
-                }, () => {
-                  this._applyFilters()
-                })
-              }}
-            >
-              View all events
-            </Button>
-        }
-      </View>
-    )
-  }
 
   renderFilterBar() {
     return (
@@ -284,19 +283,12 @@ class EventListingScreen extends Component {
           flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between'
-        }}>
+        }}>          
           <View style={{
             flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-between'
-          }}>
-            {this.renderViewItineraryButton()}
-          </View>
-          <View style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }}>
+            }}>
 
             <ModalDropdown
               defaultIndex={0}
@@ -318,10 +310,10 @@ class EventListingScreen extends Component {
                     break;
                 }
 
-                this.setState({
-                  typeFilter: typeValue
-                }, () => {
-                this._applyFilters() 
+                  this.setState({
+                    typeFilter: typeValue
+                  }, () => {
+                  this._applyFilters() 
                 })
               }}
             >
@@ -333,6 +325,7 @@ class EventListingScreen extends Component {
                 />
               </View>
             </ModalDropdown>
+
             <ModalDropdown
               defaultIndex={0}
               options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
@@ -347,7 +340,7 @@ class EventListingScreen extends Component {
                 this._applyFilters() 
                 })
               }}
-            >
+              >
               <View style={styles.filterButtonContent}>
                 <Text style={styles.buttonText}>Date</Text>
                 <Icon
@@ -357,9 +350,19 @@ class EventListingScreen extends Component {
               </View>
             </ModalDropdown>
 
-
-
-            {/* <Button containerStyle={styles.filterButtonContainerStyle} style={styles.filterButton}>
+            <ModalDropdown
+              defaultIndex={0}
+              options={this.state.regionFilterListData}
+              style={styles.filterButtonContainerStyle}
+              textStyle={styles.filterButton}
+              onSelect={(idx, value) => {
+                this.setState({
+                  regionFilter:value
+                }, () => {
+                this._applyFilters() 
+                })
+              }}
+              >
               <View style={styles.filterButtonContent}>
                 <Text style={styles.buttonText}>Region</Text>
                 <Icon
@@ -367,7 +370,7 @@ class EventListingScreen extends Component {
                   name="angle-down" size={18}
                 />
               </View>
-            </Button> */}
+            </ModalDropdown>
           </View>
         </View>
       </View>
@@ -401,31 +404,20 @@ class EventListingScreen extends Component {
       }
     }
 
-    console.log({listDataByDate})
+    // console.log({listDataByDate})
 
     return (
-      <ViewContainer style={{backgroundColor:'white'}}>
-        
+      <ViewContainer style={{backgroundColor:'white'}}>       
 
         {this.renderTypeFilterModal()}
-        {this.renderFilterBar()}
-
-        {this.state.showingMyItinerary && this.state.currentListData.length == 0
-          ? <NoItineraryItemsScreen
-              filterType={this.state.typeFilter == FilterTypes.ALL ? 'events' : this.state.typeFilter}
-              onViewAllEventsPress={() => {
-                this.setState({ showingMyItinerary: false }, () => {
-                  this._applyFilters()
-                })
-              }}
-            />
-          : null}
+        {this.renderFilterBar()}       
 
         <ListingScreen
           listData={listDataByDate}
           renderItemPicture={(listing, style) => {
             return (
               <Image
+                indicator={ProgressBar}
                 source={{uri: listing.urlData.poster_url}}
                 style={style}
               />
@@ -435,7 +427,7 @@ class EventListingScreen extends Component {
             return (
               <View style={style}>
                 <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
-                {/* <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text> */}
+                <Text style={styles.listingDate} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.formatted_date + " " + listing.urlData.formatted_start_time}</Text>
                 <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
               </View>
             )
@@ -444,7 +436,7 @@ class EventListingScreen extends Component {
             return listing.urlData.formatted_start_time
           }}
           getSectionHeaderText={(sectionData) => {
-            console.log('sectionData = ', sectionData);
+            {/* console.log('sectionData = ', sectionData); */}
 
             if (sectionData.length != 0) {
               return sectionData[0].urlData.formatted_date
@@ -460,10 +452,26 @@ class EventListingScreen extends Component {
   }
 
   _navigateToEventDetail(listing) {
+    
+    let filterType = "";
+    
+    if(this.state.typeFilter == FilterTypes.ALL){
+      filterType = "Concerts & Events";
+    }else if(this.state.typeFilter == FilterTypes.CONCERTS){
+      filterType = "Official Concerts";
+    }else if(this.state.typeFilter == FilterTypes.WORKSHOPS){
+      filterType = "Community Events";
+    }
+
+    let title = listing.urlData.name;
+    title = title.length > 25 ? (title.substring(0, 25) + "...") : title;
+
     this.props.navigator.push({
       ident: "EventDetail",
+      title: title,
       passProps: {
-        urlData:listing.urlData
+        urlData:listing.urlData,
+        filterType:filterType
       }
     })
   }
@@ -489,6 +497,7 @@ const styles = StyleSheet.create({
    listingDate: {
     paddingBottom: 5,
     fontSize: 13,
+    color: "#636363",
     fontFamily: "Helvetica",
     fontWeight: '100'
   },
@@ -521,7 +530,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     fontSize: 17,
     fontWeight: '400',
-    color: '#333',
+    color: '#8f8294',
     fontFamily: 'Helvetica'
   },
 

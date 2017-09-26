@@ -28,46 +28,15 @@ var MapScreen = React.createClass({
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      markers:[],
-      wMarkers: []
+      totalMarkers:[],
+      markers: []
     };
   },
 
-  componentDidMount() {
-    
-    /*axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public,performances')
-    .then((response) => {
-      var aList = response.data
-      var markers = []
-        for (var shows in aList) {
-          markers = markers.concat([{
-            markerData:aList[shows],
-            image: require ('../assets/pin1.png')
-          }])
-        }
-        this.setState({
-          markers:markers
-        })
-    })
-    .done()
-    axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
-    .then((response) =>{
-      var wList = response.data
-      var wMarkers = []
-        for (var workshops in wList) {
-          wMarkers = wMarkers.concat([{
-            wMarkerData : wList[workshops],
-            image : require ('../assets/pin2.png')
-          }])
-        }
-        this.setState({
-          wMarkers:wMarkers
-        })
-    })
-    .done()*/
+  componentDidMount() {    
 
     this.dataLoadedHandler = Client.events.addListener('data loaded', (data) => {
-      const markers = Object.keys(data.shows).map((key) => {
+      let totalMarkers = Object.keys(data.shows).map((key) => {
         return {
           markerData: Client.getShowById(key),
           image: require ('../assets/pin1.png')
@@ -76,19 +45,18 @@ var MapScreen = React.createClass({
 
       const wMarkers = Object.keys(data.workshops).map((key) => {
         return {
-          wMarkerData: Client.getWorkshopById(key),
+          markerData: Client.getWorkshopById(key),
           image: require ('../assets/pin2.png')
         }
       })
 
-      console.log({
-        markers,
-        wMarkers
-      })
+      totalMarkers.push.apply(totalMarkers, wMarkers);
+
+      const markers = totalMarkers;     
 
       this.setState({
-        markers,
-        wMarkers
+        totalMarkers,
+        markers
       })
     })
 
@@ -137,6 +105,13 @@ var MapScreen = React.createClass({
         navTitle='Discover Nearby'
         canGoBack={this.props.navigator.getCurrentRoutes().length > 1}
         onBack={() => this.props.navigator.pop()}
+        filterBar={true}
+        markers={this.state.totalMarkers}
+        onMarkersChange={(searchMarkers)=>{  
+          this.setState({
+            markers:searchMarkers
+          })
+        }}
       >
         <MapView
           ref="map"
@@ -172,35 +147,7 @@ var MapScreen = React.createClass({
                 </View>
               </MapView.Callout>
             </MapView.Marker>
-          ))}
-          {this.state.wMarkers.map((wMarker,i) =>(
-            <MapView.Marker
-              key={i}
-              coordinate = {{
-                latitude : wMarker.wMarkerData.venue[0].latitude,
-                longitude : wMarker.wMarkerData.venue[0].longitude
-              }}
-              flat = {true}
-              title = {wMarker.wMarkerData.name}
-              description = {wMarker.wMarkerData.venue_name}
-              image = {wMarker.image}
-            >
-              <MapView.Callout
-                onPress={(event) => this._navigateToEventDetail2(wMarker)}
-                style={styles.callout}>
-                <View style={styles.calloutView1}>
-                  <Image style={styles.calloutPhoto} source={{uri: wMarker.wMarkerData.poster_url}}/>
-                </View>
-                <View style={styles.calloutView2}>
-                  <Text style={styles.calloutTitle}>{wMarker.wMarkerData.name}</Text>
-                  <Text style={styles.calloutVenue}>{wMarker.wMarkerData.venue_name}</Text>
-                  <Text style={styles.calloutCommunity}>{wMarker.wMarkerData.venue[0].community}</Text>
-                  <Text style={styles.calloutDate}>{wMarker.wMarkerData.formatted_date}</Text>
-                  <Text style={styles.calloutTime}>{wMarker.wMarkerData.formatted_start_time} - {wMarker.wMarkerData.formatted_end_time}</Text>
-                </View>
-              </MapView.Callout>
-            </MapView.Marker>
-          ))}
+          ))}          
         </MapView>
         <View style={styles.bubble}>
           <Text style={{ textAlign: 'center'}}>
@@ -209,16 +156,7 @@ var MapScreen = React.createClass({
         </View>
       </Screen>
     );
-  },
-
-  _navigateToEventDetail2(wMarker) {
-    this.props.navigator.push({
-      ident: "EventDetail",
-      passProps: {
-        urlData: wMarker.wMarkerData
-      }
-    })
-  },
+  },  
 
   _navigateToEventDetail(marker) {
     this.props.navigator.push({

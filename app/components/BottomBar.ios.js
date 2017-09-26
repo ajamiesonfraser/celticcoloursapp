@@ -36,7 +36,7 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab3"}
-          icon={require('../assets/compass.png')}
+          icon={require('../assets/discovery-map-icon.png')}
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab3' })}>
             <AppNavigator
@@ -49,13 +49,13 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab1"}
-          icon={require('../assets/home.png')}
+          icon={require('../assets/my-itinerary-icon.png')}
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab1' })}>
           <AppNavigator
             initialRoute={{
-              ident: 'EventListing',
-              title: 'Upcoming Events'
+              ident: 'MyItineraryScreen',
+              title: 'My Itinerary'
             }}
           />
 
@@ -63,9 +63,22 @@ class BottomBar extends Component {
 
         <Icon.TabBarItemIOS
           selected={this.state.selectedTab === "tab2"}
-          icon={require('../assets/fiddle.png')}
+          icon={require('../assets/upcoming-events-icon.png')}
           title={``}
           onPress={() => Client.events.emit('switch tab', { name: 'tab2' })}>
+          <AppNavigator
+            initialRoute={{
+              ident: 'EventListing',
+              title: 'Upcoming Events'
+            }}
+          />
+        </Icon.TabBarItemIOS>
+
+        <Icon.TabBarItemIOS
+          selected={this.state.selectedTab === "tab4"}
+          icon={require('../assets/artists-icon.png')}
+          title={``}
+          onPress={() => Client.events.emit('switch tab', { name: 'tab4' })}>
             <AppNavigator
               initialRoute={{
                 ident: "ArtistListing",
@@ -75,10 +88,10 @@ class BottomBar extends Component {
         </Icon.TabBarItemIOS>
 
         <Icon.TabBarItemIOS
-          selected={this.state.selectedTab === "tab4"}
-          icon={require('../assets/fiddle.png')}
+          selected={this.state.selectedTab === "tab5"}
+          icon={require('../assets/contact-icon.png')}
           title={``}
-          onPress={() => Client.events.emit('switch tab', 'tab4')}>
+          onPress={() => Client.events.emit('switch tab', {name: 'tab5'})}>
             <AppNavigator
               initialRoute={{
                 ident: "ContactScreen",

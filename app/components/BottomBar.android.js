@@ -8,8 +8,10 @@ import Client from '../services/Client'
 
 const ROUTES = [
   { title: 'Discover Nearby', ident: 'MapScreen' },
+  { title: 'My Itinerary', ident: 'MyItineraryScreen' },
   { title: 'Upcoming Events', ident: 'EventListing' },
   { title: 'Artists', ident: 'ArtistListing' },
+  { title: 'Contact', ident: 'ContactScreen' },
 ]
 
 class BottomBar extends Component {
@@ -23,7 +25,7 @@ class BottomBar extends Component {
 
   componentDidMount() {
     this.openDrawerListener = Client.events.addListener('open drawer', () => {
-      console.log('this = ', this)
+      // console.log('this = ', this)
       this._setDrawer()
     })
   }
@@ -33,9 +35,12 @@ class BottomBar extends Component {
   }
 
   render() {
-    console.log('trying something')
+    // console.log('trying something')
     var navigationView = (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
+        <View style={{alignItems:'center'}}>
+          <Image style={{width:50, height:50}} source={require('../assets/celtic-colours-2017-logo.png')}/>
+        </View>
         {ROUTES.map((el, i) => {
           return (
             <TouchableOpacity 

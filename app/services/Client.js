@@ -18,12 +18,12 @@ const Client = {
   },
 
   _loadShows() {
-    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,date_unix,date,poster_url,formatted_start_time,venue_name,venue,seating,price,description_public,performances')
+    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=shows&local=yes&field=name,formatted_date,date_unix,date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,custom-fields,ticket_link,description_public,performances')
     .then(response => response.data)
   },
 
   _loadWorkshops() {
-    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,date_unix,date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,description_public')
+    return axios.get('https://novastream.ca/xml2json.php?org=23998&type=workshops&field=name,formatted_date,date_unix,date,poster_url,formatted_start_time,formatted_end_time,venue_name,venue,seating,price,custom-fields,ticket_link,description_public')
     .then(response => response.data)
   },
 

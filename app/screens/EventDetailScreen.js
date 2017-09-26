@@ -1,7 +1,9 @@
 'use strict'
 
 import React, { Component } from 'React'
-import { StyleSheet, View, Text, Image, TouchableOpacity, ListView } from 'react-native'
+import { StyleSheet, View, Text, TouchableOpacity, ListView } from 'react-native'
+import Image from 'react-native-image-progress'
+import ProgressBar from 'react-native-progress/Circle'
 import ArtistDetailModal from './ArtistDetailModal'
 import EventDetail from './EventDetail'
 import DetailScreen from './DetailScreen'
@@ -21,7 +23,7 @@ class EventDetailScreen extends Component {
   _renderListingRow(listing) {
     return (
       <TouchableOpacity style={styles.listingRow} onPress={(event) => this._navigateToArtistDetail(listing)}>
-          <Image style={styles.artistPicture} source={{uri: listing.web_photo_url}}/>
+          <Image indicator={ProgressBar} style={styles.artistPicture} source={{uri: listing.web_photo_url}}/>
           <View style={styles.listingInfo}>
             <Text style={styles.listingItem} numberOfLines={1} ellipsizeMode={'tail'}>{listing.name}</Text>
           </View>
@@ -32,24 +34,19 @@ class EventDetailScreen extends Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2})
     if (this.props.urlData.performances && this.props.urlData.performances[0]) {
       return (
-        <ListView
-          dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
-          renderRow={(listing) => {
-            var rows = [];
-            for(var i in listing) {
-              rows.push(this._renderListingRow(listing[i]));
-            }
-            return (<View>{rows}</View>);
-          }} 
-        />
-      );
-    } else {
-      return (
-        <Text style={{
-          fontStyle: 'italic'
-        }}>
-          No performances to show
-        </Text>
+        <View>
+          <Text style={styles.performingTitle}>Performing Artists</Text>
+          <ListView
+            dataSource={ds.cloneWithRows(this.props.urlData.performances[0])}
+            renderRow={(listing) => {
+              var rows = [];
+              for(var i in listing) {
+                rows.push(this._renderListingRow(listing[i]));
+              }
+              return (<View>{rows}</View>);
+            }} 
+          />
+        </View>
       );
     }
   }
@@ -71,9 +68,7 @@ class EventDetailScreen extends Component {
     return(
       <DetailScreen {...this.props}>
         {this.renderArtistDetailModal()}
-        <EventDetail showDetails={true} event={this.props.urlData}/>
-
-        <Text style={styles.performingTitle}>Performing Artists</Text>
+        <EventDetail showDetails={true} event={this.props.urlData}/>        
         {this.renderPerformerList()}
       </DetailScreen>
 		)
