@@ -85,7 +85,9 @@ class Screen extends Component {
 
   _applyFilters(){
     const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
-    ? this.props.markers.filter(x => this.state.dateFilter == x.urlData.date)
+    ? this.props.markers.filter(x => 
+      this.state.dateFilter == x.markerData.date
+    )
     : this.props.markers
 
     this.props.onMarkersChange(filteredByDate);
