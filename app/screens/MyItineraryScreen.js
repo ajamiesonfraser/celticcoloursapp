@@ -8,10 +8,12 @@ import {
   ListView,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Picker
 } from 'react-native'
-
+import isEqual from 'lodash.isequal'
+import LoadingView from 'react-native-loading-view'
+import Image from 'react-native-image-progress'
+import ProgressBar from 'react-native-progress/Circle'
 import ModalDropdown from 'react-native-modal-dropdown'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ViewContainer from '../components/ViewContainer'
@@ -20,81 +22,33 @@ import ListingScreen from './ListingScreen'
 
 import Client from '../services/Client'
 
-/** NOTE: in JS, month numbers start at zero, so we use 9 even though it is the 10th month */
-const EVENT_DATES = [
-  '2017-10-06',
-  '2017-10-07',
-  '2017-10-08',
-  '2017-10-09',
-  '2017-10-10',
-  '2017-10-11',
-  '2017-10-12',
-  '2017-10-13',
-  '2017-10-14',
-]
-
-const DAYS_OF_WEEK = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday'
-]
-
-const MONTH_NAMES = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December'
-]
-
-const FilterTypes = {
-  ALL: 'all',
-  CONCERTS: 'concerts',
-  WORKSHOPS: 'community events'
-}
-
-const stringDateToFormattedDate = (stringDate, includeYear=true) => {
-  const [year, month, day] = stringDate.split('-').map(x => parseInt(x, 10))
-  const dateObject = new Date(year, month - 1, day)
-  
-  let str = `${DAYS_OF_WEEK[dateObject.getDay()]} ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
-
-  if (includeYear) {
-    str += ` ${dateObject.getFullYear()}`
-  }
-
-  return str
-}
-
 class MyItineraryScreen extends Component {
     constructor(props) {
       super(props)
       this.state = {
         listData: [],
-        currentListData: null, 
-        
-        typeFilter: FilterTypes.ALL,
-        dateFilter: 'all',
-        showingMyItinerary: false,
-  
+        currentListData: null,         
         showingTypeFilterModal: false,
         showingDateFilterModal: false,
+        loading:true,
       }
       
     }  
 
-    componentDidMount() {
+    componentDidMount() {    
+      this.getLoadingData();      
+    }   
+
+    componentDidUpdate(prevProps, prevState){     
+      if(this.state.listData.length > 0){
+        let filterData = this.state.listData.filter(({urlData}) => Client.isEventInItinerary(urlData));
+        if(!isEqual(prevState.currentListData, filterData)){
+          this.setState({currentListData:filterData})
+        }
+      }
+    }
+
+    getLoadingData(){
       this.dataLoadedHandler = Client.events.addListener('data loaded', (data) => {
         const { artists, workshops, shows } = data
   
@@ -104,125 +58,27 @@ class MyItineraryScreen extends Component {
           return { urlData: { id: workshopId, ...workshops[workshopId] }, type: 'workshop' }
         }))
   
-        // console.log({listData});
         let filterData =  listData.filter(({ urlData }) => Client.isEventInItinerary(urlData));
+
         this.setState({
           artists,
           shows,
           listData,
-          currentListData: this._getFilteredByDate(filterData),
+          currentListData: filterData,
+          loading:false,
         })
       })
   
       Client.loadData();
-      
-      // this._applyFilters();
+     
     }
   
     componentWillUnmount() {
       this.dataLoadedHandler.remove()
     }
 
-    _getFilteredByDate(data){
-      const filteredByType = data.filter((el) => {
-        // filter by type
-        if (this.state.typeFilter != FilterTypes.ALL) {
-          switch (this.state.typeFilter) {
-            case FilterTypes.CONCERTS:
-              if (el.type != 'show') {
-                return false
-              }
-              break
-            case FilterTypes.WORKSHOPS:
-              if (el.type != 'workshop') {
-                return false
-              }
-              break
-          }
-        }
-        return true
-      })
-  
-      // console.log('this.state.dateFilter : ', this.state.dateFilter)
-  
-      const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
-        ? filteredByType.filter(x => this.state.dateFilter == x.urlData.date)
-        : filteredByType
-
-      return filteredByDate;
-    }
-
-    _applyFilters() {
-      let listData = this.state.listData  
-      listData = listData.filter(({ urlData }) => Client.isEventInItinerary(urlData));
-      
-      this.setState({
-        currentListData: this._getFilteredByDate(listData)
-      })
-    }
-
-    renderFilterBar() {
-      return (
-        <View style={{height: 40}}>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>  
-              <ModalDropdown
-                defaultIndex={0}
-                options={['Concerts & Events', 'Official Concerts', 'Community Events']}
-                style={styles.filterButtonContainerStyle}
-                textStyle={styles.filterButton}
-                onSelect={(idx, value) => {
-                  let typeValue;  
-                  switch (value) {
-                    case 'Concerts & Events':
-                      typeValue = FilterTypes.ALL;
-                      break;
-                    case 'Official Concerts':
-                      typeValue = FilterTypes.CONCERTS;
-                      break;
-                    case 'Community Events':
-                      typeValue = FilterTypes.WORKSHOPS;
-                      break;
-                  }  
-                  this.setState({
-                    typeFilter: typeValue
-                  }, () => {
-                  this._applyFilters() 
-                  })
-                }}
-              >
-                <View style={styles.filterButtonContent}>
-                  <Text style={styles.buttonText}>Type</Text>
-                  <Icon style={styles.filterDropdownIcon} name="angle-down" size={18}/>
-                </View>
-              </ModalDropdown>
-              <ModalDropdown
-                defaultIndex={0}
-                options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
-                style={styles.filterButtonContainerStyle}
-                textStyle={styles.filterButton}
-                onSelect={(idx, value) => {
-                  this.setState({
-                    dateFilter: value != 'all'
-                      ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
-                      : value
-                  }, () => {
-                  this._applyFilters() 
-                  })
-                }}
-              >
-                <View style={styles.filterButtonContent}>
-                  <Text style={styles.buttonText}>Date</Text>
-                  <Icon style={styles.filterDropdownIcon} name="angle-down" size={18}/>
-                </View>
-              </ModalDropdown>  
-            </View>
-          </View>
-        </View>
-      )
-    }
-  
-    render() {
+   
+    render() {  
       const listDataByDate = {}
       
       if (this.state.currentListData != null) {
@@ -251,66 +107,57 @@ class MyItineraryScreen extends Component {
 
       return (
         <ViewContainer style={{backgroundColor:'white'}}>      
-          {this.renderFilterBar()}
-
           {this.state.currentListData == null || this.state.currentListData.length == 0
-          ? <NoItineraryItemsScreen
-              filterType={this.state.typeFilter == FilterTypes.ALL ? 'events' : this.state.typeFilter}
-            />
+          ? <NoItineraryItemsScreen/>
           : null}
-          <ListingScreen
-          listData={listDataByDate}
-          renderItemPicture={(listing, style) => {
-            return (
-              <Image
-                source={{uri: listing.urlData.poster_url}}
-                style={style}
-              />
-            )
-          }}
-          renderItem={(listing, style) => {
-            return (
-              <View style={style}>
-                <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
-                {/* <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text> */}
-                <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
-              </View>
-            )
-          }}
-          getItemRightText={(listing) => {
-            return listing.urlData.formatted_start_time
-          }}
-          getSectionHeaderText={(sectionData) => {
-            {/* console.log('sectionData = ', sectionData); */}
+          {
+            this.state.loading == true ?
+              <LoadingView loading={true}>
+              </LoadingView>
+            : 
+              <ListingScreen
+                listData={listDataByDate}
+                renderItemPicture={(listing, style) => {
+                  return (
+                    <Image
+                      indicator={ProgressBar}
+                      source={{uri: listing.urlData.poster_url}}
+                      style={style}
+                    />
+                  )
+                }}
+                renderItem={(listing, style) => {
+                  return (
+                    <View style={style}>
+                      <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
+                      {/* <Text style={styles.listingDate}>{listing.urlData.formatted_date}</Text> */}
+                      <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
+                    </View>
+                  )
+                }}
+                getItemRightText={(listing) => {
+                  return listing.urlData.formatted_start_time
+                }}
+                getSectionHeaderText={(sectionData) => {
+                  {/* console.log('sectionData = ', sectionData); */}
 
-            if (sectionData.length != 0) {
-              return sectionData[0].urlData.formatted_date
-            }
-          }}
-          onItemPress={(listing) => {
-            this._navigateToEventDetail(listing)
-          }}
-          sections={true}
-        />
+                  if (sectionData.length != 0) {
+                    return sectionData[0].urlData.formatted_date
+                  }
+                }}
+                onItemPress={(listing) => {
+                  this._navigateToEventDetail(listing)
+                }}
+                sections={true}
+              />
+          }
+          
         </ViewContainer>
       )
     }  
 
     _navigateToEventDetail(listing) {
-      let typeValue;
-  
-      switch (this.state.typeFilter) {
-        case FilterTypes.ALL:
-          typeValue = 'Concerts & Events'
-          break;
-        case FilterTypes.CONCERTS:
-          typeValue = 'Official Concerts'
-          break;
-        case FilterTypes.WORKSHOPS:
-          typeValue = 'Community Events';
-          break;
-      }
-  
+       
       let title = listing.urlData.name;
       if(title.length > 20){
         title = title.substring(0, 25) + "...";
@@ -321,7 +168,6 @@ class MyItineraryScreen extends Component {
         ident: "EventDetail",
         passProps: {
           urlData:listing.urlData,
-          typeValue:typeValue
         }
       })
     }

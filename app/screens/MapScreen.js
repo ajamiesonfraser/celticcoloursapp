@@ -2,10 +2,13 @@
 
 import React, {Component} from 'react'
 import { StyleSheet, PropTypes, View, Text, Dimensions, TouchableOpacity, Image } from 'react-native'
+import ModalDropdown from 'react-native-modal-dropdown'
+import Icon from 'react-native-vector-icons/FontAwesome'
 import MapView from 'react-native-maps'
 import axios from 'axios'
 import _ from 'lodash'
 import Screen from './Screen'
+import ViewContainer from '../components/ViewContainer'
 import Client from '../services/Client'
 
 var { width, height } = Dimensions.get('window');
@@ -17,8 +20,58 @@ const LONGITUDE = -60.195829;
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-var MapScreen = React.createClass({
+const EVENT_DATES = [
+  '2017-10-06',
+  '2017-10-07',
+  '2017-10-08',
+  '2017-10-09',
+  '2017-10-10',
+  '2017-10-11',
+  '2017-10-12',
+  '2017-10-13',
+  '2017-10-14',
+]
 
+const DAYS_OF_WEEK = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
+]
+
+const MONTH_NAMES = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+]
+
+const stringDateToFormattedDate = (stringDate, includeYear=true) => {
+  const [year, month, day] = stringDate.split('-').map(x => parseInt(x, 10))
+  const dateObject = new Date(year, month - 1, day)
+  
+  let str = `${DAYS_OF_WEEK[dateObject.getDay()]} ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
+
+  if (includeYear) {
+    str += ` ${dateObject.getFullYear()}`
+  }
+
+  return str
+}
+
+
+var MapScreen = React.createClass({
 
   getInitialState() {
     return {
@@ -29,7 +82,8 @@ var MapScreen = React.createClass({
         longitudeDelta: LONGITUDE_DELTA
       },
       totalMarkers:[],
-      markers: []
+      markers: [],
+      dateFilter: 'all',
     };
   },
 
@@ -84,7 +138,6 @@ var MapScreen = React.createClass({
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       }
-
       // this.onRegionChange(newRegion);
     });
   },
@@ -98,22 +151,76 @@ var MapScreen = React.createClass({
     this.setState({ region });
   },
 
-  render() {
-        
+  renderFilterBar() {
+    return (
+      <View style={{height: 40}}>
+        <View style={{flex: 1,flexDirection: 'row',justifyContent: 'space-between'}}>          
+          <View style={{flex: 1,flexDirection: 'row',justifyContent: 'space-between'}}>
+          <View style={{flex: 1,flexDirection: 'row',justifyContent: 'space-between'}}/>
+          <View style={{flex: 1,flexDirection: 'row',justifyContent: 'space-between'}}/>
+            <ModalDropdown
+              defaultIndex={0}
+              options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
+              style={styles.filterButtonContainerStyle}
+              dropdownStyle={{
+                height: (33 + StyleSheet.hairlineWidth) * (EVENT_DATES.length + 2)
+                }                
+              }
+              textStyle={styles.filterButton}
+              onSelect={(idx, value) => {
+                this.setState({
+                  dateFilter: value != 'all'
+                    ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
+                    : value
+                }, () => {
+                this._applyFilters() 
+                })
+              }}
+              >
+              <View style={styles.filterButtonContent}>
+                {this.renderDateText()}
+                <Icon
+                  style={styles.filterDropdownIcon}
+                  name="angle-down" size={18}
+                />
+              </View>
+            </ModalDropdown>
+          </View>
+        </View>
+      </View>
+    )
+  },
+
+  _applyFilters(){
+    const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
+    ? this.state.markers.filter(x => 
+      this.state.dateFilter == x.markerData.date
+    )
+    : this.state.markers
+
+    this.setState({
+      markers:filteredByDate
+    })
+  },
+
+  renderDateText(){
+    let text = "";
+    if(this.state.dateFilter == 'all'){
+      text = this.state.dateFilter;
+    }else{
+      text = stringDateToFormattedDate(this.state.dateFilter, false);
+    }
+
+    return (
+      <Text style={styles.buttonText}>{text}</Text>
+    )
+  },
+
+  render() {        
     
     return (
-      <Screen
-        navTitle='Discover Nearby'
-        canGoBack={this.props.navigator.getCurrentRoutes().length > 1}
-        onBack={() => this.props.navigator.pop()}
-        filterBar={true}
-        markers={this.state.totalMarkers}
-        onMarkersChange={(searchMarkers)=>{  
-          this.setState({
-            markers:searchMarkers
-          })
-        }}
-      >
+      <ViewContainer style={{backgroundColor:'white'}}>  
+        {this.renderFilterBar()}
         <MapView
           ref="map"
           style={styles.map}
@@ -150,12 +257,8 @@ var MapScreen = React.createClass({
             </MapView.Marker>
           ))}          
         </MapView>
-        <View style={styles.bubble}>
-          <Text style={{ textAlign: 'center'}}>
-            {`${this.state.region.latitude.toPrecision(7)}, ${this.state.region.longitude.toPrecision(7)}`}
-          </Text>
-        </View>
-      </Screen>
+      
+      </ViewContainer>
     );
   },  
 
@@ -227,7 +330,7 @@ var styles = StyleSheet.create({
   },
   map: {
     position: 'absolute',
-    top: 0,
+    top: 40,
     left: 0,
     right: 0,
     bottom: 0,
@@ -237,6 +340,40 @@ var styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,
+  },
+  filterButtonContainerStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 3,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 3,
+    borderColor: '#3d97e8'
+  },
+
+  filterButtonContent: {
+    flexGrow: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  
+  filterButton: {
+    flex: 1,
+    fontSize: 14,
+    color: 'red',
+  },
+
+  filterDropdownIcon: {
+    marginLeft: 5,
+    color: '#FD3443'
+  },
+  buttonText: {
+    fontSize: 11,
+    fontWeight: '300',
+    color: '#FD3443'
   },
 });
 

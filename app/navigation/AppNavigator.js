@@ -44,7 +44,7 @@ class AppNavigator extends Component {
       case 'MyItineraryScreen':
         return (
           <MyItineraryScreen
-            {...globalNavigatorProps} />
+            {...globalNavigatorProps}/>
         )
         
       case 'EventListing':

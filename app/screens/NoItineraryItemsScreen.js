@@ -26,7 +26,7 @@ class NoItineraryItemsScreen extends Component {
           marginBottom: 5,
           textAlign: 'center'
         }}>
-          There are no {this.props.filterType} in your itinerary.
+          There are no events in your itinerary.
         </Text>
         <Text style={{
           flex: 0,

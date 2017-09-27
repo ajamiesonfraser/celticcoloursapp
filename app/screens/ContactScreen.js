@@ -28,13 +28,13 @@ class ContactScreen extends Component {
         call(args).catch(console.error);
     }
 
-    sendMail(mail){
+    sendMail(mail, name, message){
         Mailer.mail({
             subject:'',
             recipients: [mail],
             ccRecipients: [''],
             bccRecipients: [''],
-            body: '',
+            body: message,
             isHTML: true,
         }, (error, event)=>{
             if(error){
@@ -60,13 +60,13 @@ class ContactScreen extends Component {
                 <View style={{paddingTop:20}} />
                 <TextInput 
                     style={{height:40, borderColor:'gray', borderWidth:1}} 
-                    placeholder="Name"
+                    placeholder="  Name"
                     onChangeText={(text)=>this.state.name = text}
                 />
                 <View style={{paddingTop:20}} />
                 <TextInput 
                     style={{height:40, borderColor:'gray', borderWidth:1}} 
-                    placeholder="Email"
+                    placeholder="  Email"
                     keyboardType={'email-address'}
                     onChangeText={(text)=>this.state.email = text}
                 />
@@ -75,14 +75,14 @@ class ContactScreen extends Component {
                     multiline = {true}
                     numberOfLines = {4}
                     style={{height:160, borderColor:'gray', borderWidth:1}} 
-                    placeholder="Message"
+                    placeholder="  Message"
                     onChangeText={(text)=>this.state.message = text}
                 />
                 <View style={{paddingTop:20, alignItems:'flex-end'}}>
                     <TouchableOpacity 
                         style={{width:width / 4, alignItems:'center', borderColor:"#0076FF", borderWidth:1, borderRadius:20}} 
                         onPress={()=>{
-                            
+                            this.sendMail(this.state.email, this.state.name, this.state.message)
                         }}>
                         <Text style={{color:"#0076FF"}}>Send</Text>
                     </TouchableOpacity>
@@ -120,7 +120,7 @@ class ContactScreen extends Component {
                         <Text>Email</Text>
                         <View style={{paddingTop:10}} />
                         <TouchableOpacity onPress={()=>{
-                            this.sendMail('info@celtic-colours.com')
+                            this.sendMail('info@celtic-colours.com', '', '')
                             }}>
                             <Text style={{color:"#0076FF"}}>info@celtic-colours.com</Text>
                         </TouchableOpacity>                        

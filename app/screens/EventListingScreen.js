@@ -13,6 +13,7 @@ import {
 
 import Image from 'react-native-image-progress'
 import ProgressBar from 'react-native-progress/Circle'
+import LoadingView from 'react-native-loading-view'
 import ModalDropdown from 'react-native-modal-dropdown'
 import CheckBox from 'react-native-check-box'
 import Button from 'react-native-button'
@@ -100,12 +101,14 @@ class EventListingScreen extends Component {
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
+      loading:true,
 
     }
   }
 
   componentDidMount() {
     this.dataLoadedHandler = Client.events.addListener('data loaded', (data) => {
+
       const { artists, workshops, shows } = data
 
       const listData = Object.keys(shows).map(showId => {
@@ -138,11 +141,14 @@ class EventListingScreen extends Component {
         shows,
         listData,
         currentListData: listData,
-        regionFilterListData
+        regionFilterListData,
+        loading: false
       })
-    })
+    });
+    
+    Client.loadData();
+    this.setState({loading:true})
 
-    Client.loadData()
   }
 
   componentWillUnmount() {
@@ -273,28 +279,52 @@ class EventListingScreen extends Component {
     )
   }
 
+  renderTypeText(){
+    let text = "";
+    switch (this.state.typeFilter) {
+      case FilterTypes.ALL:
+        text = "Concerts & Events";
+        break;
+      case FilterTypes.CONCERTS:
+        text = 'Official Concerts';
+        break;
+      case FilterTypes.WORKSHOPS:
+        text = 'Community Events';
+        break;
+    }
+
+    return (
+      <Text style={styles.buttonText}>{text}</Text>
+    )
+  }
+
+  renderDateText(){
+    let text = "";
+    if(this.state.dateFilter == 'all'){
+      text = this.state.dateFilter;
+    }else{
+      text = stringDateToFormattedDate(this.state.dateFilter, false);
+    }
+
+    return (
+      <Text style={styles.buttonText}>{text}</Text>
+    )
+  }
 
   renderFilterBar() {
     return (
-      <View style={{
-        height: 40
-      }}>
-        <View style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'space-between'
-        }}>          
-          <View style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-            }}>
+      <View style={{height: 40}}>
+        <View style={{flex: 1,flexDirection: 'row',justifyContent: 'space-between'}}>          
 
             <ModalDropdown
               defaultIndex={0}
               options={['Concerts & Events', 'Official Concerts', 'Community Events']}
               style={styles.filterButtonContainerStyle}
               textStyle={styles.filterButton}
+              dropdownStyle={{
+                height: (33 + StyleSheet.hairlineWidth) * 3
+                }                
+              }
               onSelect={(idx, value) => {
                 let typeValue;
 
@@ -316,9 +346,9 @@ class EventListingScreen extends Component {
                   this._applyFilters() 
                 })
               }}
-            >
+              >
               <View style={styles.filterButtonContent}>
-                <Text style={styles.buttonText}>Type</Text>
+                {this.renderTypeText()}                
                 <Icon
                   style={styles.filterDropdownIcon}
                   name="angle-down" size={18}
@@ -328,6 +358,10 @@ class EventListingScreen extends Component {
 
             <ModalDropdown
               defaultIndex={0}
+              dropdownStyle={{
+                height: (33 + StyleSheet.hairlineWidth) * (EVENT_DATES.length + 2)
+                }                
+              }
               options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
               style={styles.filterButtonContainerStyle}
               textStyle={styles.filterButton}
@@ -342,7 +376,7 @@ class EventListingScreen extends Component {
               }}
               >
               <View style={styles.filterButtonContent}>
-                <Text style={styles.buttonText}>Date</Text>
+                {this.renderDateText()}                
                 <Icon
                   style={styles.filterDropdownIcon}
                   name="angle-down" size={18}
@@ -355,6 +389,10 @@ class EventListingScreen extends Component {
               options={this.state.regionFilterListData}
               style={styles.filterButtonContainerStyle}
               textStyle={styles.filterButton}
+              dropdownStyle={{
+                height: (33 + StyleSheet.hairlineWidth) * (this.state.regionFilterListData.length + 1)
+                }                
+              }
               onSelect={(idx, value) => {
                 this.setState({
                   regionFilter:value
@@ -364,14 +402,13 @@ class EventListingScreen extends Component {
               }}
               >
               <View style={styles.filterButtonContent}>
-                <Text style={styles.buttonText}>Region</Text>
+                <Text style={styles.buttonText}>{this.state.regionFilter}</Text>
                 <Icon
                   style={styles.filterDropdownIcon}
                   name="angle-down" size={18}
                 />
               </View>
             </ModalDropdown>
-          </View>
         </View>
       </View>
     )
@@ -402,51 +439,56 @@ class EventListingScreen extends Component {
           return Date.parse(`01/01/2011 ${a.urlData.formatted_start_time}`) - Date.parse(`01/01/2011 ${b.urlData.formatted_start_time}`)
         })
       }
-    }
+    }  
 
-    // console.log({listDataByDate})
+    return (      
 
-    return (
       <ViewContainer style={{backgroundColor:'white'}}>       
 
         {this.renderTypeFilterModal()}
         {this.renderFilterBar()}       
+        {
+          this.state.loading == true ?
+           <LoadingView loading={true}>
+           </LoadingView>
+          : 
+            <ListingScreen
+              listData={listDataByDate}
+              renderItemPicture={(listing, style) => {
+                return (
+                  <Image
+                    indicator={ProgressBar}
+                    source={{uri: listing.urlData.poster_url}}
+                    style={style}
+                  />
+                )
+              }}
+              renderItem={(listing, style) => {
+                return (
+                  <View style={style}>
+                    <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
+                    <Text style={styles.listingDate} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.formatted_date + " " + listing.urlData.formatted_start_time}</Text>
+                    <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
+                  </View>
+                )
+              }}
+              getItemRightText={(listing) => {
+                return listing.urlData.formatted_start_time
+              }}
+              getSectionHeaderText={(sectionData) => {
+                {/* console.log('sectionData = ', sectionData); */}
 
-        <ListingScreen
-          listData={listDataByDate}
-          renderItemPicture={(listing, style) => {
-            return (
-              <Image
-                indicator={ProgressBar}
-                source={{uri: listing.urlData.poster_url}}
-                style={style}
-              />
-            )
-          }}
-          renderItem={(listing, style) => {
-            return (
-              <View style={style}>
-                <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.name}</Text>
-                <Text style={styles.listingDate} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.formatted_date + " " + listing.urlData.formatted_start_time}</Text>
-                <Text style={styles.listingVenue} numberOfLines={1} ellipsizeMode={'tail'} >{listing.urlData.venue_name}</Text>
-              </View>
-            )
-          }}
-          getItemRightText={(listing) => {
-            return listing.urlData.formatted_start_time
-          }}
-          getSectionHeaderText={(sectionData) => {
-            {/* console.log('sectionData = ', sectionData); */}
-
-            if (sectionData.length != 0) {
-              return sectionData[0].urlData.formatted_date
-            }
-          }}
-          onItemPress={(listing) => {
-            this._navigateToEventDetail(listing)
-          }}
-          sections={true}
-        />
+                if (sectionData.length != 0) {
+                  return sectionData[0].urlData.formatted_date
+                }
+              }}
+              onItemPress={(listing) => {
+                this._navigateToEventDetail(listing)
+              }}
+              sections={true}
+            />
+        }
+        
       </ViewContainer>
     )
   }
@@ -471,7 +513,6 @@ class EventListingScreen extends Component {
       title: title,
       passProps: {
         urlData:listing.urlData,
-        filterType:filterType
       }
     })
   }
@@ -570,7 +611,7 @@ const styles = StyleSheet.create({
   },
   
   buttonText: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '300',
     color: '#FD3443'
   },

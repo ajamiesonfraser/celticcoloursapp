@@ -20,6 +20,7 @@
     "react-native-deprecated-custom-components": "^0.1.1",
     "react-native-htmlview": "^0.12.0",
     "react-native-image-progress": "^1.0.1",
+    "react-native-loading-view": "^1.0.0",
     "react-native-mail": "^3.0.4",
     "react-native-maps": "0.15.1",
     "react-native-modal": "2.2.0",

@@ -2,6 +2,7 @@
 import React, { Component} from 'react'
 import {Text, View, ListView,StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import Image from 'react-native-image-progress'
+import LoadingView from 'react-native-loading-view'
 import ProgressBar from 'react-native-progress/Circle'
 import ViewContainer from '../components/ViewContainer'
 import Navbar from '../components/Navbar'
@@ -108,25 +109,32 @@ class ArtistListingScreen extends Component {
     return (
       <ViewContainer style={{backgroundColor:'white'}}>
         {this.renderFilterBar()}
-        <ListingScreen
-          listData={this.state.listData}
-          renderItemPicture={(listing, style) => {
-            return (
-              <Image indicator={ProgressBar} style={style} source={{uri: listing.urlData.web_photo_url}}/>
-            )
-          }}
-          renderItem={(listing, style) => {
-            return (
-              <View style={style}>
-                <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.name}</Text>
-                <Text style={styles.homebase}>{listing.urlData.homebase}</Text>
-              </View>
-            )
-          }}
-          onItemPress={(listing) => {
-            this._navigateToArtistDetail(listing)
-          }}
-        />
+        {
+          this.state.listData.length == 0 ?
+            <LoadingView loading={true}>
+            </LoadingView>
+          :
+            <ListingScreen
+              listData={this.state.listData}
+              renderItemPicture={(listing, style) => {
+                return (
+                  <Image indicator={ProgressBar} style={style} source={{uri: listing.urlData.web_photo_url}}/>
+                )
+              }}
+              renderItem={(listing, style) => {
+                return (
+                  <View style={style}>
+                    <Text style={styles.listingName} numberOfLines={1} ellipsizeMode={'tail'}>{listing.urlData.name}</Text>
+                    <Text style={styles.homebase}>{listing.urlData.homebase}</Text>
+                  </View>
+                )
+              }}
+              onItemPress={(listing) => {
+                this._navigateToArtistDetail(listing)
+              }}
+            />
+        }
+        
       </ViewContainer>
     )
   }

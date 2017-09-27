@@ -64,8 +64,17 @@ class EventDetail extends Component {
   };
 
   renderDetails() {
+    
+
     if (this.props.showDetails) {
-      console.log(this.props.event.ticket_link)
+      let len = this.props.event.description_public.indexOf('Nearby Meal:');
+      let description = "";
+      if(len > -1){
+        let subStr = this.props.event.description_public.substring(len, this.props.event.description_public.length)
+        description = this.props.event.description_public.replace(subStr, "");
+      }else{
+        description = this.props.event.description_public;
+      }      
       return (
         <View>          
           <View style={{alignItems:'center'}}>
@@ -76,31 +85,75 @@ class EventDetail extends Component {
             </TouchableOpacity>
           </View>
           <View style={{paddingTop:10}} />
-          <View style={{flexDirection:'row'}}>
-            <View style={{width:width / 2 - 25, alignItems:'center'}}>
-              <TouchableOpacity style={[styles.button, {borderColor:"#d51930"}]} onPress={()=>{
-                  this.changeScheduleStatus();
-                }}
-                >
-                {
-                  this.state.isInItinerary ? 
-                    <Text style={{color:"#d51930", fontSize:11}}>Added to Schedule</Text>
-                  : 
-                    <Text style={{color:"#d51930", fontSize:11}}>Add to Schedule</Text>
-                }              
-              </TouchableOpacity>
-            </View>
-            <View style={{width:width / 2 - 25, alignItems:'center'}}>
-              <TouchableOpacity style={[styles.button, {borderColor:"#f6af39"}]} onPress={()=>{
-                if(this.props.event.ticket_link != "")
-                  this.handleClick(this.props.event.ticket_link);
-                }}>
-                <Text style={{color:"#f6af39", fontSize:11}}>By Tickets</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{paddingTop:10}} />
-          <HTML html={this.props.event.description_public}/>
+          {
+            this.props.event.ticket_link != "" ?
+              <View style={{flexDirection:'row'}}>
+                <View style={{width:width / 2 - 20, alignItems:'center'}}>
+                  {
+                    this.state.isInItinerary ? 
+                      <TouchableOpacity style={[styles.button, {borderColor:"#878787"}]} onPress={()=>{
+                          this.changeScheduleStatus();
+                        }}
+                        >                        
+                          <View style={{flexDirection:'row'}}>
+                            <Image style={{width:15, height:15}} source={require("../assets/remove-from-itinerary.png")}/>
+                            <Text style={{color:"#878787", fontSize:11}}>Remove from Itinerary</Text>
+                          </View>                          
+                      </TouchableOpacity>
+                    :
+                      <TouchableOpacity style={[styles.button, {borderColor:"#d51930"}]} onPress={()=>{
+                            this.changeScheduleStatus();
+                        }}
+                        >                          
+                        <View style={{flexDirection:'row'}}>
+                        <Image style={{width:15, height:15}} source={require("../assets/add-to-itinerary.png")}/>
+                          <Text style={{color:"#d51930", fontSize:11}}>Add to Itinerary</Text>
+                        </View>
+                                
+                      </TouchableOpacity>
+                  }
+                </View>
+                <View style={{width:width / 2 - 25, alignItems:'center'}}>
+                  <TouchableOpacity style={[styles.button, {borderColor:"#f6af39"}]} onPress={()=>{
+                      this.handleClick(this.props.event.ticket_link);
+                    }}>
+                    <View style={{flexDirection:'row'}}>
+                      <Image style={{width:15, height:15}} source={require("../assets/buy-tickets.png")}/>
+                      <Text style={{color:"#f6af39", fontSize:11}}>Buy Tickets</Text>
+                    </View>           
+                  </TouchableOpacity>
+                </View>
+              </View>
+            : 
+              <View style={{alignItems:'center'}}>
+              {
+                this.state.isInItinerary ? 
+                  <TouchableOpacity style={[styles.button, {borderColor:"#878787"}]} onPress={()=>{
+                      this.changeScheduleStatus();
+                    }}
+                    >                        
+                      <View style={{flexDirection:'row'}}>
+                        <Image style={{width:15, height:15}} source={require("../assets/remove-from-itinerary.png")}/>
+                        <Text style={{color:"#878787", fontSize:11}}>Remove from Itinerary</Text>
+                      </View>                          
+                  </TouchableOpacity>
+                :
+                  <TouchableOpacity style={[styles.button, {borderColor:"#d51930"}]} onPress={()=>{
+                        this.changeScheduleStatus();
+                    }}
+                    >                          
+                    <View style={{flexDirection:'row'}}>
+                    <Image style={{width:15, height:15}} source={require("../assets/add-to-itinerary.png")}/>
+                      <Text style={{color:"#d51930", fontSize:11}}>Add to Itinerary</Text>
+                    </View>
+                            
+                  </TouchableOpacity>
+              }
+              </View>
+          }
+          
+          <View style={{paddingTop:20}} />
+          <HTML html={description}/>
         </View>
       )
     }
