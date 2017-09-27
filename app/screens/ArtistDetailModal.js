@@ -68,6 +68,7 @@ const styles = StyleSheet.create ({
     alignItems:'center',
     backgroundColor: 'white',
     marginTop: 50,
+    marginBottom: 50,
     padding: 22,
     borderRadius: 5
   }
