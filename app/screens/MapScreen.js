@@ -85,7 +85,7 @@ var MapScreen = React.createClass({
         longitudeDelta: LONGITUDE_DELTA
       }
 
-      this.onRegionChange(newRegion);
+      // this.onRegionChange(newRegion);
     });
   },
 
