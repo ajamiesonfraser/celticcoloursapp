@@ -38,8 +38,9 @@ class BottomBar extends Component {
     // console.log('trying something')
     var navigationView = (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
-        <View style={{alignItems:'center'}}>
-          <Image style={{width:50, height:50}} source={require('../assets/celtic-colours-2017-logo.png')}/>
+        <View style={{paddingTop:20}} />
+        <View style={{alignItems:'center', paddingBottom:20}}>
+          <Image style={{width:180, height:135}} source={require('../assets/celtic-colours-2017-logo.png')}/>
         </View>
         {ROUTES.map((el, i) => {
           return (

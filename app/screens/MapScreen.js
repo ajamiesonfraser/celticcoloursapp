@@ -51,8 +51,8 @@ var MapScreen = React.createClass({
       })
 
       totalMarkers.push.apply(totalMarkers, wMarkers);
-
-      const markers = totalMarkers;     
+      
+      const markers = totalMarkers;
 
       this.setState({
         totalMarkers,
@@ -99,7 +99,8 @@ var MapScreen = React.createClass({
   },
 
   render() {
-
+        
+    
     return (
       <Screen
         navTitle='Discover Nearby'
@@ -124,14 +125,14 @@ var MapScreen = React.createClass({
             <MapView.Marker
               key={i} 
               coordinate = {{
-                latitude: marker.markerData.venue[0].latitude,
-                longitude: marker.markerData.venue[0].longitude
+                latitude: marker.markerData.venue[0].latitude == "" ? 0 : marker.markerData.venue[0].latitude,
+                longitude: marker.markerData.venue[0].longitude == "" ? 0 : marker.markerData.venue[0].longitude
               }}
               flat = {true}
               title={marker.markerData.name}
               description={marker.markerData.venue_name}
               image={marker.image}
-            >
+              >
               <MapView.Callout
                 onPress={(event) => this._navigateToEventDetail(marker)}
                 style={styles.callout}>
