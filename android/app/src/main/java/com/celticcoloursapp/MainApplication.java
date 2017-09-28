@@ -12,6 +12,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
 import com.chirag.RNMail.*;
+import com.github.wumke.RNImmediatePhoneCall.RNImmediatePhoneCallPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
           new MapsPackage(),
           new VectorIconsPackage(),
-          new RNMail()
+          new RNMail(),
+          new RNImmediatePhoneCallPackage()
       );
     }
   };

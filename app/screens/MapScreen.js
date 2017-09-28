@@ -83,7 +83,7 @@ var MapScreen = React.createClass({
       },
       totalMarkers:[],
       markers: [],
-      dateFilter: 'all',
+      dateFilter: 'All Dates',
     };
   },
 
@@ -160,7 +160,7 @@ var MapScreen = React.createClass({
           <View style={{flex: 1,flexDirection: 'row',justifyContent: 'space-between'}}/>
             <ModalDropdown
               defaultIndex={0}
-              options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
+              options={['All Dates'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
               style={styles.filterButtonContainerStyle}
               dropdownStyle={{
                 height: (33 + StyleSheet.hairlineWidth) * (EVENT_DATES.length + 2)
@@ -169,7 +169,7 @@ var MapScreen = React.createClass({
               textStyle={styles.filterButton}
               onSelect={(idx, value) => {
                 this.setState({
-                  dateFilter: value != 'all'
+                  dateFilter: value != 'All Dates'
                     ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
                     : value
                 }, () => {
@@ -192,7 +192,7 @@ var MapScreen = React.createClass({
   },
 
   _applyFilters(){
-    const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
+    const filteredByDate = (this.state.dateFilter != 'All Dates' && this.state.dateFilter != null)
     ? this.state.markers.filter(x => 
       this.state.dateFilter == x.markerData.date
     )
@@ -205,7 +205,7 @@ var MapScreen = React.createClass({
 
   renderDateText(){
     let text = "";
-    if(this.state.dateFilter == 'all'){
+    if(this.state.dateFilter == 'All Dates'){
       text = this.state.dateFilter;
     }else{
       text = stringDateToFormattedDate(this.state.dateFilter, false);

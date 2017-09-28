@@ -20,6 +20,7 @@
     "react-native-deprecated-custom-components": "^0.1.1",
     "react-native-htmlview": "^0.12.0",
     "react-native-image-progress": "^1.0.1",
+    "react-native-immediate-phone-call": "^1.0.0",
     "react-native-loading-view": "^1.0.0",
     "react-native-mail": "^3.0.4",
     "react-native-maps": "0.15.1",
@@ -30,7 +31,8 @@
     "react-native-progress": "^3.4.0",
     "react-native-render-html": "^2.1.0",
     "react-native-side-menu": "^0.20.1",
-    "react-native-vector-icons": "^4.0.0"
+    "react-native-vector-icons": "^4.0.0",
+    "supercluster": "^3.0.0"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",

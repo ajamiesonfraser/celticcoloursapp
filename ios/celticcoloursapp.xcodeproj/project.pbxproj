@@ -41,6 +41,7 @@
 		7CB2A4A2C404426FA0975391 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61C78401E41E40169FDA1952 /* Foundation.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		832F863B36034C21A398D3B5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 774BA962525F41FBB6DB1F1D /* Zocial.ttf */; };
+		842914451F7D3DEB00DD916B /* libRNImmediatePhoneCall.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 842914441F7D3DDD00DD916B /* libRNImmediatePhoneCall.a */; };
 		849777FD1F7AB4DA00FDA455 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 845E9A2D1F714FF1003BDEBD /* libAirMaps.a */; };
 		849777FE1F7AB4DA00FDA455 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 849777E11F7AB4C100FDA455 /* libART.a */; };
 		849777FF1F7AB4DA00FDA455 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A97C271E295A1100E4A6EC /* libRNVectorIcons.a */; };
@@ -244,6 +245,13 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		842914431F7D3DDD00DD916B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8429143F1F7D3DDB00DD916B /* RNImmediatePhoneCall.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 15209BEF1D250F63000D0F44;
+			remoteInfo = RNImmediatePhoneCall;
+		};
 		845E9A2C1F714FF1003BDEBD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2783F8266AB541CFB19B4ED0 /* AirMaps.xcodeproj */;
@@ -313,6 +321,7 @@
 		774BA962525F41FBB6DB1F1D /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		8429143F1F7D3DDB00DD916B /* RNImmediatePhoneCall.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImmediatePhoneCall.xcodeproj; path = "../node_modules/react-native-immediate-phone-call/ios/RNImmediatePhoneCall.xcodeproj"; sourceTree = "<group>"; };
 		849777DB1F7AB4C000FDA455 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		849778321F7ADE5000FDA455 /* RNMail.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNMail.xcodeproj; path = "../node_modules/react-native-mail/RNMail.xcodeproj"; sourceTree = "<group>"; };
 		A809B3F81E57339500E5050C /* holangels.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = holangels.gpx; path = ../holangels.gpx; sourceTree = "<group>"; };
@@ -336,6 +345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				842914451F7D3DEB00DD916B /* libRNImmediatePhoneCall.a in Frameworks */,
 				8497783B1F7ADE6200FDA455 /* libRNMail.a in Frameworks */,
 				849777FD1F7AB4DA00FDA455 /* libAirMaps.a in Frameworks */,
 				849777FE1F7AB4DA00FDA455 /* libART.a in Frameworks */,
@@ -523,6 +533,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				8429143F1F7D3DDB00DD916B /* RNImmediatePhoneCall.xcodeproj */,
 				849778321F7ADE5000FDA455 /* RNMail.xcodeproj */,
 				849777DB1F7AB4C000FDA455 /* ART.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -572,6 +583,14 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* celticcoloursapp.app */,
 				00E356EE1AD99517003FC87E /* celticcoloursappTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		842914401F7D3DDB00DD916B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				842914441F7D3DDD00DD916B /* libRNImmediatePhoneCall.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -712,7 +731,8 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 4WXZ25X9U9;
+						DevelopmentTeam = NM82P768VX;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -779,6 +799,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = 842914401F7D3DDB00DD916B /* Products */;
+					ProjectRef = 8429143F1F7D3DDB00DD916B /* RNImmediatePhoneCall.xcodeproj */;
 				},
 				{
 					ProductGroup = 849778331F7ADE5000FDA455 /* Products */;
@@ -973,6 +997,13 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		842914441F7D3DDD00DD916B /* libRNImmediatePhoneCall.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNImmediatePhoneCall.a;
+			remoteRef = 842914431F7D3DDD00DD916B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		845E9A2D1F714FF1003BDEBD /* libAirMaps.a */ = {
@@ -1195,17 +1226,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 4WXZ25X9U9;
+				DEVELOPMENT_TEAM = NM82P768VX;
 				INFOPLIST_FILE = celticcoloursapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mensa.celticcoloursapp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.celtic-colours.celticcolours";
 				PRODUCT_NAME = celticcoloursapp;
+				PROVISIONING_PROFILE = "84dbe468-c4ae-457a-bb74-905496a2200a";
+				PROVISIONING_PROFILE_SPECIFIER = celtic_colours_dev;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1214,16 +1248,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 4WXZ25X9U9;
+				DEVELOPMENT_TEAM = NM82P768VX;
 				INFOPLIST_FILE = celticcoloursapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_LDFLAGS[arch=*]" = (
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mensa.celticcoloursapp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.celtic-colours.celticcolours";
 				PRODUCT_NAME = celticcoloursapp;
+				PROVISIONING_PROFILE = "84dbe468-c4ae-457a-bb74-905496a2200a";
+				PROVISIONING_PROFILE_SPECIFIER = celtic_colours_dev;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

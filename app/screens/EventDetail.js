@@ -63,8 +63,7 @@ class EventDetail extends Component {
     });
   };
 
-  renderDetails() {
-    
+  renderDetails() {    
 
     if (this.props.showDetails) {
       let len = this.props.event.description_public.indexOf('Nearby Meal:');
@@ -74,7 +73,8 @@ class EventDetail extends Component {
         description = this.props.event.description_public.replace(subStr, "");
       }else{
         description = this.props.event.description_public;
-      }      
+      }   
+
       return (
         <View>          
           <View style={{alignItems:'center'}}>
@@ -88,7 +88,7 @@ class EventDetail extends Component {
           {
             this.props.event.ticket_link != "" ?
               <View style={{flexDirection:'row'}}>
-                <View style={{width:width / 2 - 20, alignItems:'center'}}>
+                <View style={{width:width / 2 - 25, alignItems:'center'}}>
                   {
                     this.state.isInItinerary ? 
                       <TouchableOpacity style={[styles.button, {borderColor:"#878787"}]} onPress={()=>{
@@ -97,7 +97,7 @@ class EventDetail extends Component {
                         >                        
                           <View style={{flexDirection:'row'}}>
                             <Image style={{width:15, height:15}} source={require("../assets/remove-from-itinerary.png")}/>
-                            <Text style={{color:"#878787", fontSize:11}}>Remove from Itinerary</Text>
+                            <Text style={{paddingLeft:3, color:"#878787", fontSize:11}}>Remove from Itinerary</Text>
                           </View>                          
                       </TouchableOpacity>
                     :
@@ -106,8 +106,8 @@ class EventDetail extends Component {
                         }}
                         >                          
                         <View style={{flexDirection:'row'}}>
-                        <Image style={{width:15, height:15}} source={require("../assets/add-to-itinerary.png")}/>
-                          <Text style={{color:"#d51930", fontSize:11}}>Add to Itinerary</Text>
+                        <Image style={{ width:15, height:15}} source={require("../assets/add-to-itinerary.png")}/>
+                          <Text style={{paddingLeft:8, color:"#d51930", fontSize:11}}>Add to Itinerary</Text>
                         </View>
                                 
                       </TouchableOpacity>
@@ -119,7 +119,7 @@ class EventDetail extends Component {
                     }}>
                     <View style={{flexDirection:'row'}}>
                       <Image style={{width:15, height:15}} source={require("../assets/buy-tickets.png")}/>
-                      <Text style={{color:"#f6af39", fontSize:11}}>Buy Tickets</Text>
+                      <Text style={{paddingLeft:10, color:"#f6af39", fontSize:11}}>Buy Tickets</Text>
                     </View>           
                   </TouchableOpacity>
                 </View>
@@ -134,7 +134,7 @@ class EventDetail extends Component {
                     >                        
                       <View style={{flexDirection:'row'}}>
                         <Image style={{width:15, height:15}} source={require("../assets/remove-from-itinerary.png")}/>
-                        <Text style={{color:"#878787", fontSize:11}}>Remove from Itinerary</Text>
+                        <Text style={{paddingLeft:3, color:"#878787", fontSize:11}}>Remove from Itinerary</Text>
                       </View>                          
                   </TouchableOpacity>
                 :
@@ -144,7 +144,7 @@ class EventDetail extends Component {
                     >                          
                     <View style={{flexDirection:'row'}}>
                     <Image style={{width:15, height:15}} source={require("../assets/add-to-itinerary.png")}/>
-                      <Text style={{color:"#d51930", fontSize:11}}>Add to Itinerary</Text>
+                      <Text style={{paddingLeft:8,color:"#d51930", fontSize:11}}>Add to Itinerary</Text>
                     </View>
                             
                   </TouchableOpacity>
@@ -241,7 +241,7 @@ const styles = StyleSheet.create ({
   },
   button: {
     padding: 10,
-    width: width / 2 - 50,
+    width: width / 2 - 30,
     borderColor:"#0076FF",
     borderWidth:1,
     borderRadius:20,

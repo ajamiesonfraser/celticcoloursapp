@@ -1,6 +1,7 @@
 import React, { Component} from 'react'
 import {Linking, StyleSheet, View, Text, TouchableOpacity, Image, TextInput, ScrollView, Dimensions } from 'react-native'
-import call from 'react-native-phone-call'
+// import call from 'react-native-phone-call'
+import RNImmediatePhoneCall from 'react-native-immediate-phone-call'
 var Mailer = require('NativeModules').RNMail
 import ViewContainer from '../components/ViewContainer'
 
@@ -21,11 +22,12 @@ class ContactScreen extends Component {
     }
 
     callPhone(number){
-        const args = {
-            number:number,
-            prompt:false
-        }
-        call(args).catch(console.error);
+        // const args = {
+        //     number:number,
+        //     prompt:false
+        // }
+        // call(args).catch(console.error);
+        RNImmediatePhoneCall.immediatePhoneCall(number)
     }
 
     sendMail(mail, name, message){
@@ -120,9 +122,9 @@ class ContactScreen extends Component {
                         <Text>Email</Text>
                         <View style={{paddingTop:10}} />
                         <TouchableOpacity onPress={()=>{
-                            this.sendMail('info@celtic-colours.com', '', '')
+                            this.sendMail('app@celtic-colours.com', '', '')
                             }}>
-                            <Text style={{color:"#0076FF"}}>info@celtic-colours.com</Text>
+                            <Text style={{color:"#0076FF"}}>app@celtic-colours.com</Text>
                         </TouchableOpacity>                        
                     </View>
                 </View>

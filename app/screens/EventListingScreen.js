@@ -96,8 +96,8 @@ class EventListingScreen extends Component {
 
       
       typeFilter: FilterTypes.ALL,
-      dateFilter: 'all',
-      regionFilter: 'all',
+      dateFilter: 'All Dates',
+      regionFilter: 'All Regions',
 
       showingTypeFilterModal: false,
       showingDateFilterModal: false,
@@ -117,7 +117,7 @@ class EventListingScreen extends Component {
         return { urlData: { id: workshopId, ...workshops[workshopId] }, type: 'workshop' }
       }))
 
-      let regionFilterListData = ['all'];
+      let regionFilterListData = ['All Regions'];
       for(var i = 0 ; i < listData.length ; i++){
         let customFields = listData[i].urlData['custom-fields'][0];
         let customField = customFields['custom-field'][0]
@@ -182,13 +182,13 @@ class EventListingScreen extends Component {
 
     // console.log('this.state.dateFilter : ', this.state.dateFilter)
 
-    const filteredByDate = (this.state.dateFilter != 'all' && this.state.dateFilter != null)
+    const filteredByDate = (this.state.dateFilter != 'All Dates' && this.state.dateFilter != null)
       ? filteredByType.filter(x => this.state.dateFilter == x.urlData.date)
       : filteredByType
 
     
      let filterdByRegion = [];
-    if(this.state.regionFilter == 'all'){
+    if(this.state.regionFilter == 'All Regions'){
       filterdByRegion = filteredByDate;
     }else{
       for(var i = 0 ; i < filteredByDate.length ; i++){
@@ -283,7 +283,7 @@ class EventListingScreen extends Component {
     let text = "";
     switch (this.state.typeFilter) {
       case FilterTypes.ALL:
-        text = "Concerts & Events";
+        text = "All Events";
         break;
       case FilterTypes.CONCERTS:
         text = 'Official Concerts';
@@ -300,7 +300,7 @@ class EventListingScreen extends Component {
 
   renderDateText(){
     let text = "";
-    if(this.state.dateFilter == 'all'){
+    if(this.state.dateFilter == 'All Dates'){
       text = this.state.dateFilter;
     }else{
       text = stringDateToFormattedDate(this.state.dateFilter, false);
@@ -318,7 +318,7 @@ class EventListingScreen extends Component {
 
             <ModalDropdown
               defaultIndex={0}
-              options={['Concerts & Events', 'Official Concerts', 'Community Events']}
+              options={['All Events', 'Official Concerts', 'Community Events']}
               style={styles.filterButtonContainerStyle}
               textStyle={styles.filterButton}
               dropdownStyle={{
@@ -329,7 +329,7 @@ class EventListingScreen extends Component {
                 let typeValue;
 
                 switch (value) {
-                  case 'Concerts & Events':
+                  case 'All Events':
                     typeValue = FilterTypes.ALL;
                     break;
                   case 'Official Concerts':
@@ -362,12 +362,12 @@ class EventListingScreen extends Component {
                 height: (33 + StyleSheet.hairlineWidth) * (EVENT_DATES.length + 2)
                 }                
               }
-              options={['all'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
+              options={['All Dates'].concat(EVENT_DATES.map(x => stringDateToFormattedDate(x, false)))}
               style={styles.filterButtonContainerStyle}
               textStyle={styles.filterButton}
               onSelect={(idx, value) => {
                 this.setState({
-                  dateFilter: value != 'all'
+                  dateFilter: value != 'All Dates'
                     ? EVENT_DATES[idx - 1] // -1 is for 'all' option being first
                     : value
                 }, () => {
@@ -498,7 +498,7 @@ class EventListingScreen extends Component {
     let filterType = "";
     
     if(this.state.typeFilter == FilterTypes.ALL){
-      filterType = "Concerts & Events";
+      filterType = "All Events";
     }else if(this.state.typeFilter == FilterTypes.CONCERTS){
       filterType = "Official Concerts";
     }else if(this.state.typeFilter == FilterTypes.WORKSHOPS){
