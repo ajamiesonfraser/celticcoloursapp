@@ -11,14 +11,16 @@ import Screen from './Screen'
 import ViewContainer from '../components/ViewContainer'
 import Client from '../services/Client'
 
+import Map from '../components/Map';
+import Points from '../assets/Points.json';
+
 var { width, height } = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
 
 const LATITUDE = 46.139907;
 const LONGITUDE = -60.195829;
 
-const LATITUDE_DELTA = 0.03;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const LATITUDE_DELTA = 0.0922 / 1.2;
+const LONGITUDE_DELTA = 0.0421 / 1.2;
 
 const EVENT_DATES = [
   '2017-10-06',
@@ -93,20 +95,20 @@ var MapScreen = React.createClass({
       let totalMarkers = Object.keys(data.shows).map((key) => {
         return {
           markerData: Client.getShowById(key),
-          image: require ('../assets/pin1.png')
+          type: "shows"
         }
       })
 
       const wMarkers = Object.keys(data.workshops).map((key) => {
         return {
           markerData: Client.getWorkshopById(key),
-          image: require ('../assets/pin2.png')
+          type: "workshops"
         }
       })
 
       totalMarkers.push.apply(totalMarkers, wMarkers);
       
-      const markers = totalMarkers;
+      const markers = this.changeMarkerTypes(totalMarkers);
 
       this.setState({
         totalMarkers,
@@ -151,6 +153,25 @@ var MapScreen = React.createClass({
     this.setState({ region });
   },
 
+  changeMarkerTypes(markers){
+    const changedMarkers = markers.map((marker, i)=>{
+      return{
+        "idx":i,
+        "type": "Feature",
+        "properties": {
+          "featureclass": "Marker"
+        },
+        "markerActivity":false,
+        "data":marker,
+        "geometry": {
+          "type": "Point",
+          "coordinates": [marker.markerData.venue[0].longitude, marker.markerData.venue[0].latitude]
+        }
+      }
+    });
+    return changedMarkers;
+  },
+
   renderFilterBar() {
     return (
       <View style={{height: 40}}>
@@ -193,13 +214,15 @@ var MapScreen = React.createClass({
 
   _applyFilters(){
     const filteredByDate = (this.state.dateFilter != 'All Dates' && this.state.dateFilter != null)
-    ? this.state.markers.filter(x => 
+    ? this.state.totalMarkers.filter(x => 
       this.state.dateFilter == x.markerData.date
     )
-    : this.state.markers
+    : this.state.totalMarkers
+
+    const markers = this.changeMarkerTypes(filteredByDate);
 
     this.setState({
-      markers:filteredByDate
+      markers
     })
   },
 
@@ -221,13 +244,13 @@ var MapScreen = React.createClass({
     return (
       <ViewContainer style={{backgroundColor:'white'}}>  
         {this.renderFilterBar()}
-        <MapView
+        {/* <MapView
           ref="map"
           style={styles.map}
           region={this.state.region}
           onRegionChange={this.onRegionChange}
           showsUserLocation={true}
-        >
+          >
           {this.state.markers.map((marker,i) => (
             <MapView.Marker
               key={i} 
@@ -256,8 +279,11 @@ var MapScreen = React.createClass({
               </MapView.Callout>
             </MapView.Marker>
           ))}          
-        </MapView>
-      
+        </MapView> */}
+        <Map
+          mapPoints={this.state.markers}   
+          region={this.state.region}       
+        />
       </ViewContainer>
     );
   },  
@@ -273,74 +299,7 @@ var MapScreen = React.createClass({
 
 });
 
-var styles = StyleSheet.create({
-  callout:{
-    padding: 15,
-    flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    height: 230,
-    width: 210
-  },
-  calloutView1: {
-    alignItems: 'center',
-    marginBottom: 10
-  },
-  calloutView2: {
-    alignItems: 'center'
-  },
-  calloutPhoto:{
-    width: 150,
-    height: 75,
-    borderRadius: 5
-  },
-  calloutTitle:{
-    fontSize:15,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 5
-  },
-  calloutVenue:{
-    fontSize:13,
-    fontWeight: '100',
-    textAlign: 'center',
-    marginBottom: 3,
-    color: '#0076FF'
-  },
-  calloutDate:{
-    marginTop:5,
-    fontWeight: 'bold',
-    fontSize: 11
-  },
-  calloutTime:{
-    color:'#e95644',
-    fontSize: 13
-  },
-  calloutCommunity:{
-    fontSize:11
-  },
-  container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  map: {
-    position: 'absolute',
-    top: 40,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
+var styles = StyleSheet.create({      
   filterButtonContainerStyle: {
     flex: 1,
     flexDirection: 'row',
