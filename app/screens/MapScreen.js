@@ -243,43 +243,7 @@ var MapScreen = React.createClass({
     
     return (
       <ViewContainer style={{backgroundColor:'white'}}>  
-        {this.renderFilterBar()}
-        {/* <MapView
-          ref="map"
-          style={styles.map}
-          region={this.state.region}
-          onRegionChange={this.onRegionChange}
-          showsUserLocation={true}
-          >
-          {this.state.markers.map((marker,i) => (
-            <MapView.Marker
-              key={i} 
-              coordinate = {{
-                latitude: marker.markerData.venue[0].latitude == "" ? 0 : marker.markerData.venue[0].latitude,
-                longitude: marker.markerData.venue[0].longitude == "" ? 0 : marker.markerData.venue[0].longitude
-              }}
-              flat = {true}
-              title={marker.markerData.name}
-              description={marker.markerData.venue_name}
-              image={marker.image}
-              >
-              <MapView.Callout
-                onPress={(event) => this._navigateToEventDetail(marker)}
-                style={styles.callout}>
-                <View style={styles.calloutView1}>
-                  <Image style={styles.calloutPhoto} source={{uri: marker.markerData.poster_url}}/>
-                </View>
-                <View style={styles.calloutView2}>
-                  <Text style={styles.calloutTitle}>{marker.markerData.name}</Text>
-                  <Text style={styles.calloutVenue}>{marker.markerData.venue_name}</Text>
-                  <Text style={styles.calloutCommunity}>{marker.markerData.venue[0].community}</Text>
-                  <Text style={styles.calloutDate}>{marker.markerData.formatted_date}</Text>
-                  <Text style={styles.calloutTime}>{marker.markerData.formatted_start_time} - {marker.markerData.formatted_end_time}</Text>
-                </View>
-              </MapView.Callout>
-            </MapView.Marker>
-          ))}          
-        </MapView> */}
+        {this.renderFilterBar()}      
         <Map
           mapPoints={this.state.markers}   
           region={this.state.region}       

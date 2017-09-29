@@ -11,8 +11,8 @@ class Navbar extends Component {
 
 	render (){
 		return (
-      <View>
-        <NavigationBar
+      <View >
+        <NavigationBar 
           title={{
             title: this.props.navTitle,
             style: {

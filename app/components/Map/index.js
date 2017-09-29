@@ -26,6 +26,7 @@ const initRegion = {
   latitudeDelta: 0.0922/1.2,
   longitudeDelta: 0.0421/1.2,
 }
+const offset_map_small = 0.0001;
 
 var styles = StyleSheet.create({
   callout:{
@@ -241,6 +242,43 @@ export default class Map extends React.Component {
    
   }
 
+  onClusterPress(el) {
+      //  Calculer l'angle
+      const { region } = this.state;
+      const angle = region.longitudeDelta || 0.0421/1.2;
+      const result =  Math.round(Math.log(360 / angle) / Math.LN2);
+      //  Chercher les enfants
+      const markers = this.state.clusters["places"].getChildren(el.properties.cluster_id, result);
+      const newRegion = [];
+      const smallZoom = 0.05;
+      //  Remap
+      markers.map(function (element) {
+        newRegion.push({
+          latitude: offset_map_small + element.geometry.coordinates[1] - region.latitudeDelta * smallZoom,
+          longitude: offset_map_small + element.geometry.coordinates[0] - region.longitudeDelta * smallZoom,
+        });
+
+        newRegion.push({
+          latitude: offset_map_small + element.geometry.coordinates[1],
+          longitude: offset_map_small + element.geometry.coordinates[0],
+        });
+
+        newRegion.push({
+          latitude: offset_map_small + element.geometry.coordinates[1] + region.latitudeDelta * smallZoom,
+          longitude: offset_map_small + element.geometry.coordinates[0] + region.longitudeDelta * smallZoom,
+        });
+      });   
+
+      this.goToRegion(newRegion, 100)
+  }
+
+  goToRegion(region, padding) {
+    this.map.fitToCoordinates(region, {
+      edgePadding: { top: padding, right: padding, bottom: padding, left: padding },
+      animated: true,
+    });
+  }
+
   onChangeRegionComplete(region) {
     this.setRegion(region);
     this.setState({
@@ -306,6 +344,7 @@ export default class Map extends React.Component {
               this.setState({
                 curMapPoints: pointList
               }, ()=>{this.createClusters()})
+              this.onClusterPress(element)
             }
                
           }}
