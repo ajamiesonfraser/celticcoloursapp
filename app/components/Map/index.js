@@ -326,6 +326,9 @@ export default class Map extends React.Component {
       const markerImage = (element.data && element.data.type == "shows") ? ImageMarker1 : ImageMarker2
       return(
         <MapView.Marker
+          onLayout={(ev)=>{
+            console.log(ev.nativeEvent.layout + " : " + i)
+          }}
           key={i}
           coordinate={{
             latitude: element.geometry.coordinates[1],
@@ -334,7 +337,7 @@ export default class Map extends React.Component {
           flat={true}
           onPress={ ()=>{ 
             if(category != 'Cluster'){
-              console.log("marker click")
+              
               this.onMarkerPress(element.idx)
             }else{
               let pointList = this.state.curMapPoints;
