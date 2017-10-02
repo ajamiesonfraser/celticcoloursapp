@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Button
+  Button,
+  findNodeHandle
 } from 'react-native';
 
 import Image from 'react-native-image-progress'
@@ -14,11 +15,11 @@ import MapView from 'react-native-maps'
 import supercluster from 'supercluster'
 import isEqual from 'lodash.isequal'
 
-import Marker from './Marker';
-
 import ImageCluster from '../../assets/marker.png'
 import ImageMarker1 from '../../assets/pin1.png'
 import ImageMarker2 from '../../assets/pin2.png'
+
+const RCTUIManager = require('NativeModules').UIManager;
 
 const initRegion = {
   latitude: 46.139907,
@@ -31,10 +32,9 @@ const offset_map_small = 0.0001;
 var styles = StyleSheet.create({
   callout:{
     position:'absolute',
-    top:-230,
-    left:-85,
+    top:0,
+    left:0,
     padding: 15,
-    flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
     height: 230,
@@ -43,7 +43,7 @@ var styles = StyleSheet.create({
     borderColor:'#000',
     borderWidth:0.5,
     borderRadius:10,
-    zIndex:50
+    zIndex:1
   },
   calloutView1: {
     alignItems: 'center',
@@ -83,15 +83,14 @@ var styles = StyleSheet.create({
     fontSize:11
   },
   container: {
-    position: 'absolute',
+    flex:1,
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    bottom: 0,    
   },
   map: {
+    // position:'absolute',
     flex:1,
     top: 0,
     left: 0,
@@ -133,7 +132,13 @@ export default class Map extends React.Component {
       region: initRegion,
       mapPoints:[],
       curMapPoints:[],
+      selMarkerPos:{
+        x:0,
+        y:0
+      }
     }
+
+    // this._nodes = new Map();
   }
 
 
@@ -169,7 +174,6 @@ export default class Map extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(!isEqual(this.state.mapPoints, nextProps.mapPoints)){
-      console.log("received")
       this.setState({
         mapPoints: nextProps.mapPoints,
         curMapPoints: nextProps.mapPoints
@@ -224,15 +228,30 @@ export default class Map extends React.Component {
     return [];
   }
 
-  onMarkerPress(idx){
+  getSelMarkerPos(element){
+    RCTUIManager.measure(findNodeHandle(this.refs['marker' + element.idx]), (x, y, width, height, pageX, pageY) => {
+      this.setState({selMarkerPos:{
+        x:x,
+        y:y
+      }})
+    });
+  }
+
+  onMarkerPress(element){
+    let idx = element.idx
+    let selMarkerPos = {};
+    
     let pointList = this.state.curMapPoints;
     for(var i = 0 ; i < pointList.length ; i++){
       pointList[i].markerActivity = false;
     }
     pointList[idx].markerActivity = true;
     this.setState({
-      curMapPoints: pointList
-    }, ()=>{this.createClusters()})
+      curMapPoints: pointList,
+    }, ()=>{
+      this.createClusters() 
+      this.getSelMarkerPos(element)
+    })
   }
 
   onCallOutPress(idx){
@@ -290,35 +309,45 @@ export default class Map extends React.Component {
     this.setState({
       moving: true,
     });
-  }
+  }  
 
-  drawCallOut(element){
-    if(element.markerActivity == true){
+  drawCallOut(markers){
+    let element = undefined;
+    for(var i = 0 ; i < markers.length ; i++){
+      if(markers[i].markerActivity == true){
+        element = markers[i];
+        break;
+      }
+    }
+   
+    if(element != undefined){
+      this.getSelMarkerPos(element)
+      callOutStyle = {top:this.state.selMarkerPos.y - 230, left:this.state.selMarkerPos.x - 85};
       return (
-          <View style={styles.callout}>         
-            <TouchableOpacity onPress={()=>{
-              console.log("call out click")
-            }}>   
-              <View style={styles.calloutView1}>
-                    <Image style={styles.calloutPhoto} source={{uri: element.data.markerData.poster_url}}/>
-                  </View>
-              <View style={styles.calloutView2}>
-                <Text style={styles.calloutTitle}>{element.data.markerData.name}</Text>
-                <Text style={styles.calloutVenue}>{element.data.markerData.venue_name}</Text>
-                <Text style={styles.calloutCommunity}>{element.data.markerData.venue[0].community}</Text>
-                <Text style={styles.calloutDate}>{element.data.markerData.formatted_date}</Text>
-                <Text style={styles.calloutTime}>{element.data.markerData.formatted_start_time} - {element.data.markerData.formatted_end_time}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={[styles.callout, {...callOutStyle}]} onPress={()=>{
+            console.log("call out click")
+          }}>   
+            <View style={styles.calloutView1}>
+                  <Image style={styles.calloutPhoto} source={{uri: element.data.markerData.poster_url}}/>
+                </View>
+            <View style={styles.calloutView2}>
+              <Text style={styles.calloutTitle}>{element.data.markerData.name}</Text>
+              <Text style={styles.calloutVenue}>{element.data.markerData.venue_name}</Text>
+              <Text style={styles.calloutCommunity}>{element.data.markerData.venue[0].community}</Text>
+              <Text style={styles.calloutDate}>{element.data.markerData.formatted_date}</Text>
+              <Text style={styles.calloutTime}>{element.data.markerData.formatted_start_time} - {element.data.markerData.formatted_end_time}</Text>
+            </View>
+          </TouchableOpacity>
       )
+
+      
     }    
 
     return null
   }
 
-  renderMarkers(){
-    let markers = this.createMarkersForRegion_Places();
+  renderMarkers(markers){
+    
     const { clusters, region } = this.state;
     let markerArray = markers.map((element, i) => {
       const category = element.properties.featureclass || "Cluster";
@@ -326,31 +355,29 @@ export default class Map extends React.Component {
       const markerImage = (element.data && element.data.type == "shows") ? ImageMarker1 : ImageMarker2
       return(
         <MapView.Marker
-          onLayout={(ev)=>{
-            console.log(ev.nativeEvent.layout + " : " + i)
-          }}
+          ref={"marker" + element.idx}
           key={i}
           coordinate={{
             latitude: element.geometry.coordinates[1],
             longitude: element.geometry.coordinates[0]
           }}
           flat={true}
-          onPress={ ()=>{ 
+          onPress={ (e)=>{ 
             if(category != 'Cluster'){
-              
-              this.onMarkerPress(element.idx)
+              this.onMarkerPress(element)
             }else{
               let pointList = this.state.curMapPoints;
               for(var i = 0 ; i < pointList.length ; i++){
                 pointList[i].markerActivity = false;
               }
               this.setState({
-                curMapPoints: pointList
+                curMapPoints: pointList,
+                selMarkerPos:{x:0, y:0}
               }, ()=>{this.createClusters()})
               this.onClusterPress(element)
             }
                
-          }}
+          }}          
           >
           {
             category == "Cluster" ? 
@@ -364,7 +391,7 @@ export default class Map extends React.Component {
                 <Text style={styles.textStyle}>{text}</Text>
               </View>
             :
-              this.drawCallOut(element)
+              null
               
           }  
         </MapView.Marker>
@@ -374,29 +401,35 @@ export default class Map extends React.Component {
   }
 
   render() {
+    let markers = this.createMarkersForRegion_Places();
+
+
     return (
-      <MapView
-          ref={ref => { this.map = ref; }} 
-          initialRegion={this.props.region}
-          onRegionChange={this.onChangeRegion.bind(this)}
-          onRegionChangeComplete={this.onChangeRegionComplete.bind(this)}
-          showsUserLocation={true}
-          style={styles.map}          
-          onPress={(e)=>{
-            if(!e.nativeEvent.action || (e.nativeEvent.action && e.nativeEvent.action != "marker-press")){
-              let pointList = this.state.curMapPoints;
-              for(var i = 0 ; i < pointList.length ; i++){
-                pointList[i].markerActivity = false;
-              }
-              this.setState({
-                curMapPoints: pointList
-              }, ()=>{this.createClusters()})
-            }    
-          }}
-         >
-          { this.renderMarkers() }
-          {/* {this.createMarkersForRegion_Places()} */}
-      </MapView>
+      <View style={styles.container}  >
+        <MapView
+            ref={ref => { this.map = ref; }} 
+            initialRegion={this.props.region}
+            onRegionChange={this.onChangeRegion.bind(this)}
+            onRegionChangeComplete={this.onChangeRegionComplete.bind(this)}
+            showsUserLocation={true}
+            style={styles.map}          
+            onPress={(e)=>{
+              if(!e.nativeEvent.action || (e.nativeEvent.action && e.nativeEvent.action != "marker-press")){
+                let pointList = this.state.curMapPoints;
+                for(var i = 0 ; i < pointList.length ; i++){
+                  pointList[i].markerActivity = false;
+                }
+                this.setState({
+                  curMapPoints: pointList,
+                  selMarkerPos:{x:0, y:0}
+                }, ()=>{this.createClusters()})
+              }    
+            }}
+          >
+            { this.renderMarkers(markers) }         
+        </MapView>
+        {this.drawCallOut(markers)}
+      </View>
     );
   }
 }
