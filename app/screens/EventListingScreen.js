@@ -175,8 +175,6 @@ class EventListingScreen extends Component {
         }
       }
 
-      // console.log('showing el.type = ' + el.type);
-
       return true
     })
 
@@ -187,20 +185,20 @@ class EventListingScreen extends Component {
       : filteredByType
 
     
-     let filterdByRegion = [];
-    if(this.state.regionFilter == 'All Regions'){
+    let filterdByRegion = [];
+    if(this.state.regionFilter === 'All Regions'){
       filterdByRegion = filteredByDate;
     }else{
       for(var i = 0 ; i < filteredByDate.length ; i++){
-        let customFields = listData[i].urlData['custom-fields'][0];
+        let customFields = filteredByDate[i].urlData['custom-fields'][0];
         let customField = customFields['custom-field'][0]
         let value = customField['value']
-        if(this.state.regionFilter == value){
+        if(this.state.regionFilter === value){
           filterdByRegion.push(filteredByDate[i]);
         }
       }
     }
-
+    
     this.setState({
       currentListData: filterdByRegion
     })
