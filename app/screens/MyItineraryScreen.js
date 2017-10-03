@@ -42,6 +42,10 @@ class MyItineraryScreen extends Component {
     componentDidUpdate(prevProps, prevState){     
       if(this.state.listData.length > 0){
         let filterData = this.state.listData.filter(({urlData}) => Client.isEventInItinerary(urlData));
+
+        filterData.sort((a, b) => {          
+          return new Date(a.urlData.date) - new Date(b.urlData.date);
+        })
         if(!isEqual(prevState.currentListData, filterData)){
           this.setState({currentListData:filterData})
         }
@@ -59,6 +63,11 @@ class MyItineraryScreen extends Component {
         }))
   
         let filterData =  listData.filter(({ urlData }) => Client.isEventInItinerary(urlData));
+
+
+        filterData.sort((a, b) => {          
+          return new Date(a.urlData.date) - new Date(b.urlData.date);
+        })
 
         this.setState({
           artists,
@@ -84,8 +93,8 @@ class MyItineraryScreen extends Component {
       if (this.state.currentListData != null) {
         this.state.currentListData.forEach((el) => {
           if (el.urlData.date != null) {
-            const [year, month, day] = el.urlData.date.split('-')
-            const dateObject = new Date(year, month - 1, day)
+            // const [year, month, day] = el.urlData.date.split('-')
+            // const dateObject = new Date(year, month - 1, day)
             //const dateFormatted = `${DAYS_OF_WEEK[dateObject.getDay()]}, ${MONTH_NAMES[dateObject.getMonth()]} ${dateObject.getDate()}`
   
             if (!listDataByDate[el.urlData.date]) {
