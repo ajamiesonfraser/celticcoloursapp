@@ -118,30 +118,30 @@ var MapScreen = React.createClass({
 
     Client.loadData()
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
-          }
-        });
-      },
-      (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //     this.setState({
+    //       region: {
+    //         latitude: position.coords.latitude,
+    //         longitude: position.coords.longitude,
+    //         latitudeDelta: LATITUDE_DELTA,
+    //         longitudeDelta: LONGITUDE_DELTA
+    //       }
+    //     });
+    //   },
+    //   (error) => alert(error.message),
+    //   {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    // );
 
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-      const newRegion = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-      }
-      // this.onRegionChange(newRegion);
-    });
+    // this.watchID = navigator.geolocation.watchPosition((position) => {
+    //   const newRegion = {
+    //     latitude: position.coords.latitude,
+    //     longitude: position.coords.longitude,
+    //     latitudeDelta: LATITUDE_DELTA,
+    //     longitudeDelta: LONGITUDE_DELTA
+    //   }
+    //   // this.onRegionChange(newRegion);
+    // });
   },
 
   componentWillUnmount: function() {
@@ -246,7 +246,10 @@ var MapScreen = React.createClass({
         {this.renderFilterBar()}      
         <Map
           mapPoints={this.state.markers}   
-          region={this.state.region}       
+          region={this.state.region}  
+          onCallOutPress={(marker)=>{
+            this._navigateToEventDetail(marker)
+          }}     
         />
       </ViewContainer>
     );
