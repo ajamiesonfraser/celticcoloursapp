@@ -134,7 +134,7 @@ class ArtistListingScreen extends Component {
               }}
             />
         }
-        
+        <View style={{paddingTop:40}}/>
       </ViewContainer>
     )
   }

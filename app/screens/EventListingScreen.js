@@ -486,7 +486,7 @@ class EventListingScreen extends Component {
               sections={true}
             />
         }
-        
+        <View style={{paddingTop:40}}/>
       </ViewContainer>
     )
   }

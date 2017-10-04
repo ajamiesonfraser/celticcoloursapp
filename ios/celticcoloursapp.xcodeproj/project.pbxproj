@@ -42,7 +42,6 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		832F863B36034C21A398D3B5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 774BA962525F41FBB6DB1F1D /* Zocial.ttf */; };
 		842914451F7D3DEB00DD916B /* libRNImmediatePhoneCall.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 842914441F7D3DDD00DD916B /* libRNImmediatePhoneCall.a */; };
-		84903E781F816C4000443E7A /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84903E771F816C4000443E7A /* Images-2.xcassets */; };
 		849777FD1F7AB4DA00FDA455 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 845E9A2D1F714FF1003BDEBD /* libAirMaps.a */; };
 		849777FE1F7AB4DA00FDA455 /* libART.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 849777E11F7AB4C100FDA455 /* libART.a */; };
 		849777FF1F7AB4DA00FDA455 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8A97C271E295A1100E4A6EC /* libRNVectorIcons.a */; };
@@ -323,7 +322,6 @@
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8429143F1F7D3DDB00DD916B /* RNImmediatePhoneCall.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNImmediatePhoneCall.xcodeproj; path = "../node_modules/react-native-immediate-phone-call/ios/RNImmediatePhoneCall.xcodeproj"; sourceTree = "<group>"; };
-		84903E771F816C4000443E7A /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Images-2.xcassets"; path = "celticcoloursapp/Images-2.xcassets"; sourceTree = "<group>"; };
 		849777DB1F7AB4C000FDA455 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		849778321F7ADE5000FDA455 /* RNMail.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNMail.xcodeproj; path = "../node_modules/react-native-mail/RNMail.xcodeproj"; sourceTree = "<group>"; };
 		A809B3F81E57339500E5050C /* holangels.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = holangels.gpx; path = ../holangels.gpx; sourceTree = "<group>"; };
@@ -478,7 +476,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				84903E771F816C4000443E7A /* Images-2.xcassets */,
 			);
 			name = celticcoloursapp;
 			sourceTree = "<group>";
@@ -1061,7 +1058,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				84903E781F816C4000443E7A /* Images-2.xcassets in Resources */,
 				04689F8BCAD14C8FA2D6CE07 /* Entypo.ttf in Resources */,
 				6A5D7471CEA24DA986D186A2 /* EvilIcons.ttf in Resources */,
 				C1C0DA0A93E5430982B524B0 /* FontAwesome.ttf in Resources */,

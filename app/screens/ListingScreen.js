@@ -100,7 +100,7 @@ class ListingScreen extends Component {
         <ListView
           pageSize={1}
           automaticallyAdjustContentInsets={false}
-          scrollRenderAheadDistance={1}
+          scrollRenderAheadDistance={2}
           enableEmptySections={true}
           dataSource={ds}
           renderRow={(listing, sectionId, rowId) => {

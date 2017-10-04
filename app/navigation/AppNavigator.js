@@ -100,6 +100,8 @@ class AppNavigator extends Component {
     }
   }
 
+  
+
   render() {
     let navTitle = 'Celtic Colours App'
 
@@ -126,7 +128,7 @@ class AppNavigator extends Component {
           style={styles.navigatorStyles}
           renderScene={(...args) => {
             return (
-              <ViewContainer style={{ paddingTop: 44 }}>
+              <ViewContainer style={{ marginTop: 50 }}>
                 {this._renderScene(...args)}
               </ViewContainer>
             )
@@ -140,12 +142,13 @@ class AppNavigator extends Component {
             <Navigator.NavigationBar 
               routeMapper={ NavigationBarRouteMapper }
               style={{
+                marginTop:10,
                 height: 44,
                 backgroundColor: '#fff'
               }}
             />
           }
-        />
+        /> 
       </Screen>
     )
   }
@@ -155,7 +158,7 @@ class AppNavigator extends Component {
 const styles = StyleSheet.create({
 
   navigatorStyles: {
-    flex: 1
+    flex: 1,
   }
 
 })
